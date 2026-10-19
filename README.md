@@ -19,14 +19,23 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya, VBA o'rnatilgan bo'lishi kerak.
 `photo.rar` dagi boshqa shablonlar keyingi bosqichlarda qo'shiladi.
 
 ## O'rnatish (bir marta)
-1. Ushbu repodagi `src` papkasini yuklab oling (**Code → Download ZIP**).
-2. CorelDRAW'ni oching va **Alt+F11** ni bosing (VBA muharriri ochiladi).
-3. Chapdagi **GlobalMacros** ustida o'ng tugmani bosing va **Import File...** ni tanlang. Keyin quyidagi fayllarni birma-bir import qiling:
-   `modGeom.bas`, `modTemplates.bas`, `modDraw.bas`, `modMain.bas`, `clsField.cls`, `frmKarobka.frm`
-4. **Tools → References** ichida **Microsoft Forms 2.0 Object Library** belgilangan bo'lsin.
-5. Saqlang (**Ctrl+S**).
+Avval ushbu repodagi kodni yuklab oling: **Code → Download ZIP**. Keyin CorelDRAW'da **Alt+F11** ni bosing, VBA muharriri ochiladi.
 
-> Agar `frmKarobka.frm` import bo'lmasa: **Insert → UserForm** qiling, nomini (Name) `frmKarobka` qilib qo'ying, so'ng `frmKarobka.frm` dagi `Option Explicit` dan pastki hamma kodni formaning kod oynasiga joylang.
+> ⚠️ `.bas`, `.cls`, `.frm` fayllarini kod oynasiga **nusxalab joylamang**. Ularning boshidagi `VERSION`, `Begin`, `Attribute` qatorlari kodga tushib qolsa, **"Invalid outside procedure"** xatosi chiqadi. Nusxalab joylash uchun `src/joylash/*.txt` fayllaridan foydalaning.
+
+### A yo'l: Import (oson)
+1. Chapdagi **GlobalMacros** ustida o'ng tugmani bosing va **Import File...** ni tanlang.
+2. `src` papkasidagi quyidagi fayllarni birma-bir import qiling: `modGeom.bas`, `modTemplates.bas`, `modDraw.bas`, `modMain.bas`, `clsField.cls`, `frmKarobka.frm`.
+
+### B yo'l: qo'lda joylash (import ishlamasa)
+1. **GlobalMacros** ni tanlang, so'ng **Insert → Module** ni 4 marta bosing. Pastdagi Properties oynasida modullarning nomini (Name) `modGeom`, `modTemplates`, `modDraw`, `modMain` deb o'zgartiring.
+2. **Insert → Class Module** ni bosing va nomini `clsField` qiling.
+3. **Insert → UserForm** ni bosing va nomini `frmKarobka` qiling. Keyin formaning ustida ikki marta bosib, uning kod oynasini oching.
+4. Har bir oynadagi bor matnni o'chiring. O'rniga `src/joylash` papkasidagi shu nomli `.txt` faylning **butun** matnini joylang.
+
+### Oxirida
+- **Tools → References** ichida **Microsoft Forms 2.0 Object Library** belgilangan bo'lsin.
+- **Debug → Compile** ni bosing. Xato chiqmasa, **Ctrl+S** bilan saqlang.
 
 ## Ishlatish
 - **Tools → Macros → Run Macro → Karobka** ni bosing.
@@ -42,3 +51,5 @@ Chizishda faqat panellarni `Rect` / `Poly` bilan qo'shish kifoya. Kesish va buki
 
 ## Tekshirish (Corelsiz)
 `python3 tools/preview.py` buyrug'i xuddi shu geometriyani `preview/*.svg` fayllariga chizadi.
+
+`src` dagi kod o'zgartirilgandan keyin `python3 tools/make_paste.py` ni ishga tushiring. U `src/joylash` dagi nusxalarni yangilaydi.

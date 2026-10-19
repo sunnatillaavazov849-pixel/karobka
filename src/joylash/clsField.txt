@@ -1,0 +1,10 @@
+' Bitta o'lcham maydoni: o'zgarganda formaga xabar beradi
+Option Explicit
+
+Public WithEvents tb As MSForms.TextBox
+Public Key As String
+Public Owner As Object
+
+Private Sub tb_Change()
+    Owner.FieldChanged
+End Sub
