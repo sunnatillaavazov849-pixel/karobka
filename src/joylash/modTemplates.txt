@@ -1,51 +1,101 @@
 ' Karobka shablonlari. Yangi shablon qo'shish:
-'   1) TCount ni oshiring  2) TName va TParams ga qator qo'shing  3) TBuild da chizing
-' TParams formati: "Kalit=Yozuv=Standart|..."   (o'lchamlar mm da)
+'   1) TCount ni oshiring  2) TName, TGroup va TParams ga qator qo'shing  3) TBuild da chizing
+' TParams formati: "Kalit=Nomi=Standart=Izoh|..."   (o'lchamlar mm da)
 Option Explicit
 Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
+Private Const PI As Double = 3.14159265358979
+
 Public Function TCount() As Long
-    TCount = 6
+    TCount = 13
+End Function
+
+Public Function TGroup(ByVal i As Long) As String
+    Select Case i
+        Case 1, 2: TGroup = "Gofra"
+        Case 3 To 6: TGroup = "Tuck-end"
+        Case 7, 8: TGroup = "Mailer"
+        Case Else: TGroup = "Lotok"
+    End Select
 End Function
 
 Public Function TName(ByVal i As Long) As String
     Select Case i
-        Case 1: TName = "Gofra quti (FEFCO 0201)"
-        Case 2: TName = "Tuck-end (teskari qopqoq)"
-        Case 3: TName = "Tuck-end (to'g'ri qopqoq)"
-        Case 4: TName = "Lotok (tray)"
-        Case 5: TName = "Taglik + qopqoq (telescope)"
-        Case 6: TName = "Mailer (qopqoqli quti)"
+        Case 1: TName = "FEFCO 0201"
+        Case 2: TName = "FEFCO 0200 (ochiq)"
+        Case 3: TName = "Teskari qopqoq (RTE)"
+        Case 4: TName = "To'g'ri qopqoq (STE)"
+        Case 5: TName = "Ruchkali quti"
+        Case 6: TName = "Yostiqcha (pillow)"
+        Case 7: TName = "Mailer (FEFCO 0427)"
+        Case 8: TName = "Mailer, oynali"
+        Case 9: TName = "Lotok"
+        Case 10: TName = "Lotok, ikki qavat"
+        Case 11: TName = "Taglik + qopqoq"
+        Case 12: TName = "G'ilof (sleeve)"
+        Case 13: TName = "Tortma quti"
     End Select
 End Function
 
 Public Function TParams(ByVal i As Long) As String
-    Const LWH As String = "L=Uzunlik=%L|W=Eni=%W|H=Balandlik=%H"
     Select Case i
-        Case 1: TParams = Fill(LWH, 300, 200, 150) & "|G=Yelim joyi=35"
-        Case 2, 3: TParams = Fill(LWH, 80, 50, 150) & "|G=Yelim joyi=15|T=Til (tuck)=15"
-        Case 4: TParams = Fill(LWH, 200, 150, 50)
-        Case 5: TParams = Fill(LWH, 200, 150, 50) & "|HL=Qopqoq balandligi=30|K=Qopqoq zazori=2"
-        Case 6: TParams = Fill(LWH, 250, 180, 60) & "|T=Karton qalinligi=2"
+        Case 1, 2: TParams = LWH(300, 200, 150) & "|G=Yelim=35=Yelimlanadigan qanot eni"
+        Case 3, 4: TParams = LWH(80, 50, 150) & "|G=Yelim=15=Yelimlanadigan qanot eni|TK=Til=15=Qopqoq tili uzunligi"
+        Case 5: TParams = LWH(160, 100, 120) & "|G=Yelim=15=Yelimlanadigan qanot eni" & _
+                          "|HH=Ruchka=60=Ruchka qismining balandligi|HW=Teshik eni=80=Ruchka teshigi eni"
+        Case 6: TParams = "L=Uzunlik=160=Ichki uzunlik|W=Eni=90=Ichki eni|G=Yelim=15=Yelimlanadigan qanot eni" & _
+                          "|D=Qavariq=25=Uchlaridagi yoy balandligi"
+        Case 7: TParams = LWH(250, 180, 60) & "|T=Qalinlik=2=Karton qalinligi"
+        Case 8: TParams = LWH(250, 180, 60) & "|T=Qalinlik=2=Karton qalinligi|M=Oyna chetidan=35=Qopqoq chetidan oynagacha"
+        Case 9: TParams = LWH(200, 150, 50)
+        Case 10: TParams = LWH(250, 180, 50) & "|T=Qalinlik=2=Karton qalinligi"
+        Case 11: TParams = LWH(200, 150, 50) & "|HL=Qopqoq bal.=30=Qopqoq devori balandligi" & _
+                           "|K=Zazor=2=Qopqoq va taglik orasidagi bo'shliq"
+        Case 12: TParams = LWH(200, 150, 50) & "|G=Yelim=15=Yelimlanadigan qanot eni"
+        Case 13: TParams = LWH(200, 150, 50) & "|G=Yelim=15=Yelimlanadigan qanot eni" & _
+                           "|K=Zazor=2=G'ilof va lotok orasidagi bo'shliq"
     End Select
 End Function
 
-Private Function Fill(ByVal s As String, ByVal L As Double, ByVal W As Double, ByVal H As Double) As String
-    Fill = Replace(Replace(Replace(s, "%L", L), "%W", W), "%H", H)
+Private Function LWH(ByVal L As Double, ByVal W As Double, ByVal H As Double) As String
+    LWH = "L=Uzunlik=" & L & "=Ichki uzunlik|W=Eni=" & W & "=Ichki eni|H=Balandlik=" & H & "=Ichki balandlik"
 End Function
 
-' p: Scripting.Dictionary  kalit -> qiymat (mm)
+' p: Scripting.Dictionary  kalit -> qiymat (mm). Yoyilma (modGeom) va 3D (mod3D) ni to'ldiradi
 Public Sub TBuild(ByVal i As Long, p As Object)
+    Dim L As Double, W As Double, H As Double
     DieReset
+    M3Reset
+    L = p("L"): W = p("W")
+    If p.Exists("H") Then H = p("H")
     Select Case i
-        Case 1: Rsc0201 p("L"), p("W"), p("H"), p("G")
-        Case 2: TuckEnd p("L"), p("W"), p("H"), p("G"), p("T"), 0
-        Case 3: TuckEnd p("L"), p("W"), p("H"), p("G"), p("T"), 2
-        Case 4: Tray 0, p("L"), p("W"), p("H")
-        Case 5
-            Tray 0, p("L"), p("W"), p("H")
-            Tray p("L") + 2 * p("H") + 20 + p("HL"), p("L") + 2 * p("K"), p("W") + 2 * p("K"), p("HL")
-        Case 6: Mailer p("L"), p("W"), p("H"), p("T")
+        Case 1: Rsc L, W, H, p("G"), True
+        Case 2: Rsc L, W, H, p("G"), False
+        Case 3: TuckEnd L, W, H, p("G"), p("TK"), 0
+        Case 4: TuckEnd L, W, H, p("G"), p("TK"), 2
+        Case 5: Gable L, W, H, p("G"), p("HH"), p("HW")
+        Case 6: Pillow L, W, p("G"), p("D")
+        Case 7: Mailer L, W, H, p("T")
+        Case 8
+            Mailer L, W, H, p("T")
+            Dim m As Double: m = Min2(p("M"), Min2(L, W) / 2 - 5)
+            CutRect m, W + H + m, L - m, 2 * W + H - m
+        Case 9
+            Tray 0, L, W, H
+            Box3 0, 0, 0, L, H, W, False
+        Case 10
+            TrayDouble L, W, H, p("T")
+            Box3 0, 0, 0, L, H, W, False
+        Case 11
+            Tray 0, L, W, H
+            Tray L + 2 * H + 20 + p("HL"), L + 2 * p("K"), W + 2 * p("K"), p("HL")
+            Box3 0, 0, 0, L, H, W, False
+            Box3 0 - p("K"), H * 1.6, 0 - p("K"), L + 2 * p("K"), p("HL"), W + 2 * p("K"), True, False
+        Case 12
+            Dim xs() As Double
+            Body xs, L, p("G"), W, H, W, H
+            Box3 0, 0, 0, L, H, W, True, True, False
+        Case 13: Drawer L, W, H, p("G"), p("K")
     End Select
     Solve
 End Sub
@@ -56,59 +106,161 @@ Private Function Min2(ByVal a As Double, ByVal b As Double) As Double
     If a < b Then Min2 = a Else Min2 = b
 End Function
 
-' Yelim | L | W | L | W  yon devorlar. xs(0..4) qaytaradi
-Private Sub Body(xs() As Double, ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double)
-    Dim i As Long, c As Double
-    xs(0) = 0: xs(1) = L: xs(2) = L + W: xs(3) = 2 * L + W: xs(4) = 2 * L + 2 * W
+' Yelim | w0 | w1 | ...  yon devorlar (balandligi H). xs - panel chegaralari
+Private Sub Body(xs() As Double, ByVal H As Double, ByVal g As Double, ParamArray widths() As Variant)
+    Dim i As Long, n As Long, c As Double
+    n = UBound(widths) + 1
+    ReDim xs(0 To n)
+    For i = 0 To n - 1: xs(i + 1) = xs(i) + widths(i): Next i
     c = Min2(g * 0.6, H / 4)
     Poly 0, 0, -g, c, -g, H - c, 0, H
-    For i = 0 To 3
-        Rect xs(i), 0, xs(i + 1), H
-    Next i
+    For i = 0 To n - 1: Rect xs(i), 0, xs(i + 1), H: Next i
+End Sub
+
+' FEFCO qanotlari, qo'shni qanotlar orasida tirqish
+Private Sub SlotFlaps(xs() As Double, ByVal baseY As Double, ByVal s As Double, ByVal f As Double)
+    Dim i As Long
+    For i = 0 To UBound(xs) - 1: Rect xs(i), baseY, xs(i + 1), baseY + s * f: Next i
+    For i = 1 To UBound(xs) - 1: Slit xs(i), baseY, xs(i), baseY + s * f: Next i
 End Sub
 
 ' ---------------------------------------------------------------- shablonlar
 
-Private Sub Rsc0201(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double)
-    Dim xs(0 To 4) As Double, i As Long, f As Double
-    Body xs, L, W, H, g
-    f = W / 2
-    For i = 0 To 3
-        Rect xs(i), H, xs(i + 1), H + f
-        Rect xs(i), -f, xs(i + 1), 0
-    Next i
-    For i = 1 To 3
-        Slit xs(i), H, xs(i), H + f
-        Slit xs(i), -f, xs(i), 0
-    Next i
+Private Sub Rsc(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, ByVal topFlaps As Boolean)
+    Dim xs() As Double
+    Body xs, H, g, L, W, L, W
+    If topFlaps Then SlotFlaps xs, H, 1, W / 2
+    SlotFlaps xs, 0, -1, W / 2
+    Box3 0, 0, 0, L, H, W, topFlaps
 End Sub
 
 ' bottomLid: pastki qopqoq qaysi panelda (0 = teskari, 2 = to'g'ri)
 Private Sub TuckEnd(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, _
                     ByVal tuck As Double, ByVal bottomLid As Long)
-    Dim xs(0 To 4) As Double
-    Body xs, L, W, H, g
+    Dim xs() As Double
+    Body xs, H, g, L, W, L, W
     TuckClosure xs, H, 1, 2, L, W, tuck
     TuckClosure xs, 0, -1, bottomLid, L, W, tuck
+    Box3 0, 0, 0, L, H, W, False
+    Lid3 L, H, W, 35, tuck
 End Sub
 
-Private Sub TuckClosure(xs() As Double, ByVal base As Double, ByVal s As Double, ByVal lidIdx As Long, _
+Private Sub TuckClosure(xs() As Double, ByVal b As Double, ByVal s As Double, ByVal lid As Long, _
                         ByVal L As Double, ByVal W As Double, ByVal tuck As Double)
     Dim i As Long, xa As Double, xb As Double, y1 As Double, y2 As Double
     Dim dh As Double, c As Double, tc As Double
-    dh = Min2(W * 0.8, L / 2)
-    c = Min2(dh / 3, W / 4)
+    dh = Min2(W * 0.8, L / 2): c = Min2(dh / 3, W / 4)
     For i = 0 To 3
         xa = xs(i): xb = xs(i + 1)
-        If i = lidIdx Then
-            y1 = base + s * W: y2 = base + s * (W + tuck)
-            tc = Min2(tuck * 0.8, (xb - xa) / 4)
-            Rect xa, base, xb, y1
+        If i = lid Then
+            y1 = b + s * W: y2 = b + s * (W + tuck): tc = Min2(tuck * 0.8, (xb - xa) / 4)
+            Rect xa, b, xb, y1
             Poly xa, y1, xa + tc, y2, xb - tc, y2, xb, y1
         ElseIf i Mod 2 = 1 Then
-            Poly xa, base, xa + c, base + s * dh, xb - c, base + s * dh, xb, base
+            Poly xa, b, xa + c, b + s * dh, xb - c, b + s * dh, xb, b
         End If
     Next i
+End Sub
+
+Private Sub Gable(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, _
+                  ByVal hh As Double, ByVal hw As Double)
+    Dim xs() As Double, i As Long, xa As Double, xb As Double, y1 As Double, y2 As Double
+    Dim c As Double, cx As Double, cy As Double, th As Double, xm As Double
+    hw = Min2(hw, L - 20)
+    Body xs, H, g, L, W, L, W
+    SlotFlaps xs, 0, -1, W / 2
+    y1 = H + W / 2: y2 = y1 + hh: c = Min2(hh / 3, 15)
+    For i = 0 To 3
+        xa = xs(i): xb = xs(i + 1)
+        Rect xa, H, xb, y1
+        If i Mod 2 = 0 Then
+            Poly xa, y1, xb, y1, xb, y2 - c, xb - c, y2, xa + c, y2, xa, y2 - c
+            cx = (xa + xb) / 2: cy = y1 + hh * 0.55: th = Min2(18, hh * 0.35)
+            CutPoly cx - hw / 2 + th / 2, cy - th / 2, cx + hw / 2 - th / 2, cy - th / 2, cx + hw / 2, cy, _
+                    cx + hw / 2 - th / 2, cy + th / 2, cx - hw / 2 + th / 2, cy + th / 2, cx - hw / 2, cy
+        Else
+            xm = (xa + xb) / 2
+            Crease xa, H, xm, y1
+            Crease xb, H, xm, y1
+        End If
+    Next i
+    ' 3D: quti + tom + ruchka
+    Box3 0, 0, 0, L, H, W, False
+    Face 0, H, 0, 0, H + W / 2, W / 2, L, H + W / 2, W / 2, L, H, 0
+    Face 0, H, W, L, H, W, L, H + W / 2, W / 2, 0, H + W / 2, W / 2
+    Face 0, H, 0, 0, H, W, 0, H + W / 2, W / 2
+    Face L, H, 0, L, H + W / 2, W / 2, L, H, W
+    Face 0, H + W / 2, W / 2, L, H + W / 2, W / 2, L, H + W / 2 + hh, W / 2, 0, H + W / 2 + hh, W / 2
+End Sub
+
+Private Sub Pillow(ByVal L As Double, ByVal W As Double, ByVal g As Double, ByVal d As Double)
+    Const N As Long = 16
+    Dim i As Long, k As Long, c As Double, xa As Double, xb As Double, t As Double
+    Dim lx(0 To N) As Double, ltY(0 To N) As Double, htY(0 To N) As Double, lbY(0 To N) As Double, hbY(0 To N) As Double
+    Dim ax() As Double, ay() As Double, m As Long
+    d = Min2(d, W / 2)
+    c = Min2(g * 0.6, L / 4)
+    Poly 0, 0, -g, c, -g, L - c, 0, L
+    For i = 0 To 1
+        xa = i * W: xb = xa + W
+        For k = 0 To N
+            t = k / N
+            lx(k) = xa + W * t
+            ltY(k) = L + d * Sin(PI * t): htY(k) = L + 2 * d * Sin(PI * t)
+            lbY(k) = -d * Sin(PI * t): hbY(k) = -2 * d * Sin(PI * t)
+        Next k
+        ' panel: past yoy -> yuqori yoy (teskari)
+        ReDim ax(0 To 2 * N + 1): ReDim ay(0 To 2 * N + 1): m = 0
+        For k = 0 To N: ax(m) = lx(k): ay(m) = lbY(k): m = m + 1: Next k
+        For k = N To 0 Step -1: ax(m) = lx(k): ay(m) = ltY(k): m = m + 1: Next k
+        PolyArr ax, ay, m
+        ' qopqoqlar (linza shakli): ichki yoy bukish, tashqi yoy kesish
+        m = 0
+        For k = 0 To N: ax(m) = lx(k): ay(m) = ltY(k): m = m + 1: Next k
+        For k = N - 1 To 1 Step -1: ax(m) = lx(k): ay(m) = htY(k): m = m + 1: Next k
+        PolyArr ax, ay, m
+        m = 0
+        For k = 0 To N: ax(m) = lx(k): ay(m) = lbY(k): m = m + 1: Next k
+        For k = N - 1 To 1 Step -1: ax(m) = lx(k): ay(m) = hbY(k): m = m + 1: Next k
+        PolyArr ax, ay, m
+    Next i
+    ' 3D: ikki qavariq yuz
+    Dim th As Double, z0 As Double, z1 As Double, x0 As Double, x1 As Double
+    th = d * 1.2
+    For k = 0 To 11
+        x0 = L * k / 12: x1 = L * (k + 1) / 12
+        z0 = th * Sin(PI * k / 12): z1 = th * Sin(PI * (k + 1) / 12)
+        Face x0, 0, z0, x1, 0, z1, x1, W, z1, x0, W, z0
+        Face x0, 0, -z0, x0, W, -z0, x1, W, -z1, x1, 0, -z1
+    Next k
+End Sub
+
+Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal t As Double)
+    Dim tc As Double, fc As Double, x0 As Double, sx As Double, y0 As Double, sy As Double
+    Dim a As Long, b As Long
+    Rect 0, 0, L, W
+    Rect 0, -H, L, 0
+    Rect 0, -2 * H + t, L, -H
+    Rect -H, 0, 0, W
+    Rect -2 * H + t, 0, -H, W
+    Rect L, 0, L + H, W
+    Rect L + H, 0, L + 2 * H - t, W
+    Rect 0, W, L, W + H
+    Rect 0, W + H, L, 2 * W + H
+    tc = Min2(H * 0.4, L / 6)
+    Poly 0, 2 * W + H, tc, 2 * W + 2 * H - t, L - tc, 2 * W + 2 * H - t, L, 2 * W + H
+    fc = Min2(H * 0.5, W / 4)
+    For a = 0 To 1
+        If a = 0 Then x0 = 0: sx = -1 Else x0 = L: sx = 1
+        Poly x0, W + H + t, x0 + sx * (H - t), W + H + t + fc, x0 + sx * (H - t), 2 * W + H - fc, x0, 2 * W + H - t
+        For b = 0 To 1
+            If b = 0 Then y0 = 0: sy = -1 Else y0 = W: sy = 1
+            Poly x0, y0 + sy * 0.5, x0 + sx * (H - 2 * t), y0 + sy * (0.5 + fc * 0.6), _
+                 x0 + sx * (H - 2 * t), y0 + sy * (H - 1), x0, y0 + sy * H
+        Next b
+    Next a
+    Box3 0, 0, 0, L, H, W, False
+    Lid3 L, H, W, 70, H - t
 End Sub
 
 ' Burchaklari yelimlanadigan lotok. ox: X bo'yicha siljish
@@ -130,32 +282,35 @@ Private Sub Tray(ByVal ox As Double, ByVal L As Double, ByVal W As Double, ByVal
     Next a
 End Sub
 
-' Mailer (FEFCO 0427 ga o'xshash): ikki qavat devorlar, qopqoq va old til
-Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal t As Double)
-    Dim tc As Double, fc As Double, x0 As Double, sx As Double, y0 As Double, sy As Double
-    Dim a As Long, b As Long
-    Rect 0, 0, L, W                              ' taglik
-    Rect 0, -H, L, 0                             ' old devor
-    Rect 0, -2 * H + t, L, -H                    ' old ichki devor
-    Rect -H, 0, 0, W                             ' chap devor
-    Rect -2 * H + t, 0, -H, W                    ' chap ichki
-    Rect L, 0, L + H, W                          ' o'ng devor
-    Rect L + H, 0, L + 2 * H - t, W              ' o'ng ichki
-    Rect 0, W, L, W + H                          ' orqa devor
-    Rect 0, W + H, L, 2 * W + H                  ' qopqoq
-    tc = Min2(H * 0.4, L / 6)
-    Poly 0, 2 * W + H, tc, 2 * W + 2 * H - t, L - tc, 2 * W + 2 * H - t, L, 2 * W + H   ' old til
-    fc = Min2(H * 0.5, W / 4)
+Private Sub TrayDouble(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal t As Double)
+    Dim x0 As Double, y0 As Double, sx As Double, sy As Double, c As Double, a As Long, b As Long
+    c = H * 0.25
+    Rect 0, 0, L, W
+    Rect -H, 0, 0, W
+    Rect L, 0, L + H, W
+    Rect 0, -H, L, 0: Rect 0, -2 * H + t, L, -H
+    Rect 0, W, L, W + H: Rect 0, W + H, L, W + 2 * H - t
+    ' burchak qanotlari yon devorlarga ulangan
     For a = 0 To 1
         If a = 0 Then x0 = 0: sx = -1 Else x0 = L: sx = 1
-        ' qopqoq yon qanoti
-        Poly x0, W + H + t, x0 + sx * (H - t), W + H + t + fc, _
-             x0 + sx * (H - t), 2 * W + H - fc, x0, 2 * W + H - t
-        ' quloqlar (old va orqa devorga ulangan)
         For b = 0 To 1
             If b = 0 Then y0 = 0: sy = -1 Else y0 = W: sy = 1
-            Poly x0, y0 + sy * 0.5, x0 + sx * (H - 2 * t), y0 + sy * (0.5 + fc * 0.6), _
-                 x0 + sx * (H - 2 * t), y0 + sy * (H - 1), x0, y0 + sy * H
+            Poly x0, y0, x0 + sx * H, y0, x0 + sx * (H - c), y0 + sy * (H - 2 * t), x0 + sx * c, y0 + sy * (H - 2 * t)
+            Slit x0, y0, x0, y0 + sy * H
         Next b
     Next a
+End Sub
+
+Private Sub Drawer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, ByVal k As Double)
+    Dim ox As Double, ww As Double, hh As Double, c As Double, i As Long
+    Dim xs(0 To 4) As Double
+    Tray 0, L, W, H
+    ox = L + H + 30 + g
+    ww = W + 2 * k: hh = H + k
+    c = Min2(g * 0.6, L / 4)
+    xs(1) = ww: xs(2) = ww + hh: xs(3) = 2 * ww + hh: xs(4) = 2 * ww + 2 * hh
+    Poly ox, 0, ox - g, c, ox - g, L + k - c, ox, L + k
+    For i = 0 To 3: Rect ox + xs(i), 0, ox + xs(i + 1), L + k: Next i
+    Box3 0, 0, 0, L, H, W, False
+    Box3 L * 0.4, -k, -k, L + k, H + 2 * k, W + 2 * k, True, True, False
 End Sub

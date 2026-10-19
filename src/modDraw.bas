@@ -29,7 +29,7 @@ Private Function MakeCurve(ByVal kind As Integer) As Shape
 End Function
 
 ' TBuild dan keyin chaqiriladi. final = False bo'lsa ko'rish (preview) sifatida chiziladi
-Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
+Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String, ByVal with3D As Boolean)
     Dim sr As New ShapeRange, sCut As Shape, sFold As Shape, txt As Shape, g As Shape
 
     If ActiveDocument Is Nothing Then CreateDocument
@@ -43,14 +43,14 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
 
     Set sCut = MakeCurve(KIND_CUT)
     If Not sCut Is Nothing Then
-        sCut.Name = "CUT"
-        sCut.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(0, 0, 255)
+        sCut.Name = "Kesish"
+        sCut.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(0, 90, 255)
         sr.Add sCut
     End If
     Set sFold = MakeCurve(KIND_FOLD)
     If Not sFold Is Nothing Then
-        sFold.Name = "FOLD"
-        sFold.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(255, 0, 0)
+        sFold.Name = "Bukish"
+        sFold.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(230, 0, 40)
         On Error Resume Next
         sFold.Outline.Style = OutlineStyles(3)    ' punktir
         On Error GoTo Done
@@ -58,9 +58,13 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
     End If
     If sr.Count = 0 Then GoTo Done
 
-    Set txt = ActiveLayer.CreateArtisticText(sr.LeftX, sr.BottomY - 8, caption)
-    txt.Text.Story.Size = 10
-    sr.Add txt
+    ' 3D ko'rinish yoyilmaning o'ng tomonida
+    If with3D Then Draw3D sr, sr.RightX + 40, sr.BottomY, sr.SizeHeight * 0.6
+
+    On Error Resume Next
+    Set txt = ActiveLayer.CreateArtisticText(sr.LeftX, sr.BottomY - 8, caption, , , "Segoe UI", 10)
+    If Not txt Is Nothing Then sr.Add txt
+    On Error GoTo Done
 
     Set g = sr.Group
     g.CenterX = ActivePage.CenterX

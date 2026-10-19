@@ -12,13 +12,16 @@ Private Const TOL As Double = 0.001
 
 Private eX1() As Double, eY1() As Double, eX2() As Double, eY2() As Double, eN As Long
 Private sX1() As Double, sY1() As Double, sX2() As Double, sY2() As Double, sN As Long
+' erkin chiziqlar: oyna/teshik (CUT) va qo'shimcha bukish (FOLD)
+Private fK() As Integer, fX1() As Double, fY1() As Double, fX2() As Double, fY2() As Double, fN As Long
 
 Public segKind() As Integer
 Public segX1() As Double, segY1() As Double, segX2() As Double, segY2() As Double
 Public segN As Long
 
 Public Sub DieReset()
-    eN = 0: sN = 0: segN = 0
+    eN = 0: sN = 0: segN = 0: fN = 0
+    ReDim fK(0 To 63): ReDim fX1(0 To 63): ReDim fY1(0 To 63): ReDim fX2(0 To 63): ReDim fY2(0 To 63)
     ReDim eX1(0 To 255): ReDim eY1(0 To 255): ReDim eX2(0 To 255): ReDim eY2(0 To 255)
     ReDim sX1(0 To 63): ReDim sY1(0 To 63): ReDim sX2(0 To 63): ReDim sY2(0 To 63)
 End Sub
@@ -49,6 +52,44 @@ End Sub
 
 Public Sub Rect(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
     Poly x1, y1, x2, y1, x2, y2, x1, y2
+End Sub
+
+' Massivdan ko'pburchak (yoylar uchun)
+Public Sub PolyArr(xs() As Double, ys() As Double, ByVal n As Long)
+    Dim i As Long, j As Long
+    For i = 0 To n - 1
+        j = (i + 1) Mod n
+        AddEdge xs(i), ys(i), xs(j), ys(j)
+    Next i
+End Sub
+
+Private Sub AddFree(ByVal k As Integer, ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
+    If fN > UBound(fX1) Then
+        Dim m As Long: m = UBound(fX1) * 2 + 1
+        ReDim Preserve fK(0 To m): ReDim Preserve fX1(0 To m): ReDim Preserve fY1(0 To m)
+        ReDim Preserve fX2(0 To m): ReDim Preserve fY2(0 To m)
+    End If
+    fK(fN) = k: fX1(fN) = R3(x1): fY1(fN) = R3(y1): fX2(fN) = R3(x2): fY2(fN) = R3(y2)
+    fN = fN + 1
+End Sub
+
+' Yopiq kesish konturi (oyna, teshik): CutPoly x1, y1, x2, y2, ...
+Public Sub CutPoly(ParamArray v() As Variant)
+    Dim n As Long, i As Long, j As Long
+    n = (UBound(v) + 1) \ 2
+    For i = 0 To n - 1
+        j = (i + 1) Mod n
+        AddFree KIND_CUT, v(2 * i), v(2 * i + 1), v(2 * j), v(2 * j + 1)
+    Next i
+End Sub
+
+Public Sub CutRect(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
+    CutPoly x1, y1, x2, y1, x2, y2, x1, y2
+End Sub
+
+' Qo'shimcha bukish chizig'i
+Public Sub Crease(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
+    AddFree KIND_FOLD, x1, y1, x2, y2
 End Sub
 
 ' Majburiy kesish (masalan qopqoqlar orasidagi tirqish)
@@ -149,5 +190,16 @@ Public Sub Solve()
                 If OnSeg(mx, my, sX1(j), sY1(j), sX2(j), sY2(j)) Then segKind(i) = KIND_CUT: Exit For
             Next j
         End If
+    Next i
+
+    For i = 0 To fN - 1
+        If segN > UBound(segX1) Then
+            k = UBound(segX1) * 2 + 1
+            ReDim Preserve segX1(0 To k): ReDim Preserve segY1(0 To k)
+            ReDim Preserve segX2(0 To k): ReDim Preserve segY2(0 To k): ReDim Preserve segKind(0 To k)
+        End If
+        segKind(segN) = fK(i)
+        segX1(segN) = fX1(i): segY1(segN) = fY1(i): segX2(segN) = fX2(i): segY2(segN) = fY2(i)
+        segN = segN + 1
     Next i
 End Sub

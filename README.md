@@ -1,29 +1,33 @@
-# Karobka: CorelDRAW uchun quti chizmasi
+# Karobka: CorelDRAW uchun quti chizmasi (VBA)
 
-Shablonni tanlaysiz va o'lchamlarni kiritasiz. Dastur yoyilmani (kesish va bukish chiziqlari bilan) hamda yig'ilgan qutining 3D ko'rinishini ko'rsatadi. **Chizish** tugmasi chizmani ochiq turgan CorelDRAW hujjatiga chizadi.
+Shablonni tanlaysiz va o'lchamlarni kiritasiz. Yoyilma (ko'k — kesish, qizil — bukish) va yig'ilgan qutining sodda 3D ko'rinishi darhol sahifada paydo bo'ladi. **Chizish** tugmasi tayyor chizmani guruh qilib qo'yadi.
 
-## O'rnatish (3 qadam)
-1. [`dist/Karobka.exe`](dist/Karobka.exe) faylini yuklab oling.
-2. CorelDRAW'ni oching.
-3. `Karobka.exe` ni ishga tushiring.
+Talab: CorelDRAW 2020 yoki undan yangi versiya.
 
-Talab: Windows 10/11 (64-bit), CorelDRAW 2020 yoki undan yangi versiya. .NET yoki boshqa dastur o'rnatish shart emas.
+## O'rnatish
+1. **Code → Download ZIP** orqali yuklab oling va arxivni oching.
+2. CorelDRAW'da **Alt+F11** ni bosing. Chapdagi **GlobalMacros** ustida o'ng tugmani bosib, **Import File** ni tanlang va `src` papkadagi 7 ta faylni import qiling:
+   `modGeom.bas`, `modTemplates.bas`, `mod3D.bas`, `modDraw.bas`, `modMain.bas`, `clsField.cls`, `frmKarobka.frm`.
+   Eski versiya o'rnatilgan bo'lsa, avval eski modullarni o'chiring (o'ng tugma → **Remove**).
+3. **Debug → Compile** ni bosing, so'ng **Ctrl+S** bilan saqlang.
+4. Ishga tushirish: **Tools → Macros → Karobka**.
 
-> Birinchi ochishda Windows "Windows protected your PC" oynasini ko'rsatishi mumkin. Unda **More info → Run anyway** ni bosing.
+> Fayllarni kod oynasiga nusxalab joylamang, "Invalid outside procedure" xatosi chiqadi. Agar Import ishlamasa, `src/joylash/*.txt` dagi toza koddan foydalaning. Uning uchun Insert → Module / Class Module / UserForm qiling, nomini fayl nomi bilan bir xil qo'ying va `.txt` faylning butun matnini joylang.
 
-## Shablonlar
+## Shablonlar (13 ta)
 | Guruh | Shablonlar |
 |-------|-----------|
-| Gofra quti | FEFCO 0201, FEFCO 0200 (ochiq) |
+| Gofra | FEFCO 0201, FEFCO 0200 (ochiq) |
 | Tuck-end | Teskari qopqoq, To'g'ri qopqoq, Ruchkali quti, Yostiqcha (pillow) |
 | Mailer | Mailer (FEFCO 0427), Mailer oynali |
-| Lotok | Lotok, Ikki qavat devorli lotok, Taglik + qopqoq, G'ilof (sleeve), Tortma quti |
+| Lotok | Lotok, Ikki qavat lotok, Taglik + qopqoq, G'ilof, Tortma quti |
 
-`photo.rar` dagi qolgan shablonlar guruh-guruh bo'lib qo'shiladi.
+## Yangi shablon qo'shish
+`src/modTemplates.bas` da quyidagilarni qiling:
+1. `TCount` ni bittaga oshiring.
+2. `TGroup`, `TName` va `TParams` ga yangi qator qo'shing.
+3. `TBuild` da chizing.
 
-## Dasturchilar uchun
-- Kod `app/` papkasida (C#, WPF). Oyna ko'rinishi `app/UI/Main.xaml` da, dizayn ranglari va o'lchamlari shu faylning `Window.Resources` qismida joylashgan.
-- Yangi shablon qo'shish uchun `app/Templates/Boxes.cs` da `Template` dan meros klass yozing va uni `Catalog.All` ga qo'shing. Panellar `Rect` / `Poly` bilan chiziladi. Ikki panelga umumiy qirra avtomatik bukish bo'ladi, qolgan qirralar kesish bo'ladi. Qo'shni qanotlar orasidagi tirqish `Slit` bilan, oyna yoki teshik `CutRect` / `CutPoly` bilan belgilanadi.
-- Geometriyani tekshirish: `dotnet run --project app/tests -- preview`. Buyruq har bir shablonni `preview/*.svg` ga chizadi.
-- Yig'ish: `dotnet publish app/Karobka.csproj -c Release -o dist`. Buyruq Linux'da ham ishlaydi.
-- Eski VBA versiyasi `src/` papkasida saqlanib qolgan.
+Panellar `Rect` / `Poly` bilan chiziladi: ikki panelga umumiy qirra bukish, qolgan qirralar kesish bo'ladi. Qanotlar orasidagi tirqish `Slit` bilan, oyna yoki teshik `CutRect` / `CutPoly` bilan belgilanadi. 3D ko'rinish uchun `Box3`, `Lid3` va `Face` ishlatiladi.
+
+Koddagi o'zgarishdan keyin `python3 tools/make_paste.py` ni ishga tushiring, u `src/joylash` dagi nusxalarni yangilaydi.
