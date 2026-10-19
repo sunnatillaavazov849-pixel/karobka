@@ -1,0 +1,73 @@
+Attribute VB_Name = "modDraw"
+' Natijani CorelDRAW sahifasiga chizish
+Option Explicit
+
+Public Const PREVIEW_NAME As String = "KAROBKA_PREVIEW"
+
+Public Sub DeletePreview()
+    Dim s As Shape
+    If ActiveDocument Is Nothing Then Exit Sub
+    Set s = ActivePage.FindShape(Name:=PREVIEW_NAME)
+    Do While Not s Is Nothing
+        s.Delete
+        Set s = ActivePage.FindShape(Name:=PREVIEW_NAME)
+    Loop
+End Sub
+
+Private Function MakeCurve(ByVal kind As Integer) As Shape
+    Dim crv As Curve, sp As SubPath, i As Long, any_ As Boolean
+    Set crv = Application.CreateCurve(ActiveDocument)
+    For i = 0 To segN - 1
+        If segKind(i) = kind Then
+            Set sp = crv.CreateSubPath(segX1(i), segY1(i))
+            sp.AppendLineSegment segX2(i), segY2(i)
+            any_ = True
+        End If
+    Next i
+    If any_ Then Set MakeCurve = ActiveLayer.CreateCurve(crv)
+End Function
+
+' TBuild dan keyin chaqiriladi. final = False bo'lsa ko'rish (preview) sifatida chiziladi
+Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
+    Dim sr As New ShapeRange, sCut As Shape, sFold As Shape, txt As Shape, g As Shape
+
+    If ActiveDocument Is Nothing Then CreateDocument
+    ActiveDocument.Unit = cdrMillimeter
+    ActiveDocument.BeginCommandGroup "Karobka"
+    Optimization = True
+    On Error GoTo Done
+
+    DeletePreview
+    If segN = 0 Then GoTo Done
+
+    Set sCut = MakeCurve(KIND_CUT)
+    If Not sCut Is Nothing Then
+        sCut.Name = "CUT"
+        sCut.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(0, 0, 255)
+        sr.Add sCut
+    End If
+    Set sFold = MakeCurve(KIND_FOLD)
+    If Not sFold Is Nothing Then
+        sFold.Name = "FOLD"
+        sFold.Outline.SetProperties Width:=0.25, Color:=CreateRGBColor(255, 0, 0)
+        On Error Resume Next
+        sFold.Outline.Style = OutlineStyles(3)    ' punktir
+        On Error GoTo Done
+        sr.Add sFold
+    End If
+    If sr.Count = 0 Then GoTo Done
+
+    Set txt = ActiveLayer.CreateArtisticText(sr.LeftX, sr.BottomY - 8, caption)
+    txt.Text.Story.Size = 10
+    sr.Add txt
+
+    Set g = sr.Group
+    g.CenterX = ActivePage.CenterX
+    g.CenterY = ActivePage.CenterY
+    If final Then g.Name = "Karobka" Else g.Name = PREVIEW_NAME
+
+Done:
+    Optimization = False
+    ActiveDocument.EndCommandGroup
+    ActiveWindow.Refresh
+End Sub
