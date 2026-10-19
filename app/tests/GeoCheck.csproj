@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Geometriya tekshiruvi (WPF siz, Linux'da ishlaydi): dotnet run, loyiha: app/tests -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Geometry\*.cs" />
+    <Compile Include="..\Templates\*.cs" />
+  </ItemGroup>
+</Project>

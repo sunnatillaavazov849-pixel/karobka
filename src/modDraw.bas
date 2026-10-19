@@ -1,6 +1,7 @@
 Attribute VB_Name = "modDraw"
 ' Natijani CorelDRAW sahifasiga chizish
 Option Explicit
+Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
 Public Const PREVIEW_NAME As String = "KAROBKA_PREVIEW"
 

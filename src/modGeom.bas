@@ -3,6 +3,7 @@ Attribute VB_Name = "modGeom"
 ' Shablon panellarni (ko'pburchak) qo'shadi. Ikki panelga umumiy qirra -> bukish,
 ' bitta panelga tegishli qirra -> kesish. Slit bilan ustma-ust qirra -> kesish.
 Option Explicit
+Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
 Public Const KIND_CUT As Integer = 1
 Public Const KIND_FOLD As Integer = 2

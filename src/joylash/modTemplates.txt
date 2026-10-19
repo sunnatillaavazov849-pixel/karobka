@@ -2,6 +2,7 @@
 '   1) TCount ni oshiring  2) TName va TParams ga qator qo'shing  3) TBuild da chizing
 ' TParams formati: "Kalit=Yozuv=Standart|..."   (o'lchamlar mm da)
 Option Explicit
+Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
 Public Function TCount() As Long
     TCount = 6
