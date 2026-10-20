@@ -6,6 +6,7 @@ Public WithEvents btnMinus As MSForms.Label
 Public WithEvents btnPlus As MSForms.Label
 Public Key As String
 Public StepV As Double
+Public MinV As Double          ' eng kichik qiymat (0 - xususiyatni o'chirish mumkin)
 Public Owner As Object
 
 Private Sub tb_Change()
@@ -15,7 +16,7 @@ End Sub
 Private Sub Bump(ByVal d As Double)
     Dim v As Double
     v = Val(Replace(tb.Text, ",", ".")) + d
-    If v < StepV Then v = StepV
+    If v < MinV Then v = MinV
     tb.Text = Replace(CStr(v), ",", ".")
 End Sub
 

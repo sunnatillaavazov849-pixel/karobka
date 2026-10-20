@@ -78,6 +78,7 @@ End Sub
 Public Sub CutPoly(ParamArray v() As Variant)
     Dim n As Long, i As Long, j As Long
     n = (UBound(v) + 1) \ 2
+    If n = 2 Then AddFree KIND_CUT, v(0), v(1), v(2), v(3): Exit Sub   ' bitta kesish chizig'i
     For i = 0 To n - 1
         j = (i + 1) Mod n
         AddFree KIND_CUT, v(2 * i), v(2 * i + 1), v(2 * j), v(2 * j + 1)
@@ -86,6 +87,15 @@ End Sub
 
 Public Sub CutRect(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
     CutPoly x1, y1, x2, y1, x2, y2, x1, y2
+End Sub
+
+' Massivdan yopiq kesish konturi
+Public Sub CutPolyArr(xs() As Double, ys() As Double, ByVal n As Long)
+    Dim i As Long, j As Long
+    For i = 0 To n - 1
+        j = (i + 1) Mod n
+        AddFree KIND_CUT, xs(i), ys(i), xs(j), ys(j)
+    Next i
 End Sub
 
 ' Qo'shimcha bukish chizig'i

@@ -64,20 +64,20 @@ Private Sub UserForm_Initialize()
     Dim i As Long, cardL As MSForms.Frame
     Me.Caption = "Karobka"
     Me.BackColor = C_BG
-    Me.Width = 480: Me.Height = 390
+    Me.Width = 480: Me.Height = 420
     Me.Font.Name = FONT_NAME
 
     ' --- Shablon bloki
     Set cardL = Me.Controls.Add("Forms.Frame.1", "cardL")
     With cardL
-        .Left = PAD: .Top = PAD: .Width = 200: .Height = 300
+        .Left = PAD: .Top = PAD: .Width = 200: .Height = 352
         .BackColor = C_CARD: .BorderStyle = fmBorderStyleSingle: .BorderColor = C_LINE
         .SpecialEffect = fmSpecialEffectFlat: .Caption = ""
     End With
     NewLabel cardL, "Shablon", PAD, 8, 150, 16, True, C_TEXT, 10
     Set lst = cardL.Controls.Add("Forms.ListBox.1", "lst")
     With lst
-        .Left = 6: .Top = 30: .Width = 186: .Height = 262
+        .Left = 6: .Top = 30: .Width = 186: .Height = 314
         .BorderStyle = fmBorderStyleNone: .SpecialEffect = fmSpecialEffectFlat
         .BackColor = C_CARD: .ForeColor = C_TEXT
         .Font.Name = FONT_NAME: .Font.Size = 9
@@ -89,18 +89,18 @@ Private Sub UserForm_Initialize()
     ' --- O'lcham bloki
     Set fra = Me.Controls.Add("Forms.Frame.1", "fra")
     With fra
-        .Left = PAD + 200 + PAD: .Top = PAD: .Width = 240: .Height = 248
+        .Left = PAD + 200 + PAD: .Top = PAD: .Width = 240: .Height = 290
         .BackColor = C_CARD: .BorderStyle = fmBorderStyleSingle: .BorderColor = C_LINE
         .SpecialEffect = fmSpecialEffectFlat: .Caption = ""
         .ScrollBars = fmScrollBarsNone
     End With
 
     ' --- Sozlamalar va asosiy tugma
-    Set chk3D = NewCheck("3D", fra.Left + 2, 266, 60, "Yig'ilgan qutini yoyilma yonida ko'rsatish")
-    Set chkLive = NewCheck("Jonli ko'rish", fra.Left + 66, 266, 120, "O'lcham o'zgarganda sahifada darhol ko'rsatish")
-    Set btnDraw = NewButton(Me, "Chizish", fra.Left, 288, 240, 24, C_TEXT, C_CARD, 10)
+    Set chk3D = NewCheck("3D", fra.Left + 2, 308, 60, "Yig'ilgan qutini yoyilma yonida ko'rsatish")
+    Set chkLive = NewCheck("Jonli ko'rish", fra.Left + 66, 308, 120, "O'lcham o'zgarganda sahifada darhol ko'rsatish")
+    Set btnDraw = NewButton(Me, "Chizish", fra.Left, 330, 240, 24, C_TEXT, C_CARD, 10)
     btnDraw.ControlTipText = "Tayyor chizmani sahifaga qo'yish"
-    Set lblStatus = NewLabel(Me, "", PAD, 318, 452, 14, False, C_MUTED, 8)
+    Set lblStatus = NewLabel(Me, "", PAD, 368, 452, 14, False, C_MUTED, 8)
 
     lst.ListIndex = 0
 End Sub
@@ -126,7 +126,7 @@ Private Sub BuildFields()
     spec = Split(TParams(lst.ListIndex + 1), "|")
     For i = 0 To UBound(spec)
         parts = Split(spec(i), "=")
-        y = 34 + i * (ROW_H + 8)
+        y = 34 + i * (ROW_H + 6)
         Set lbl = NewLabel(fra, parts(1), PAD, y + 4, 92, 16)
         If UBound(parts) >= 3 Then lbl.ControlTipText = parts(3)
 
@@ -145,6 +145,8 @@ Private Sub BuildFields()
             .Text = parts(2)
         End With
         Set f.tb = tb: f.Key = parts(0): f.StepV = 1: Set f.Owner = Me
+        f.MinV = 1
+        If UBound(parts) >= 4 Then f.MinV = Val(parts(4))
         fields.Add f
     Next i
     building = False
@@ -156,7 +158,7 @@ Private Function ReadParams() As Object
     Set p = CreateObject("Scripting.Dictionary")
     For Each f In fields
         v = Val(Replace(f.tb.Text, ",", "."))
-        If v <= 0 Then
+        If v < f.MinV Or (f.MinV > 0 And v <= 0) Then
             f.tb.ForeColor = C_ERR
             SetStatus "Qiymat noto'g'ri", True
             Exit Function

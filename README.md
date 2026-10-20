@@ -14,20 +14,26 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya.
 
 > Fayllarni kod oynasiga nusxalab joylamang, "Invalid outside procedure" xatosi chiqadi. Agar Import ishlamasa, `src/joylash/*.txt` dagi toza koddan foydalaning. Uning uchun Insert → Module / Class Module / UserForm qiling, nomini fayl nomi bilan bir xil qo'ying va `.txt` faylning butun matnini joylang.
 
-## Shablonlar (13 ta)
+## Shablonlar (46 ta)
 | Guruh | Shablonlar |
 |-------|-----------|
-| Gofra | FEFCO 0201, FEFCO 0200 (ochiq) |
-| Tuck-end | Teskari qopqoq, To'g'ri qopqoq, Ruchkali quti, Yostiqcha (pillow) |
-| Mailer | Mailer (FEFCO 0427), Mailer oynali |
-| Lotok | Lotok, Ikki qavat lotok, Taglik + qopqoq, G'ilof, Tortma quti |
+| Gofra | FEFCO 0201, 0201 ruchkali, 0200, 0203, 0300 (taglik + qopqoq) |
+| Mailer | FEFCO 0427: oddiy, quloqsiz, oynali, osma teshikli, qulfli til, ruchkali; Pitsa qutisi; Qopqoqli lotok |
+| Tuck-end | RTE, STE, Kub, Oynali, Osma (evro teshik), Qulf tag (1-2-3), Qulf tag oynali, Seal end |
+| Ruchkali | Ruchkali quti, qulf tagli, Vino qutisi, Pirojniy qutisi |
+| Lotok | Lotok, ruchkali, ikki qavat, ikki qavat ruchkali, olti/sakkiz burchakli, G'ilof, Tortma quti |
+| Ko'p burchak | Uchburchak prizma, olti/sakkiz burchakli quti, Piramida (3/4/6), Gul quti (6/8) |
+| Sovg'a | Gulbargli (yarim doira, yurak, o'tkir uchli), Yostiqcha, Konfet |
+
+Qaysi rasm qaysi shablonga to'g'ri kelishi [`templates/catalog.md`](templates/catalog.md) da yozilgan.
+
+Qo'shimcha maydonlar 0 bo'lsa, o'sha xususiyat o'chadi: Oyna, Osma, Ruchka, Qulf, Qopqoq quloq.
 
 ## Yangi shablon qo'shish
-`src/modTemplates.bas` da quyidagilarni qiling:
-1. `TCount` ni bittaga oshiring.
-2. `TGroup`, `TName` va `TParams` ga yangi qator qo'shing.
-3. `TBuild` da chizing.
+`src/modTemplates.bas` dagi `InitDefs` ga bitta `Def` qatori qo'shing: guruh, nom, quruvchi va standart o'lchamlar. Mavjud quruvchining yangi varianti uchun shu kifoya. Yangi oila bo'lsa, `TBuild` ga yangi quruvchi qo'shing.
 
 Panellar `Rect` / `Poly` bilan chiziladi: ikki panelga umumiy qirra bukish, qolgan qirralar kesish bo'ladi. Qanotlar orasidagi tirqish `Slit` bilan, oyna yoki teshik `CutRect` / `CutPoly` bilan belgilanadi. 3D ko'rinish uchun `Box3`, `Lid3` va `Face` ishlatiladi.
 
-Koddagi o'zgarishdan keyin `python3 tools/make_paste.py` ni ishga tushiring, u `src/joylash` dagi nusxalarni yangilaydi.
+Koddagi o'zgarishdan keyin:
+- `python3 tools/preview.py` — hamma shablonlarni Corelsiz chizib tekshiradi (VBA kodi `tools/vba2py.py` bilan Python'ga o'giriladi), natija `preview/` papkasida;
+- `python3 tools/make_paste.py` — `src/joylash` dagi nusxalarni yangilaydi.
