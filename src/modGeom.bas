@@ -151,14 +151,19 @@ Public Sub Solve()
     segN = 0
     ReDim segX1(0 To 255): ReDim segY1(0 To 255): ReDim segX2(0 To 255): ReDim segY2(0 To 255)
     ReDim segKind(0 To 255): ReDim cnt(0 To 255)
-    ReDim ts(0 To 2 * eN + 2)
+    ReDim ts(0 To 2 * eN + 2 * sN + 2)
 
     For i = 0 To eN - 1
         dx = eX2(i) - eX1(i): dy = eY2(i) - eY1(i): ln2 = dx * dx + dy * dy
         If ln2 > EPS Then
             ts(0) = 0: ts(1) = 1: nt = 2
-            For j = 0 To 2 * eN - 1
-                If j Mod 2 = 0 Then px = eX1(j \ 2): py = eY1(j \ 2) Else px = eX2(j \ 2): py = eY2(j \ 2)
+            For j = 0 To 2 * eN + 2 * sN - 1          ' qirra va tirqish uchlari - bo'luvchi nuqtalar
+                If j < 2 * eN Then
+                    If j Mod 2 = 0 Then px = eX1(j \ 2): py = eY1(j \ 2) Else px = eX2(j \ 2): py = eY2(j \ 2)
+                Else
+                    k = j - 2 * eN
+                    If k Mod 2 = 0 Then px = sX1(k \ 2): py = sY1(k \ 2) Else px = sX2(k \ 2): py = sY2(k \ 2)
+                End If
                 t = ((px - eX1(i)) * dx + (py - eY1(i)) * dy) / ln2
                 If t > EPS And t < 1 - EPS Then
                     If Abs(eX1(i) + t * dx - px) < TOL And Abs(eY1(i) + t * dy - py) < TOL Then
