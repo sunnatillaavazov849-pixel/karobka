@@ -14,6 +14,8 @@ Private Const ROW_H As Single = 22           ' maydon balandligi
 Private Const PAD As Single = 12
 
 Private WithEvents lst As MSForms.ListBox
+Private WithEvents cmbGroup As MSForms.ComboBox
+Private ids() As Long                 ' ro'yxat qatori -> shablon raqami
 Private WithEvents chk3D As MSForms.CheckBox
 Private WithEvents chkLive As MSForms.CheckBox
 Private WithEvents btnDraw As MSForms.Label
@@ -75,16 +77,25 @@ Private Sub UserForm_Initialize()
         .SpecialEffect = fmSpecialEffectFlat: .Caption = ""
     End With
     NewLabel cardL, "Shablon", PAD, 8, 150, 16, True, C_TEXT, 10
+    Set cmbGroup = cardL.Controls.Add("Forms.ComboBox.1", "cmbGroup")
+    With cmbGroup
+        .Left = 8: .Top = 30: .Width = 182: .Height = 18
+        .Style = fmStyleDropDownList: .SpecialEffect = fmSpecialEffectFlat
+        .BackColor = C_FIELD: .ForeColor = C_TEXT
+        .Font.Name = FONT_NAME: .Font.Size = 9
+        .ControlTipText = "Guruh bo'yicha saralash"
+        .AddItem "Hammasi"
+    End With
+    For i = 1 To TCount
+        If Not HasItem(cmbGroup, TGroup(i)) Then cmbGroup.AddItem TGroup(i)
+    Next i
     Set lst = cardL.Controls.Add("Forms.ListBox.1", "lst")
     With lst
-        .Left = 6: .Top = 30: .Width = 186: .Height = 314
+        .Left = 6: .Top = 54: .Width = 186: .Height = 290
         .BorderStyle = fmBorderStyleNone: .SpecialEffect = fmSpecialEffectFlat
         .BackColor = C_CARD: .ForeColor = C_TEXT
         .Font.Name = FONT_NAME: .Font.Size = 9
     End With
-    For i = 1 To TCount
-        lst.AddItem TGroup(i) & "  -  " & TName(i)
-    Next i
 
     ' --- O'lcham bloki
     Set fra = Me.Controls.Add("Forms.Frame.1", "fra")
@@ -102,8 +113,35 @@ Private Sub UserForm_Initialize()
     btnDraw.ControlTipText = "Tayyor chizmani sahifaga qo'yish"
     Set lblStatus = NewLabel(Me, "", PAD, 368, 452, 14, False, C_MUTED, 8)
 
-    lst.ListIndex = 0
+    cmbGroup.ListIndex = 0                ' ro'yxatni to'ldiradi
 End Sub
+
+Private Function HasItem(c As MSForms.ComboBox, ByVal txt As String) As Boolean
+    Dim k As Long
+    For k = 0 To c.ListCount - 1
+        If c.List(k) = txt Then HasItem = True: Exit Function
+    Next k
+End Function
+
+' Tanlangan guruh shablonlari bilan ro'yxatni to'ldirish
+Private Sub cmbGroup_Change()
+    Dim i As Long, n As Long, g As String
+    g = cmbGroup.Text
+    lst.Clear
+    ReDim ids(0 To TCount)
+    For i = 1 To TCount
+        If g = "Hammasi" Or g = TGroup(i) Then
+            If g = "Hammasi" Then lst.AddItem TGroup(i) & "  -  " & TName(i) Else lst.AddItem TName(i)
+            ids(n) = i: n = n + 1
+        End If
+    Next i
+    If n > 0 Then lst.ListIndex = 0
+End Sub
+
+' Tanlangan shablon raqami
+Private Function CurId() As Long
+    CurId = ids(lst.ListIndex)
+End Function
 
 Private Sub lst_Change()
     If lst.ListIndex < 0 Then Exit Sub
@@ -123,7 +161,7 @@ Private Sub BuildFields()
 
     NewLabel fra, "O'lcham", PAD, 8, 150, 16, True, C_TEXT, 10
     NewLabel fra, "mm", 200, 10, 28, 14, False, C_MUTED, 8
-    spec = Split(TParams(lst.ListIndex + 1), "|")
+    spec = Split(TParams(CurId), "|")
     For i = 0 To UBound(spec)
         parts = Split(spec(i), "=")
         y = 34 + i * (ROW_H + 6)
@@ -170,9 +208,14 @@ Private Function ReadParams() As Object
 End Function
 
 Private Function Caption_(p As Object) As String
-    Caption_ = TName(lst.ListIndex + 1) & "  " & p("L") & " x " & p("W")
-    If p.Exists("H") Then Caption_ = Caption_ & " x " & p("H")
-    Caption_ = Caption_ & " mm"
+    Dim k As Variant, dims As String
+    For Each k In Array("L", "W", "H", "A", "DI")
+        If p.Exists(k) Then
+            If dims <> "" Then dims = dims & " x "
+            dims = dims & p(k)
+        End If
+    Next k
+    Caption_ = TName(CurId) & "  " & dims & " mm"
 End Function
 
 Private Sub SetStatus(ByVal txt As String, ByVal isErr As Boolean)
@@ -187,7 +230,7 @@ Public Sub FieldChanged()
     If p Is Nothing Then Exit Sub
     SetStatus "", False
     If Not chkLive.Value Then Exit Sub
-    TBuild lst.ListIndex + 1, p
+    TBuild CurId, p
     DrawDie False, Caption_(p), chk3D.Value
 End Sub
 
@@ -208,7 +251,7 @@ Private Sub btnDraw_Click()
     Dim p As Object
     Set p = ReadParams()
     If p Is Nothing Then Exit Sub
-    TBuild lst.ListIndex + 1, p
+    TBuild CurId, p
     DrawDie True, Caption_(p), chk3D.Value
     SetStatus "Chizildi", False
     chkLive.Value = False          ' tayyor chizma ustiga preview chizilmasin
