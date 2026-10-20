@@ -21,7 +21,7 @@ End Sub
 
 Private Sub InitDefs()
     If dCnt > 0 Then Exit Sub
-    ReDim dG(1 To 200): ReDim dN(1 To 200): ReDim dB(1 To 200): ReDim dP(1 To 200)
+    ReDim dG(1 To 300): ReDim dN(1 To 300): ReDim dB(1 To 300): ReDim dP(1 To 300)
 
     ' --- gofra qutilar (FEFCO)
     Def "Gofra", "FEFCO 0201", "RSC 1", "L=300|W=200|H=150|G=35|RT=0"
@@ -82,6 +82,30 @@ Private Sub InitDefs()
     Def "Sovg'a", "Gulbargli (o'tkir uchli)", "PETAL P", "A=80|H=90|G=15|P=70"
     Def "Sovg'a", "Yostiqcha (pillow)", "PILLOW", "L=160|W=90|G=15|D=25"
     Def "Sovg'a", "Konfet (candy)", "CANDY", "A=50|L=150|E=40|G=15"
+    Def "Sovg'a", "Piramida, gulbargli (lenta)", "PYRAMID C", "N=4|A=100|H=110|G=0"
+
+    ' --- tort va lanch-boks
+    Def "Tort", "To'rt bargli tort qutisi", "CROSS", "A=110|H=90|P=40|RT=0"
+    Def "Tort", "To'rt bargli, ruchkali", "CROSS", "A=110|H=90|P=45|RT=50"
+    Def "Tort", "Yumaloq uchli tort qutisi", "CAKE", "L=190|W=120|H=110"
+    Def "Tort", "Lanch-boks", "LUNCH", "L=200|W=150|H=60"
+    Def "Tort", "Olti burchakli lanch-boks", "PLUNCH", "N=6|A=70|H=45|G=15"
+    Def "Tort", "Sakkiz burchakli lanch-boks", "PLUNCH", "N=8|A=55|H=45|G=15"
+
+    ' --- qo'shimcha
+    Def "Lotok", "Lotok, bukiladigan burchak", "TRAYW", "L=220|W=160|H=50"
+    Def "Lotok", "Bo'lakli vstavka (2x2)", "INSERT", "L=200|W=150|H=60|NX=2|NY=2|T=2"
+    Def "Lotok", "Bo'lakli vstavka (3x4)", "INSERT", "L=240|W=180|H=60|NX=3|NY=4|T=2"
+    Def "Sovg'a", "Uycha (fonar)", "HOUSE", "A=90|H=120|R=60|G=15|OY=0"
+    Def "Sovg'a", "Uycha, oynali", "HOUSE", "A=90|H=120|R=60|G=15|OY=12"
+    Def "Ruchkali", "Ruchkali, yumaloq ruchka", "GABLE R N", "L=160|W=100|H=120|G=15|HH=70|HW=70"
+    Def "Ruchkali", "Sut qutisi", "GABLE N", "L=70|W=70|H=170|G=12|HH=25|HW=0"
+    Def "Tuck-end", "Lab bo'yog'i qutisi", "TUCK S", "L=25|W=25|H=95|G=10|TK=10|OY=0|IL=30"
+    Def "Tuck-end", "Uzun quti (flakon)", "TUCK R", "L=45|W=45|H=180|G=12|TK=12|OY=0|IL=0"
+    Def "Tuck-end", "Flakon qutisi, oynali", "TUCK N", "L=60|W=60|H=160|G=12|TK=12|OY=12|IL=0"
+    Def "Ko'p burchak", "Olmos (oktaedr)", "BIPYR", "N=4|A=70|H=50|G=10"
+    Def "Ko'p burchak", "Olmos (olti qirrali)", "BIPYR", "N=6|A=50|H=60|G=10"
+    Def "Sovg'a", "Silindr quti", "CYL", "DI=80|H=120|G=15"
 End Sub
 
 Public Function TCount() As Long
@@ -130,12 +154,16 @@ Private Function PInfo(ByVal k As String) As String
         Case "LF": PInfo = "Qopqoq quloq=Qopqoq yon quloqlari (0 - yo'q, 1 - bor)=0"
         Case "RT": PInfo = "Ruchka=Ruchka teshigi eni (0 - yo'q)=0"
         Case "HH": PInfo = "Ruchka bal.=Ruchka qismining balandligi=1"
-        Case "HW": PInfo = "Teshik eni=Ruchka teshigi eni=1"
+        Case "HW": PInfo = "Teshik eni=Ruchka teshigi eni (0 - yo'q)=0"
         Case "HL": PInfo = "Qopqoq bal.=Qopqoq devori balandligi=1"
         Case "K": PInfo = "Zazor=Ichki va tashqi qism orasidagi bo'shliq=0"
         Case "D": PInfo = "Qavariq=Uchlaridagi yoy balandligi=1"
         Case "P": PInfo = "Gulbarg=Gulbarg balandligi=1"
         Case "E": PInfo = "Uchlari=Buraladigan uchlar uzunligi=1"
+        Case "R": PInfo = "Tom bal.=Tom (qopqoq) balandligi=1"
+        Case "DI": PInfo = "Diametr=Silindr diametri=1"
+        Case "NX": PInfo = "Ustunlar=Uzunlik bo'yicha bo'laklar soni=1"
+        Case "NY": PInfo = "Qatorlar=Eni bo'yicha bo'laklar soni=1"
         Case Else: PInfo = k & "==0"
     End Select
 End Function
@@ -178,7 +206,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
             If Flag(i, "E") Then bot = 2
             TuckEnd L, W, H, p("G"), p("TK"), Flag(i, "R"), bot, Pv(p, "OY"), Pv(p, "IL")
         Case "GABLE"
-            Gable L, W, H, p("G"), p("HH"), p("HW"), Flag(i, "N")
+            Gable L, W, H, p("G"), p("HH"), p("HW"), Flag(i, "N"), Flag(i, "R")
         Case "TRAY"
             Tray 0, L, W, H, Pv(p, "RT")
             Box3 0, 0, 0, L, H, W, False
@@ -192,7 +220,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
             Box3 0, 0, 0, L, H, W, True, True, False
         Case "DRAWER": Drawer L, W, H, p("G"), p("K")
         Case "PRISM": Prism Int(p("N")), p("A"), H, p("G"), p("TK")
-        Case "PYRAMID": Pyramid Int(p("N")), p("A"), H, p("G")
+        Case "PYRAMID": Pyramid Int(p("N")), p("A"), H, p("G"), Flag(i, "C")
         Case "PETAL"
             Dim sty As String
             sty = "A"
@@ -201,6 +229,17 @@ Public Sub TBuild(ByVal i As Long, p As Object)
             Petal sty, p("A"), H, p("G"), p("P")
         Case "PILLOW": Pillow L, W, p("G"), p("D")
         Case "CANDY": Candy p("A"), L, p("E"), p("G")
+        Case "CROSS": Cross p("A"), H, p("P"), Pv(p, "RT")
+        Case "CAKE": Cake L, W, H
+        Case "LUNCH": Lunch L, W, H
+        Case "PLUNCH": PolyLunch Int(p("N")), p("A"), H, p("G")
+        Case "TRAYW"
+            TrayWeb 0, L, W, H
+            Box3 0, 0, 0, L, H, W, False
+        Case "INSERT": Insert L, W, H, Int(p("NX")), Int(p("NY")), p("T")
+        Case "HOUSE": House p("A"), H, p("R"), p("G"), Pv(p, "OY")
+        Case "BIPYR": Bipyramid Int(p("N")), p("A"), H, p("G")
+        Case "CYL": Cylinder p("DI"), H, p("G")
     End Select
     Solve
 End Sub
@@ -542,8 +581,9 @@ End Sub
 
 ' ================================================================ ruchkali
 
+' snap - 1-2-3 qulf tag, rnd - ruchka qismi yumaloq (arka)
 Private Sub Gable(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, _
-                  ByVal hh As Double, ByVal hw As Double, ByVal snap As Boolean)
+                  ByVal hh As Double, ByVal hw As Double, ByVal snap As Boolean, ByVal rnd As Boolean)
     Dim xs() As Double, i As Long, xa As Double, xb As Double, y1 As Double, y2 As Double
     Dim c As Double, cx As Double, cy As Double, th As Double, xm As Double
     hw = Min2(hw, L - 20)
@@ -554,9 +594,19 @@ Private Sub Gable(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal
         xa = xs(i): xb = xs(i + 1)
         Rect xa, H, xb, y1
         If i Mod 2 = 0 Then
-            Poly xa, y1, xb, y1, xb, y2 - c, xb - c, y2, xa + c, y2, xa, y2 - c
             cx = (xa + xb) / 2: cy = y1 + hh * 0.55: th = Min2(22, hh * 0.35)
-            CutStadium cx, cy, hw, th
+            If rnd Then
+                Dim ry As Double
+                ry = Min2((xb - xa) / 2, hh * 0.8)
+                PtBegin
+                Pt xa, y1: Pt xb, y1: Pt xb, y2 - ry
+                EllPt cx, y2 - ry, (xb - xa) / 2, ry, 0, 180, 16
+                PtPoly
+                cy = y2 - ry
+            Else
+                Poly xa, y1, xb, y1, xb, y2 - c, xb - c, y2, xa + c, y2, xa, y2 - c
+            End If
+            If hw > 0 Then CutStadium cx, cy, hw, th
         Else
             xm = (xa + xb) / 2
             Crease xa, H, xm, y1
@@ -627,50 +677,15 @@ Private Sub TrayDouble(ByVal L As Double, ByVal W As Double, ByVal H As Double, 
     Next b
 End Sub
 
-' Muntazam ko'pburchak lotok: taglik, har qirrada devor. g > 0 - devorlar orasida yelim qanoti,
-' pt > 0 - devor ustida gulbarg (gul quti) va tirqish
+' Muntazam ko'pburchak lotok. g > 0 - devorlar orasida yelim qanoti, pet > 0 - gulbargli devorlar (gul quti)
 Private Sub PolyTray(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double, ByVal pet As Double)
-    Dim k As Long, vx() As Double, vy() As Double, ex As Double, ey As Double, nx As Double, ny As Double
-    Dim x1 As Double, y1 As Double, x2 As Double, y2 As Double, c As Double, j As Long, ln As Double
-    Dim mx As Double, my As Double, a As Double, u As Double, v As Double
+    Dim k As Long, vx() As Double, vy() As Double
     If n < 3 Then n = 3
     RegPoly 0, 0, sd, 0, n
     ReDim vx(0 To n - 1): ReDim vy(0 To n - 1)
     For k = 0 To n - 1: vx(k) = ptX(k): vy(k) = ptY(k): Next k
-    PolyArr vx, vy, n                            ' taglik
-    For k = 0 To n - 1
-        j = (k + 1) Mod n
-        x1 = vx(k): y1 = vy(k): x2 = vx(j): y2 = vy(j)
-        ex = (x2 - x1) / sd: ey = (y2 - y1) / sd
-        nx = ey: ny = -ex                         ' tashqi normal (taglik soat strelkasiga teskari)
-        Poly x1, y1, x2, y2, x2 + nx * H, y2 + ny * H, x1 + nx * H, y1 + ny * H
-        If g > 0 Then
-            c = Min2(g / Tan(2 * PI / n) * 1.1 + 1, H / 2)
-            If n = 4 Then c = Min2(g * 0.3, H / 4)
-            Poly x2, y2, x2 + ex * g + nx * c, y2 + ey * g + ny * c, _
-                 x2 + ex * g + nx * (H - c), y2 + ey * g + ny * (H - c), x2 + nx * H, y2 + ny * H
-        End If
-        If pet > 0 Then                           ' gulbarg: yarim ellips va tirqish
-            PtBegin
-            For a = 0 To 12
-                u = sd / 2 - sd / 2 * Cos(PI * a / 12): v = H + pet * Sin(PI * a / 12)
-                Pt x1 + ex * u + nx * v, y1 + ey * u + ny * v
-            Next a
-            PtPoly
-            mx = (x1 + x2) / 2: my = (y1 + y2) / 2
-            CutPoly mx + nx * (H + pet * 0.55), my + ny * (H + pet * 0.55), mx + nx * (H + pet * 0.95), my + ny * (H + pet * 0.95)
-        End If
-    Next k
-    ' 3D
-    Dim r3 As Double
-    For k = 0 To n - 1
-        j = (k + 1) Mod n
-        Face vx(k), 0, vy(k), vx(j), 0, vy(j), vx(j), H, vy(j), vx(k), H, vy(k)
-    Next k
-    Face vx(0), 0, vy(0), vx(1), 0, vy(1), vx(2), 0, vy(2)
-    For k = 3 To n - 1
-        Face vx(0), 0, vy(0), vx(k - 1), 0, vy(k - 1), vx(k), 0, vy(k)
-    Next k
+    PolyWalls vx, vy, n, H, g, pet
+    PolyTray3D vx, vy, n, 0, H, True
 End Sub
 
 Private Sub Drawer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g As Double, ByVal k As Double)
@@ -736,7 +751,8 @@ Private Sub PrismEnd(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByV
 End Sub
 
 ' n burchakli piramida: taglik tomoni sd, balandligi H, har uchburchak o'ng qirrasida yelim qanoti
-Private Sub Pyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double)
+' crv = True: yon tomonlar qavariq gulbarg, yelimsiz, uchida lenta teshigi
+Private Sub Pyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double, ByVal crv As Boolean)
     Dim k As Long, j As Long, vx() As Double, vy() As Double, rin As Double, sl As Double
     Dim ex As Double, ey As Double, nx As Double, ny As Double, axp As Double, ayp As Double
     Dim fx As Double, fy As Double, fl As Double, ox As Double, oy As Double, c As Double
@@ -752,14 +768,19 @@ Private Sub Pyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVa
         ex = (vx(j) - vx(k)) / sd: ey = (vy(j) - vy(k)) / sd
         nx = ey: ny = -ex
         axp = (vx(k) + vx(j)) / 2 + nx * sl: ayp = (vy(k) + vy(j)) / 2 + ny * sl
-        Poly vx(k), vy(k), vx(j), vy(j), axp, ayp
-        ' yelim qanoti: vx(j) -> uchi qirrasi bo'ylab, tashqariga
-        fx = axp - vx(j): fy = ayp - vy(j): fl = Sqr(fx * fx + fy * fy)
-        fx = fx / fl: fy = fy / fl
-        ox = 0 - fy: oy = fx                      ' qirradan tashqariga (uchburchak soat strelkasi bo'yicha)
-        c = Min2(g, fl / 4)
-        Poly vx(j), vy(j), vx(j) + ox * g + fx * c * 1.5, vy(j) + oy * g + fy * c * 1.5, _
-             axp + ox * g - fx * c * 2, ayp + oy * g - fy * c * 2, axp, ayp
+        If crv Then
+            CurvedTri vx(k), vy(k), vx(j), vy(j), axp, ayp, sl * 0.12
+            CutCircle axp + (((vx(k) + vx(j)) / 2) - axp) * 0.12, ayp + (((vy(k) + vy(j)) / 2) - ayp) * 0.12, 2.5
+        Else
+            Poly vx(k), vy(k), vx(j), vy(j), axp, ayp
+            ' yelim qanoti: vx(j) -> uchi qirrasi bo'ylab, tashqariga
+            fx = axp - vx(j): fy = ayp - vy(j): fl = Sqr(fx * fx + fy * fy)
+            fx = fx / fl: fy = fy / fl
+            ox = 0 - fy: oy = fx                      ' qirradan tashqariga (uchburchak soat strelkasi bo'yicha)
+            c = Min2(g, fl / 4)
+            Poly vx(j), vy(j), vx(j) + ox * g + fx * c * 1.5, vy(j) + oy * g + fy * c * 1.5, _
+                 axp + ox * g - fx * c * 2, ayp + oy * g - fy * c * 2, axp, ayp
+        End If
     Next k
     ' 3D
     Dim cx As Double, cz As Double
@@ -781,11 +802,11 @@ Private Sub Petal(ByVal sty As String, ByVal sd As Double, ByVal H As Double, By
         xa = xs(k): xb = xs(k + 1): xm = (xa + xb) / 2
         PtBegin
         Select Case sty
-            Case "H"
+            Case "H"                             ' yurak: ikki bo'lak, ingichka bo'yin
                 r = sd / 4
                 Pt xa, H
-                ArcPt xa + r, H + pet - r, r, 180, 0
-                ArcPt xb - r, H + pet - r, r, 180, 0
+                EllPt xm - r, H + pet - r, r, r, 225, 0, 16
+                EllPt xm + r, H + pet - r, r, r, 180, -45, 16
                 Pt xb, H
             Case "P"
                 For i = 0 To 10
@@ -890,4 +911,372 @@ Private Sub Candy(ByVal sd As Double, ByVal L As Double, ByVal e As Double, ByVa
     Face 0, sd, 0, 0 - e, sd * 0.65, sd * 0.35, 0 - e, sd * 0.35, sd * 0.65, 0, 0, sd
     Face L, 0, 0, L + e, sd * 0.35, sd * 0.35, L + e, sd * 0.65, sd * 0.65, L, sd, sd
     Face L, sd, 0, L + e, sd * 0.65, sd * 0.35, L + e, sd * 0.35, sd * 0.65, L, 0, sd
+End Sub
+
+' ================================================================ qo'shimcha yordamchilar
+
+' Doira teshik (lenta uchun)
+Private Sub CutCircle(ByVal cx As Double, ByVal cy As Double, ByVal r As Double)
+    PtBegin
+    EllPt cx, cy, r, r, 0, 330, 11
+    PtCut
+End Sub
+
+' Uchburchak (a -> b asos, c uchi), yon tomonlari tashqariga bo'rtgan (bul - bo'rtiq)
+Private Sub CurvedTri(ByVal ax As Double, ByVal ay As Double, ByVal bx As Double, ByVal by As Double, _
+                      ByVal cx As Double, ByVal cy As Double, ByVal bul As Double)
+    PtBegin
+    Pt ax, ay
+    BulgePts bx, by, cx, cy, bul
+    BulgePts cx, cy, ax, ay, bul
+    PtPoly
+End Sub
+
+' (x1,y1) dan (x2,y2) gacha chap tomonga bo'rtgan egri chiziq nuqtalari (birinchi nuqtasiz)
+Private Sub BulgePts(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal bul As Double)
+    Dim i As Long, t As Double, dx As Double, dy As Double, ln As Double, ox As Double, oy As Double
+    dx = x2 - x1: dy = y2 - y1: ln = Sqr(dx * dx + dy * dy)
+    ox = 0 - dy / ln: oy = dx / ln
+    For i = 0 To 12
+        t = i / 12
+        Pt x1 + dx * t + ox * bul * Sin(PI * t), y1 + dy * t + oy * bul * Sin(PI * t)
+    Next i
+End Sub
+
+' Ko'pburchak taglik (soat strelkasiga teskari) va har qirrada devor. g > 0 - yelim qanoti,
+' pet > 0 - devor ustida gulbarg va tirqish
+Private Sub PolyWalls(vx() As Double, vy() As Double, ByVal n As Long, ByVal H As Double, ByVal g As Double, ByVal pet As Double)
+    Dim k As Long, j As Long, ex As Double, ey As Double, nx As Double, ny As Double, sd As Double
+    Dim x1 As Double, y1 As Double, x2 As Double, y2 As Double, c As Double
+    Dim mx As Double, my As Double, a As Double, u As Double, v As Double
+    PolyArr vx, vy, n
+    For k = 0 To n - 1
+        j = (k + 1) Mod n
+        x1 = vx(k): y1 = vy(k): x2 = vx(j): y2 = vy(j)
+        sd = Sqr((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+        ex = (x2 - x1) / sd: ey = (y2 - y1) / sd
+        nx = ey: ny = 0 - ex                      ' tashqi normal
+        Poly x1, y1, x2, y2, x2 + nx * H, y2 + ny * H, x1 + nx * H, y1 + ny * H
+        If g > 0 Then
+            If n = 4 Then c = Min2(g * 0.3, H / 4) Else c = Min2(g / Tan(2 * PI / n) * 1.1 + 1, H / 2)
+            Poly x2, y2, x2 + ex * g + nx * c, y2 + ey * g + ny * c, _
+                 x2 + ex * g + nx * (H - c), y2 + ey * g + ny * (H - c), x2 + nx * H, y2 + ny * H
+        End If
+        If pet > 0 Then
+            PtBegin
+            For a = 0 To 12
+                u = sd / 2 - sd / 2 * Cos(PI * a / 12): v = H + pet * Sin(PI * a / 12)
+                Pt x1 + ex * u + nx * v, y1 + ey * u + ny * v
+            Next a
+            PtPoly
+            mx = (x1 + x2) / 2: my = (y1 + y2) / 2
+            CutPoly mx + nx * (H + pet * 0.55), my + ny * (H + pet * 0.55), mx + nx * (H + pet * 0.95), my + ny * (H + pet * 0.95)
+        End If
+    Next k
+End Sub
+
+' 3D: ko'pburchak lotok (y0 balandlikda)
+Private Sub PolyTray3D(vx() As Double, vy() As Double, ByVal n As Long, ByVal y0 As Double, ByVal H As Double, ByVal bottomOn As Boolean)
+    Dim k As Long, j As Long
+    For k = 0 To n - 1
+        j = (k + 1) Mod n
+        Face vx(k), y0, vy(k), vx(j), y0, vy(j), vx(j), y0 + H, vy(j), vx(k), y0 + H, vy(k)
+    Next k
+    If bottomOn Then
+        For k = 2 To n - 1
+            Face vx(0), y0, vy(0), vx(k - 1), y0, vy(k - 1), vx(k), y0, vy(k)
+        Next k
+    End If
+End Sub
+
+' ================================================================ tort va lanch-boks
+
+' To'rt bargli tort qutisi: kvadrat taglik, old/orqa uzun bargli devorlar (uchida til), yon tomonlar - linza.
+' rt > 0 - tillarda ruchka teshigi
+Private Sub Cross(ByVal sd As Double, ByVal H As Double, ByVal pet As Double, ByVal rt As Double)
+    Dim la As Double, ls As Double, bw As Double, bh As Double, nw As Double, i As Long, t As Double
+    Dim x As Double, w As Double, rr As Double, k As Long, sg As Double, y0 As Double
+    la = H + sd * 0.55: ls = H + sd * 0.5
+    bw = sd * 0.2: bh = sd * 0.35: nw = sd * 0.45
+    Rect 0, 0, sd, sd
+    For k = 0 To 1                               ' old va orqa barglar (yuqori va past)
+        If k = 0 Then sg = 1: y0 = sd Else sg = -1: y0 = 0
+        rr = Min2(nw * 0.35, pet / 2)
+        PtBegin
+        For i = 0 To 14                          ' chap qirra
+            t = i / 14
+            x = 0 - ArmBulge(t, bw): If t > 0.7 Then x = (sd - nw) / 2 * (t - 0.7) / 0.3
+            Pt x, y0 + sg * la * t
+        Next i
+        Pt (sd - nw) / 2, y0 + sg * (la + pet - rr)
+        If sg > 0 Then
+            ArcPt (sd - nw) / 2 + rr, y0 + la + pet - rr, rr, 180, 90
+            ArcPt (sd + nw) / 2 - rr, y0 + la + pet - rr, rr, 90, 0
+        Else
+            ArcPt (sd - nw) / 2 + rr, y0 - la - pet + rr, rr, 180, 270
+            ArcPt (sd + nw) / 2 - rr, y0 - la - pet + rr, rr, 270, 360
+        End If
+        For i = 14 To 0 Step -1                  ' o'ng qirra
+            t = i / 14
+            x = sd + ArmBulge(t, bw): If t > 0.7 Then x = sd - (sd - nw) / 2 * (t - 0.7) / 0.3
+            Pt x, y0 + sg * la * t
+        Next i
+        PtPoly
+        If rt > 0 Then CutStadium sd / 2, y0 + sg * (la + pet * 0.5), Min2(rt, nw - 8), Min2(12, pet * 0.4)
+    Next k
+    For k = 0 To 1                               ' yon linzalar
+        If k = 0 Then sg = 1: y0 = sd Else sg = -1: y0 = 0
+        PtBegin
+        For i = 0 To 16
+            t = i / 16
+            w = sd / 2 * (1 - t) + bh * Sin(PI * t)
+            Pt y0 + sg * ls * t, sd / 2 - w
+        Next i
+        For i = 15 To 1 Step -1
+            t = i / 16
+            w = sd / 2 * (1 - t) + bh * Sin(PI * t)
+            Pt y0 + sg * ls * t, sd / 2 + w
+        Next i
+        PtPoly
+        CutPoly y0 + sg * ls * 0.62, sd / 2, y0 + sg * ls * 0.9, sd / 2
+    Next k
+    Box3 0, 0, 0, sd, H, sd
+End Sub
+
+' Bargning yon bo'rtig'i: tagida bo'rtmaydi (yon linzalar bilan to'qnashmasin), o'rtada eng keng
+Private Function ArmBulge(ByVal t As Double, ByVal bw As Double) As Double
+    If t > 0.15 And t <= 0.7 Then ArmBulge = bw * Sin(PI * (t - 0.15) / 0.55)
+End Function
+
+' Yumaloq uchli tort qutisi (taglik L x W, yon qanotlar yumaloq, ustki qopqoq uzun, boshi yarim doira)
+Private Sub Cake(ByVal L As Double, ByVal W As Double, ByVal H As Double)
+    Dim e As Double, r As Double, fl As Double, i As Long, t As Double, k As Long, x0 As Double, sx As Double
+    Dim yt As Double, a As Double, cx As Double, ex As Double
+    Rect 0, 0, L, W
+    e = H + W * 0.4: r = W / 2: fl = H * 0.2
+    For k = 0 To 1                               ' yon qanotlar
+        If k = 0 Then x0 = 0: sx = -1 Else x0 = L: sx = 1
+        PtBegin
+        Pt x0, 0: Pt x0 + sx * (e - r), 0
+        If sx < 0 Then ArcPt x0 - (e - r), r, r, 270, 90 Else ArcPt x0 + (e - r), r, r, 270, 450
+        Pt x0 + sx * (e - r), W: Pt x0, W
+        PtPoly
+        cx = x0 + sx * e * 0.62: ex = e * 0.16    ' egilish uchun yoysimon bukish
+        For i = 0 To 7
+            Crease cx + sx * ex * Sin(PI * i / 8), W / 2 - r * Cos(PI * i / 8), _
+                   cx + sx * ex * Sin(PI * (i + 1) / 8), W / 2 - r * Cos(PI * (i + 1) / 8)
+        Next i
+    Next k
+    ' ustki qanot: devor (H) + qopqoq (W) + yarim doira boshi
+    yt = W + H + W * 0.85
+    PtBegin
+    For i = 0 To 8: t = i / 8: Pt 0 - fl * Sin(PI * t), W + H * t: Next i
+    Pt 0, yt
+    EllPt L / 2, yt, L / 2, L * 0.3, 180, 0, 16
+    Pt L, W + H
+    For i = 7 To 1 Step -1: t = i / 8: Pt L + fl * Sin(PI * t), W + H * t: Next i
+    Pt L, W
+    PtPoly
+    Crease 0, W + H, L, W + H
+    CutStadium L / 2, yt + L * 0.12, L * 0.18, 5
+    ' pastki qanot: devor (H) + til, tirqish bilan
+    PtBegin
+    Pt 0, 0
+    For i = 1 To 8: t = i / 8: Pt 0 - fl * Sin(PI * t), 0 - H * t: Next i
+    Pt 0, 0 - H - W * 0.45: Pt L, 0 - H - W * 0.45
+    For i = 8 To 1 Step -1: t = i / 8: Pt L + fl * Sin(PI * t), 0 - H * t: Next i
+    Pt L, 0
+    PtPoly
+    Crease 0, 0 - H, L, 0 - H
+    CutPoly L * 0.41, 0 - H - W * 0.25, L * 0.59, 0 - H - W * 0.25
+    Box3 0, 0, 0, L, H, W
+End Sub
+
+' Burchaklari bukiladigan lotok (web corner): burchak kvadrati diagonal bo'ylab bukiladi. (ox, oy) - taglik burchagi
+Private Sub TrayWebAt(ByVal ox As Double, ByVal oy As Double, ByVal L As Double, ByVal W As Double, ByVal H As Double)
+    Dim a As Long, b As Long, x0 As Double, y0 As Double, sx As Double, sy As Double
+    Rect ox, oy, ox + L, oy + W
+    Rect ox, oy - H, ox + L, oy
+    Rect ox, oy + W, ox + L, oy + W + H
+    Rect ox - H, oy, ox, oy + W
+    Rect ox + L, oy, ox + L + H, oy + W
+    For a = 0 To 1
+        If a = 0 Then x0 = ox: sx = -1 Else x0 = ox + L: sx = 1
+        For b = 0 To 1
+            If b = 0 Then y0 = oy: sy = -1 Else y0 = oy + W: sy = 1
+            Poly x0, y0, x0 + sx * H, y0, x0 + sx * H, y0 + sy * H
+            Poly x0, y0, x0 + sx * H, y0 + sy * H, x0, y0 + sy * H
+        Next b
+    Next a
+End Sub
+
+Private Sub TrayWeb(ByVal ox As Double, ByVal L As Double, ByVal W As Double, ByVal H As Double)
+    TrayWebAt ox, 0, L, W, H
+End Sub
+
+' Lanch-boks: taglik va qopqoq (ikkalasi bukiladigan burchakli), orqa devor orqali ulangan, old tilli
+Private Sub Lunch(ByVal L As Double, ByVal W As Double, ByVal H As Double)
+    Dim tw As Double, th As Double, yt As Double, r As Double, cx As Double
+    TrayWebAt 0, 0, L, W, H
+    TrayWebAt 0, W + 2 * H, L, W, H
+    Slit 0 - H, W + H, 0, W + H
+    Slit L, W + H, L + H, W + H
+    tw = Min2(L * 0.25, 50): th = Min2(H * 0.5, 25): yt = 2 * W + 3 * H: cx = L / 2: r = Min2(th * 0.5, tw / 3)
+    PtBegin
+    Pt cx - tw / 2, yt
+    ArcPt cx - tw / 2 + r, yt + th - r, r, 180, 90
+    ArcPt cx + tw / 2 - r, yt + th - r, r, 90, 0
+    Pt cx + tw / 2, yt
+    PtPoly
+    CutPoly cx - tw / 2 - 1, 0 - H + 4, cx + tw / 2 + 1, 0 - H + 4
+    Box3 0, 0, 0, L, H, W, False
+    Box3 0, H * 1.4, 0, L, H, W, True, False
+End Sub
+
+' Ko'pburchak lanch-boks: taglik va qopqoq lotoklari, bitta devor orqali ulangan
+Private Sub PolyLunch(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double)
+    Dim bx() As Double, by() As Double, lx() As Double, ly() As Double, k As Long
+    If n < 3 Then n = 3
+    RegPoly 0, 0, sd, 0, n
+    ReDim bx(0 To n - 1): ReDim by(0 To n - 1): ReDim lx(0 To n - 1): ReDim ly(0 To n - 1)
+    For k = 0 To n - 1: bx(k) = ptX(k): by(k) = ptY(k): Next k
+    For k = 0 To n - 1                           ' qopqoq: devor tashqi chizig'iga nisbatan ko'zgu
+        lx(k) = bx(n - 1 - k): ly(k) = 0 - 2 * H - by(n - 1 - k)
+    Next k
+    PolyWalls bx, by, n, H, g, 0
+    PolyWalls lx, ly, n, H, g, 0
+    PolyTray3D bx, by, n, 0, H, True
+    For k = 0 To n - 1: ly(k) = by(k): Next k
+    PolyTray3D bx, ly, n, H * 1.5, H, False
+End Sub
+
+' Bo'lakli vstavka: (ny-1) ta uzun va (nx-1) ta qisqa tasma, o'zaro kesishadigan tirqishlar bilan
+Private Sub Insert(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal nx As Long, ByVal ny As Long, ByVal t As Double)
+    Dim j As Long, k As Long, y0 As Double, x As Double
+    If nx < 1 Then nx = 1
+    If ny < 1 Then ny = 1
+    t = Max2(t, 1)
+    y0 = 0
+    For j = 1 To ny - 1                          ' uzun tasmalar: tirqish yuqoridan
+        PtBegin
+        Pt 0, y0: Pt L, y0: Pt L, y0 + H
+        For k = nx - 1 To 1 Step -1
+            x = L * k / nx
+            Pt x + t / 2, y0 + H: Pt x + t / 2, y0 + H / 2: Pt x - t / 2, y0 + H / 2: Pt x - t / 2, y0 + H
+        Next k
+        Pt 0, y0 + H
+        PtPoly
+        y0 = y0 + H + 10
+    Next j
+    For j = 1 To nx - 1                          ' qisqa tasmalar: tirqish pastdan
+        PtBegin
+        Pt 0, y0
+        For k = 1 To ny - 1
+            x = W * k / ny
+            Pt x - t / 2, y0: Pt x - t / 2, y0 + H / 2: Pt x + t / 2, y0 + H / 2: Pt x + t / 2, y0
+        Next k
+        Pt W, y0: Pt W, y0 + H: Pt 0, y0 + H
+        PtPoly
+        y0 = y0 + H + 10
+    Next j
+    For j = 1 To ny - 1: Face 0, 0, W * j / ny, L, 0, W * j / ny, L, H, W * j / ny, 0, H, W * j / ny: Next j
+    For k = 1 To nx - 1: Face L * k / nx, 0, 0, L * k / nx, 0, W, L * k / nx, H, W, L * k / nx, H, 0: Next k
+    Box3 0, 0, 0, L, H * 0.3, W, False, True, True
+End Sub
+
+' Uycha / fonar: kvadrat (sd) 4 devor, ustida to'rt qiyali tom (balandligi R), tag 1-2-3 qulf, oy > 0 - derazalar
+Private Sub House(ByVal sd As Double, ByVal H As Double, ByVal R As Double, ByVal g As Double, ByVal oy As Double)
+    Dim xs() As Double, k As Long, xa As Double, xb As Double, xm As Double, sl As Double
+    Dim fx As Double, fy As Double, fl As Double, ox As Double, oyy As Double, c As Double
+    Dim pw As Double, ph As Double, gp As Double, y1 As Double, i As Long, j As Long
+    Body xs, H, g, sd, sd, sd, sd
+    SnapBottom xs, sd, sd
+    sl = Sqr(R * R + sd * sd / 4)
+    For k = 0 To 3
+        xa = xs(k): xb = xs(k + 1): xm = (xa + xb) / 2
+        Poly xa, H, xb, H, xm, H + sl
+        fx = xm - xb: fy = sl: fl = Sqr(fx * fx + fy * fy)
+        fx = fx / fl: fy = fy / fl
+        ox = fy: oyy = 0 - fx                     ' o'ng qirradan tashqariga
+        c = Min2(g, fl / 4)
+        Poly xb, H, xb + ox * g + fx * c * 1.5, H + oyy * g + fy * c * 1.5, _
+             xm + ox * g - fx * c * 2, H + sl + oyy * g - fy * c * 2, xm, H + sl
+        If oy > 0 Then                            ' 2 x 2 deraza
+            gp = oy * 0.6
+            pw = (sd - 2 * oy - gp) / 2: ph = (H * 0.7 - 2 * oy - gp) / 2: y1 = H * 0.22
+            If pw > 3 And ph > 3 Then
+                For i = 0 To 1
+                    For j = 0 To 1
+                        CutRoundRect xa + oy + i * (pw + gp), y1 + oy + j * (ph + gp), _
+                                     xa + oy + i * (pw + gp) + pw, y1 + oy + j * (ph + gp) + ph, 2
+                    Next j
+                Next i
+            End If
+        End If
+    Next k
+    Box3 0, 0, 0, sd, H, sd, False
+    Face 0, H, sd, sd, H, sd, sd / 2, H + R, sd / 2
+    Face sd, H, sd, sd, H, 0, sd / 2, H + R, sd / 2
+    Face sd, H, 0, 0, H, 0, sd / 2, H + R, sd / 2
+    Face 0, H, 0, 0, H, sd, sd / 2, H + R, sd / 2
+End Sub
+
+' Ikki piramida (olmos): n burchakli ekvator (tomoni sd), ustki va pastki uchi H balandlikda.
+' Yoyilma: ekvator bo'ylab n ta yuqori va n ta pastki uchburchak, har birining o'ng qirrasida yelim qanoti
+Private Sub Bipyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double)
+    Dim k As Long, j As Long, sl As Double, xa As Double, xb As Double, xm As Double, s As Double
+    Dim fx As Double, fy As Double, fl As Double, ox As Double, oy As Double, c As Double
+    If n < 3 Then n = 3
+    sl = Sqr(H * H + (sd / (2 * Tan(PI / n))) ^ 2)
+    For j = 0 To 1
+        If j = 0 Then s = 1 Else s = -1
+        For k = 0 To n - 1
+            xa = k * sd: xb = xa + sd: xm = xa + sd / 2
+            Poly xa, 0, xb, 0, xm, s * sl
+            fx = xm - xb: fy = s * sl: fl = Sqr(fx * fx + fy * fy)
+            fx = fx / fl: fy = fy / fl
+            ox = s * fy: oy = 0 - s * fx                ' o'ng qirradan tashqariga
+            c = Min2(g, fl / 4)
+            Poly xb, 0, xb + ox * g + fx * c * 1.5, oy * g + fy * c * 1.5, _
+                 xm + ox * g - fx * c * 2, s * sl + oy * g - fy * c * 2, xm, s * sl
+        Next k
+    Next j
+    ' 3D
+    Dim vx() As Double, vz() As Double, cx As Double, cz As Double
+    RegPoly 0, 0, sd, 0, n
+    ReDim vx(0 To n - 1): ReDim vz(0 To n - 1)
+    For k = 0 To n - 1: vx(k) = ptX(k): vz(k) = ptY(k): cx = cx + vx(k) / n: cz = cz + vz(k) / n: Next k
+    For k = 0 To n - 1
+        j = (k + 1) Mod n
+        Face vx(k), 0, vz(k), vx(j), 0, vz(j), cx, H, cz
+        Face vx(k), 0, vz(k), cx, 0 - H, cz, vx(j), 0, vz(j)
+    Next k
+End Sub
+
+' Silindr quti: o'ralgan devor (aylana uzunligi), ikki uchida 8 tadan ichkariga bukiladigan qanot,
+' alohida ikkita doira qopqoq
+Private Sub Cylinder(ByVal dia As Double, ByVal H As Double, ByVal g As Double)
+    Dim cl As Double, k As Long, nf As Long, fw As Double, fh As Double, x As Double, j As Long, b As Double, s As Double
+    cl = PI * dia: nf = 8: fw = cl / nf: fh = Min2(dia * 0.15, 15)
+    Glue 0, H, g
+    Rect 0, 0, cl, H
+    For j = 0 To 1
+        If j = 0 Then b = H: s = 1 Else b = 0: s = -1
+        For k = 0 To nf - 1
+            x = k * fw
+            Poly x, b, x + fw, b, x + fw - fh * 0.4, b + s * fh, x + fh * 0.4, b + s * fh
+        Next k
+    Next j
+    For j = 0 To 1                               ' doira qopqoqlar yoyilma ostida
+        PtBegin
+        EllPt dia / 2 + j * (dia + 15), 0 - fh - 15 - dia / 2, dia / 2, dia / 2, 0, 350, 35
+        PtPoly
+    Next j
+    ' 3D
+    Dim a0 As Double, a1 As Double
+    For k = 0 To 15
+        a0 = 2 * PI * k / 16: a1 = 2 * PI * (k + 1) / 16
+        Face dia / 2 * Cos(a0), 0, dia / 2 * Sin(a0), dia / 2 * Cos(a1), 0, dia / 2 * Sin(a1), _
+             dia / 2 * Cos(a1), H, dia / 2 * Sin(a1), dia / 2 * Cos(a0), H, dia / 2 * Sin(a0)
+    Next k
 End Sub

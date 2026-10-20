@@ -8,11 +8,12 @@ Belgilar: ✅ shablon bor · 🟡 yaqin shablon bor (shakli soddalashtirilgan) �
 | Rasmlar | Nima | Plagindagi shablon | Holat |
 |---------|------|--------------------|-------|
 | IMG_0311–0320 | Mailer (FEFCO 0427): oddiy, oynali, osma teshikli, qulfli, ruchkali | Mailer: oddiy / quloqsiz / oynali / osma teshikli / qulfli til / ruchkali | ✅ |
-| IMG_0313, 0327 | Ichki bo'lakli (vstavka) mailer va lotoklar | — | ⬜ |
+| IMG_0312, 0313, 0327, 0335 | Ichki bo'lakli vstavka | Bo'lakli vstavka (2x2) / (3x4) — ustun va qator soni o'zgaradi | ✅ |
 | IMG_0315, 0336 | Qopqoqli lotok | Mailer: Qopqoqli lotok (bir qavat) | ✅ |
 | IMG_0320–0326, 0331–0337 | Lotoklar: yelimli, ikki qavat, ruchkali | Lotok / Lotok ruchkali / ikki qavat / ikki qavat ruchkali | ✅ |
 | IMG_0322, 0326, 0365 | Sakkiz va olti burchakli lotok | Olti / Sakkiz burchakli lotok | ✅ |
-| IMG_0322, 0328, 0456 | Ko'p burchakli lanch-boks (qopqoqli) | — | ⬜ |
+| IMG_0322, 0328, 0456, 0326 | Lanch-boks (qopqoqli) | Lanch-boks / Olti burchakli / Sakkiz burchakli lanch-boks | ✅ |
+| IMG_0334, 0337 | Burchaklari bukiladigan lotok | Lotok, bukiladigan burchak | ✅ |
 | IMG_0324, 0325, 0329, 0331, 0350, 0353, 0354, 0461 | Ruchkali quti, sumka | Ruchkali quti / qulf tag / Pirojniy qutisi | 🟡 |
 | IMG_0445, 0443 | Vino qutisi | Vino qutisi | 🟡 |
 | IMG_0333, 0389 | G'ilof va tortma quti | G'ilof / Tortma quti | ✅ |
@@ -28,6 +29,16 @@ Belgilar: ✅ shablon bor · 🟡 yaqin shablon bor (shakli soddalashtirilgan) �
 | IMG_0396, 0454, 0460 | Gul quti (gulbargli devorlar) | Gul quti (6) / (8) | 🟡 |
 | IMG_0349, 0393, 0403, 0410, 0413, 0414, 0417, 0420, 0425, 0464, 0466 | Gulbargli qopqoqli sovg'a qutilari | Gulbargli: yarim doira / yurak / o'tkir uchli | 🟡 |
 | IMG_0375–0384 | Kichik shirinlik qutilari (har xil shakl) | Gulbargli / Ruchkali | 🟡 |
-| IMG_0394, 0402, 0418, 0423, 0429, 0433–0440 | Yumaloq ruchkali tort qutilari | — | ⬜ |
-| IMG_0338–0342, 0386, 0387 | Kosmetika va maxsus qutilar | — | ⬜ |
-| IMG_0367, 0369, 0411, 0422, 0430, 0431, 0441, 0452, 0459 | Maxsus shakllar (uycha, mushuk, oktaedr va b.) | — | ⬜ |
+| IMG_0429, 0435, 0440 | To'rt bargli tort qutisi | To'rt bargli / To'rt bargli ruchkali | 🟡 |
+| IMG_0394, 0402, 0418, 0423 | Yumaloq uchli tort qutisi | Yumaloq uchli tort qutisi | 🟡 |
+| IMG_0433, 0434, 0437–0439 | Ruchkali chamadon va tort qutilari | Ruchkali quti / Pirojniy qutisi | 🟡 |
+| IMG_0339, 0342 | Lab bo'yog'i va uzun kosmetika qutilari | Lab bo'yog'i qutisi / Uzun quti / Flakon qutisi oynali | ✅ |
+| IMG_0338, 0340, 0341, 0386, 0387 | Kosmetika displeylari va maxsus vstavkalar | — | ⬜ |
+| IMG_0420, 0422, 0441 | Uycha / fonar | Uycha / Uycha oynali | 🟡 |
+| IMG_0369 | Olmos (oktaedr) | Olmos (oktaedr) / Olmos (olti qirrali) | ✅ |
+| IMG_0430 | Silindr quti | Silindr quti | 🟡 |
+| IMG_0452 | Lentali gulbargli piramida | Piramida, gulbargli (lenta) | ✅ |
+| IMG_0352 | Sut qutisi | Sut qutisi | 🟡 |
+| IMG_0455 | Yumaloq ruchkali quti | Ruchkali, yumaloq ruchka | 🟡 |
+| IMG_0459 | Xochsimon lotok | Lotok | 🟡 |
+| IMG_0367, 0411, 0431 | Maxsus shakllar (yostiq-o'ram, mushuk, uzun olti burchak gul) | — | ⬜ |
