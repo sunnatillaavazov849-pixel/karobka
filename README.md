@@ -31,7 +31,7 @@ Qaysi rasm qaysi shablonga to'g'ri kelishi [`templates/catalog.md`](templates/ca
 Qo'shimcha maydonlar 0 bo'lsa, o'sha xususiyat o'chadi: Oyna, Osma, Ruchka, Qulf, Qopqoq quloq.
 
 ## Yangi shablon qo'shish
-`src/modTemplates.bas` dagi `InitDefs` ga bitta `Def` qatori qo'shing: guruh, nom, quruvchi va standart o'lchamlar. Mavjud quruvchining yangi varianti uchun shu kifoya. Yangi oila bo'lsa, `TBuild` ga yangi quruvchi qo'shing.
+`src/modTemplates.bas` dagi `InitDefs` ga bitta `AddDef` qatori qo'shing: guruh, nom, quruvchi va standart o'lchamlar. Mavjud quruvchining yangi varianti uchun shu kifoya. Yangi oila bo'lsa, `TBuild` ga yangi quruvchi qo'shing.
 
 Panellar `Rect` / `Poly` bilan chiziladi: ikki panelga umumiy qirra bukish, qolgan qirralar kesish bo'ladi. Qanotlar orasidagi tirqish `Slit` bilan, oyna yoki teshik `CutRect` / `CutPoly` bilan belgilanadi. 3D ko'rinish uchun `Box3`, `Lid3` va `Face` ishlatiladi.
 

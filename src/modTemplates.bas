@@ -14,7 +14,7 @@ Private dG() As String, dN() As String, dB() As String, dP() As String, dCnt As 
 
 ' ================================================================ katalog
 
-Private Sub Def(ByVal grp As String, ByVal nm As String, ByVal bld As String, ByVal prm As String)
+Private Sub AddDef(ByVal grp As String, ByVal nm As String, ByVal bld As String, ByVal prm As String)
     dCnt = dCnt + 1
     dG(dCnt) = grp: dN(dCnt) = nm: dB(dCnt) = bld: dP(dCnt) = prm
 End Sub
@@ -24,88 +24,88 @@ Private Sub InitDefs()
     ReDim dG(1 To 300): ReDim dN(1 To 300): ReDim dB(1 To 300): ReDim dP(1 To 300)
 
     ' --- gofra qutilar (FEFCO)
-    Def "Gofra", "FEFCO 0201", "RSC 1", "L=300|W=200|H=150|G=35|RT=0"
-    Def "Gofra", "FEFCO 0201, ruchkali", "RSC 1", "L=400|W=300|H=250|G=35|RT=90"
-    Def "Gofra", "FEFCO 0200 (ochiq)", "RSC 0", "L=300|W=200|H=150|G=35|RT=0"
-    Def "Gofra", "FEFCO 0203 (to'liq qopqoq)", "RSC 3", "L=300|W=200|H=150|G=35|RT=0"
-    Def "Gofra", "FEFCO 0300 (taglik + qopqoq)", "TELESCOPE", "L=300|W=200|H=150|HL=60|K=3"
+    AddDef "Gofra", "FEFCO 0201", "RSC 1", "L=300|W=200|H=150|G=35|RT=0"
+    AddDef "Gofra", "FEFCO 0201, ruchkali", "RSC 1", "L=400|W=300|H=250|G=35|RT=90"
+    AddDef "Gofra", "FEFCO 0200 (ochiq)", "RSC 0", "L=300|W=200|H=150|G=35|RT=0"
+    AddDef "Gofra", "FEFCO 0203 (to'liq qopqoq)", "RSC 3", "L=300|W=200|H=150|G=35|RT=0"
+    AddDef "Gofra", "FEFCO 0300 (taglik + qopqoq)", "TELESCOPE", "L=300|W=200|H=150|HL=60|K=3"
 
     ' --- mailer (FEFCO 0427)
-    Def "Mailer", "Mailer (FEFCO 0427)", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=0|QF=0|RT=0"
-    Def "Mailer", "Mailer, qopqoq quloqsiz", "MAILER", "L=250|W=180|H=60|T=2|LF=0|OY=0|IL=0|QF=0|RT=0"
-    Def "Mailer", "Mailer, oynali", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=35|IL=0|QF=0|RT=0"
-    Def "Mailer", "Mailer, osma teshikli", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=1|QF=0|RT=0"
-    Def "Mailer", "Mailer, qulfli til", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=0|QF=1|RT=0"
-    Def "Mailer", "Mailer, ruchkali", "MAILER", "L=300|W=220|H=80|T=2|LF=1|OY=0|IL=0|QF=0|RT=90"
-    Def "Mailer", "Pitsa qutisi", "MAILER", "L=320|W=320|H=40|T=3|LF=1|OY=0|IL=0|QF=0|RT=0"
-    Def "Mailer", "Qopqoqli lotok (bir qavat)", "MAILER S", "L=200|W=150|H=50|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Mailer", "Mailer (FEFCO 0427)", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Mailer", "Mailer, qopqoq quloqsiz", "MAILER", "L=250|W=180|H=60|T=2|LF=0|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Mailer", "Mailer, oynali", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=35|IL=0|QF=0|RT=0"
+    AddDef "Mailer", "Mailer, osma teshikli", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=1|QF=0|RT=0"
+    AddDef "Mailer", "Mailer, qulfli til", "MAILER", "L=250|W=180|H=60|T=2|LF=1|OY=0|IL=0|QF=1|RT=0"
+    AddDef "Mailer", "Mailer, ruchkali", "MAILER", "L=300|W=220|H=80|T=2|LF=1|OY=0|IL=0|QF=0|RT=90"
+    AddDef "Mailer", "Pitsa qutisi", "MAILER", "L=320|W=320|H=40|T=3|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Mailer", "Qopqoqli lotok (bir qavat)", "MAILER S", "L=200|W=150|H=50|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
 
     ' --- karton qutilar (tuck-end)
-    Def "Tuck-end", "Teskari qopqoq (RTE)", "TUCK R", "L=80|W=50|H=150|G=15|TK=15|OY=0|IL=0"
-    Def "Tuck-end", "To'g'ri qopqoq (STE)", "TUCK S", "L=80|W=50|H=150|G=15|TK=15|OY=0|IL=0"
-    Def "Tuck-end", "Kub quti", "TUCK S", "L=80|W=80|H=80|G=15|TK=15|OY=0|IL=0"
-    Def "Tuck-end", "Oynali quti", "TUCK R", "L=90|W=60|H=150|G=15|TK=15|OY=20|IL=0"
-    Def "Tuck-end", "Osma (evro teshik)", "TUCK S", "L=90|W=30|H=140|G=15|TK=15|OY=0|IL=35"
-    Def "Tuck-end", "Qulf tag (1-2-3)", "TUCK N", "L=100|W=70|H=150|G=15|TK=15|OY=0|IL=0"
-    Def "Tuck-end", "Qulf tag, oynali", "TUCK N", "L=100|W=70|H=150|G=15|TK=15|OY=20|IL=0"
-    Def "Tuck-end", "Yopishtiriladigan (seal end)", "TUCK E", "L=100|W=70|H=150|G=15|TK=15|OY=0|IL=0"
+    AddDef "Tuck-end", "Teskari qopqoq (RTE)", "TUCK R", "L=80|W=50|H=150|G=15|TK=15|OY=0|IL=0"
+    AddDef "Tuck-end", "To'g'ri qopqoq (STE)", "TUCK S", "L=80|W=50|H=150|G=15|TK=15|OY=0|IL=0"
+    AddDef "Tuck-end", "Kub quti", "TUCK S", "L=80|W=80|H=80|G=15|TK=15|OY=0|IL=0"
+    AddDef "Tuck-end", "Oynali quti", "TUCK R", "L=90|W=60|H=150|G=15|TK=15|OY=20|IL=0"
+    AddDef "Tuck-end", "Osma (evro teshik)", "TUCK S", "L=90|W=30|H=140|G=15|TK=15|OY=0|IL=35"
+    AddDef "Tuck-end", "Qulf tag (1-2-3)", "TUCK N", "L=100|W=70|H=150|G=15|TK=15|OY=0|IL=0"
+    AddDef "Tuck-end", "Qulf tag, oynali", "TUCK N", "L=100|W=70|H=150|G=15|TK=15|OY=20|IL=0"
+    AddDef "Tuck-end", "Yopishtiriladigan (seal end)", "TUCK E", "L=100|W=70|H=150|G=15|TK=15|OY=0|IL=0"
 
     ' --- ruchkali va sumka
-    Def "Ruchkali", "Ruchkali quti", "GABLE", "L=160|W=100|H=120|G=15|HH=60|HW=80"
-    Def "Ruchkali", "Ruchkali quti, qulf tag", "GABLE N", "L=160|W=100|H=120|G=15|HH=60|HW=80"
-    Def "Ruchkali", "Vino qutisi", "GABLE N", "L=90|W=90|H=330|G=15|HH=70|HW=60"
-    Def "Ruchkali", "Pirojniy qutisi", "GABLE N", "L=220|W=160|H=110|G=15|HH=70|HW=110"
+    AddDef "Ruchkali", "Ruchkali quti", "GABLE", "L=160|W=100|H=120|G=15|HH=60|HW=80"
+    AddDef "Ruchkali", "Ruchkali quti, qulf tag", "GABLE N", "L=160|W=100|H=120|G=15|HH=60|HW=80"
+    AddDef "Ruchkali", "Vino qutisi", "GABLE N", "L=90|W=90|H=330|G=15|HH=70|HW=60"
+    AddDef "Ruchkali", "Pirojniy qutisi", "GABLE N", "L=220|W=160|H=110|G=15|HH=70|HW=110"
 
     ' --- lotok
-    Def "Lotok", "Lotok", "TRAY", "L=200|W=150|H=50|RT=0"
-    Def "Lotok", "Lotok, ruchkali", "TRAY", "L=350|W=250|H=100|RT=80"
-    Def "Lotok", "Lotok, ikki qavat", "TRAYD", "L=250|W=180|H=50|T=2|RT=0"
-    Def "Lotok", "Lotok, ikki qavat ruchkali", "TRAYD", "L=350|W=250|H=100|T=3|RT=80"
-    Def "Lotok", "Olti burchakli lotok", "PTRAY", "N=6|A=80|H=50|G=15"
-    Def "Lotok", "Sakkiz burchakli lotok", "PTRAY", "N=8|A=60|H=50|G=15"
-    Def "Lotok", "G'ilof (sleeve)", "SLEEVE", "L=200|W=150|H=50|G=15"
-    Def "Lotok", "Tortma quti", "DRAWER", "L=200|W=150|H=50|G=15|K=2"
+    AddDef "Lotok", "Lotok", "TRAY", "L=200|W=150|H=50|RT=0"
+    AddDef "Lotok", "Lotok, ruchkali", "TRAY", "L=350|W=250|H=100|RT=80"
+    AddDef "Lotok", "Lotok, ikki qavat", "TRAYD", "L=250|W=180|H=50|T=2|RT=0"
+    AddDef "Lotok", "Lotok, ikki qavat ruchkali", "TRAYD", "L=350|W=250|H=100|T=3|RT=80"
+    AddDef "Lotok", "Olti burchakli lotok", "PTRAY", "N=6|A=80|H=50|G=15"
+    AddDef "Lotok", "Sakkiz burchakli lotok", "PTRAY", "N=8|A=60|H=50|G=15"
+    AddDef "Lotok", "G'ilof (sleeve)", "SLEEVE", "L=200|W=150|H=50|G=15"
+    AddDef "Lotok", "Tortma quti", "DRAWER", "L=200|W=150|H=50|G=15|K=2"
 
     ' --- ko'p burchakli qutilar
-    Def "Ko'p burchak", "Uchburchak prizma", "PRISM", "N=3|A=70|H=200|G=15|TK=15"
-    Def "Ko'p burchak", "Olti burchakli quti", "PRISM", "N=6|A=50|H=120|G=15|TK=15"
-    Def "Ko'p burchak", "Sakkiz burchakli quti", "PRISM", "N=8|A=40|H=120|G=15|TK=15"
-    Def "Ko'p burchak", "Piramida (4)", "PYRAMID", "N=4|A=100|H=110|G=12"
-    Def "Ko'p burchak", "Piramida (3)", "PYRAMID", "N=3|A=110|H=110|G=12"
-    Def "Ko'p burchak", "Piramida (6)", "PYRAMID", "N=6|A=60|H=110|G=12"
-    Def "Ko'p burchak", "Gul quti (8)", "FLOWER", "N=8|A=50|H=40|P=45"
-    Def "Ko'p burchak", "Gul quti (6)", "FLOWER", "N=6|A=60|H=40|P=50"
+    AddDef "Ko'p burchak", "Uchburchak prizma", "PRISM", "N=3|A=70|H=200|G=15|TK=15"
+    AddDef "Ko'p burchak", "Olti burchakli quti", "PRISM", "N=6|A=50|H=120|G=15|TK=15"
+    AddDef "Ko'p burchak", "Sakkiz burchakli quti", "PRISM", "N=8|A=40|H=120|G=15|TK=15"
+    AddDef "Ko'p burchak", "Piramida (4)", "PYRAMID", "N=4|A=100|H=110|G=12"
+    AddDef "Ko'p burchak", "Piramida (3)", "PYRAMID", "N=3|A=110|H=110|G=12"
+    AddDef "Ko'p burchak", "Piramida (6)", "PYRAMID", "N=6|A=60|H=110|G=12"
+    AddDef "Ko'p burchak", "Gul quti (8)", "FLOWER", "N=8|A=50|H=40|P=45"
+    AddDef "Ko'p burchak", "Gul quti (6)", "FLOWER", "N=6|A=60|H=40|P=50"
 
     ' --- sovg'a qutilari
-    Def "Sovg'a", "Gulbargli (yarim doira)", "PETAL A", "A=80|H=90|G=15|P=50"
-    Def "Sovg'a", "Gulbargli (yurak)", "PETAL H", "A=80|H=90|G=15|P=60"
-    Def "Sovg'a", "Gulbargli (o'tkir uchli)", "PETAL P", "A=80|H=90|G=15|P=70"
-    Def "Sovg'a", "Yostiqcha (pillow)", "PILLOW", "L=160|W=90|G=15|D=25"
-    Def "Sovg'a", "Konfet (candy)", "CANDY", "A=50|L=150|E=40|G=15"
-    Def "Sovg'a", "Piramida, gulbargli (lenta)", "PYRAMID C", "N=4|A=100|H=110|G=0"
+    AddDef "Sovg'a", "Gulbargli (yarim doira)", "PETAL A", "A=80|H=90|G=15|P=50"
+    AddDef "Sovg'a", "Gulbargli (yurak)", "PETAL H", "A=80|H=90|G=15|P=60"
+    AddDef "Sovg'a", "Gulbargli (o'tkir uchli)", "PETAL P", "A=80|H=90|G=15|P=70"
+    AddDef "Sovg'a", "Yostiqcha (pillow)", "PILLOW", "L=160|W=90|G=15|D=25"
+    AddDef "Sovg'a", "Konfet (candy)", "CANDY", "A=50|L=150|E=40|G=15"
+    AddDef "Sovg'a", "Piramida, gulbargli (lenta)", "PYRAMID C", "N=4|A=100|H=110|G=0"
 
     ' --- tort va lanch-boks
-    Def "Tort", "To'rt bargli tort qutisi", "CROSS", "A=110|H=90|P=40|RT=0"
-    Def "Tort", "To'rt bargli, ruchkali", "CROSS", "A=110|H=90|P=45|RT=50"
-    Def "Tort", "Yumaloq uchli tort qutisi", "CAKE", "L=190|W=120|H=110"
-    Def "Tort", "Lanch-boks", "LUNCH", "L=200|W=150|H=60"
-    Def "Tort", "Olti burchakli lanch-boks", "PLUNCH", "N=6|A=70|H=45|G=15"
-    Def "Tort", "Sakkiz burchakli lanch-boks", "PLUNCH", "N=8|A=55|H=45|G=15"
+    AddDef "Tort", "To'rt bargli tort qutisi", "CROSS", "A=110|H=90|P=40|RT=0"
+    AddDef "Tort", "To'rt bargli, ruchkali", "CROSS", "A=110|H=90|P=45|RT=50"
+    AddDef "Tort", "Yumaloq uchli tort qutisi", "CAKE", "L=190|W=120|H=110"
+    AddDef "Tort", "Lanch-boks", "LUNCH", "L=200|W=150|H=60"
+    AddDef "Tort", "Olti burchakli lanch-boks", "PLUNCH", "N=6|A=70|H=45|G=15"
+    AddDef "Tort", "Sakkiz burchakli lanch-boks", "PLUNCH", "N=8|A=55|H=45|G=15"
 
     ' --- qo'shimcha
-    Def "Lotok", "Lotok, bukiladigan burchak", "TRAYW", "L=220|W=160|H=50"
-    Def "Lotok", "Bo'lakli vstavka (2x2)", "INSERT", "L=200|W=150|H=60|NX=2|NY=2|T=2"
-    Def "Lotok", "Bo'lakli vstavka (3x4)", "INSERT", "L=240|W=180|H=60|NX=3|NY=4|T=2"
-    Def "Sovg'a", "Uycha (fonar)", "HOUSE", "A=90|H=120|R=60|G=15|OY=0"
-    Def "Sovg'a", "Uycha, oynali", "HOUSE", "A=90|H=120|R=60|G=15|OY=12"
-    Def "Ruchkali", "Ruchkali, yumaloq ruchka", "GABLE R N", "L=160|W=100|H=120|G=15|HH=70|HW=70"
-    Def "Ruchkali", "Sut qutisi", "GABLE N", "L=70|W=70|H=170|G=12|HH=25|HW=0"
-    Def "Tuck-end", "Lab bo'yog'i qutisi", "TUCK S", "L=25|W=25|H=95|G=10|TK=10|OY=0|IL=30"
-    Def "Tuck-end", "Uzun quti (flakon)", "TUCK R", "L=45|W=45|H=180|G=12|TK=12|OY=0|IL=0"
-    Def "Tuck-end", "Flakon qutisi, oynali", "TUCK N", "L=60|W=60|H=160|G=12|TK=12|OY=12|IL=0"
-    Def "Ko'p burchak", "Olmos (oktaedr)", "BIPYR", "N=4|A=70|H=50|G=10"
-    Def "Ko'p burchak", "Olmos (olti qirrali)", "BIPYR", "N=6|A=50|H=60|G=10"
-    Def "Sovg'a", "Silindr quti", "CYL", "DI=80|H=120|G=15"
+    AddDef "Lotok", "Lotok, bukiladigan burchak", "TRAYW", "L=220|W=160|H=50"
+    AddDef "Lotok", "Bo'lakli vstavka (2x2)", "INSERT", "L=200|W=150|H=60|NX=2|NY=2|T=2"
+    AddDef "Lotok", "Bo'lakli vstavka (3x4)", "INSERT", "L=240|W=180|H=60|NX=3|NY=4|T=2"
+    AddDef "Sovg'a", "Uycha (fonar)", "HOUSE", "A=90|H=120|R=60|G=15|OY=0"
+    AddDef "Sovg'a", "Uycha, oynali", "HOUSE", "A=90|H=120|R=60|G=15|OY=12"
+    AddDef "Ruchkali", "Ruchkali, yumaloq ruchka", "GABLE R N", "L=160|W=100|H=120|G=15|HH=70|HW=70"
+    AddDef "Ruchkali", "Sut qutisi", "GABLE N", "L=70|W=70|H=170|G=12|HH=25|HW=0"
+    AddDef "Tuck-end", "Lab bo'yog'i qutisi", "TUCK S", "L=25|W=25|H=95|G=10|TK=10|OY=0|IL=30"
+    AddDef "Tuck-end", "Uzun quti (flakon)", "TUCK R", "L=45|W=45|H=180|G=12|TK=12|OY=0|IL=0"
+    AddDef "Tuck-end", "Flakon qutisi, oynali", "TUCK N", "L=60|W=60|H=160|G=12|TK=12|OY=12|IL=0"
+    AddDef "Ko'p burchak", "Olmos (oktaedr)", "BIPYR", "N=4|A=70|H=50|G=10"
+    AddDef "Ko'p burchak", "Olmos (olti qirrali)", "BIPYR", "N=6|A=50|H=60|G=10"
+    AddDef "Sovg'a", "Silindr quti", "CYL", "DI=80|H=120|G=15"
 End Sub
 
 Public Function TCount() As Long
@@ -467,8 +467,12 @@ Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVa
     Pt L, y0 + ht: Pt L, y0
     PtPoly
     e = H - 2 * t: rr = Min2(e, ht) * 0.9
-    PtBegin: Pt 0, y0: Pt 0 - e, y0: ArcPt rr - e, y0 + ht - rr, rr, 180, 90: Pt 0, y0 + ht: PtPoly
-    PtBegin: Pt L, y0: Pt L + e, y0: ArcPt L + e - rr, y0 + ht - rr, rr, 0, 90: Pt L, y0 + ht: PtPoly
+    PtBegin
+    Pt 0, y0: Pt 0 - e, y0: ArcPt rr - e, y0 + ht - rr, rr, 180, 90: Pt 0, y0 + ht
+    PtPoly
+    PtBegin
+    Pt L, y0: Pt L + e, y0: ArcPt L + e - rr, y0 + ht - rr, rr, 0, 90: Pt L, y0 + ht
+    PtPoly
     If oy > 0 Then
         m = Min2(oy, Min2(L, W) / 2 - 5)
         CutRoundRect m, W + H + m, L - m, 2 * W + H - m, 5

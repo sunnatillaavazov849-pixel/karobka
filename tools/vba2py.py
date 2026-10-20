@@ -464,6 +464,8 @@ class Translator:
             raise SyntaxError("tushunilmadi: " + st)
 
         for ln in body:
+            if re.match(r"\s*[A-Za-z_]\w*:(\s|$)", ln) and not re.match(r"\s*(case|else)\b", ln, re.I):
+                raise SyntaxError("%s.%s: VBA buni label deb tushunadi (qator boshida 'Nom:'): %s" % (mod, name, ln.strip()))
             parts = split_colon(ln.strip())
             for i, st in enumerate(parts):
                 m = re.match(r"if .+? then\s*\S", st, re.I)
