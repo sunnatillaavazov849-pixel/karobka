@@ -37,7 +37,7 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | `ROOF` | ikki qiyali tomli quti |
 | `PURSE` | sumka-quti: qavariq old/orqa devor, ruchka |
 | `STAR` | yulduz quti: yon tasma + ikki yulduz qopqoq |
-| `PETALN` | n qirrali quti, ikki uchida gulbarglar |
+| `PETALN` | n qirrali quti, ikki uchida gulbarglar (`V` — uchburchak gulbarg, `B` — tagi ko'pburchak) |
 | `GABLE N` / `R` | 1-2-3 qulf tag / yumaloq ruchka |
 
 ## 1-bosqich: IMG_0311 – IMG_0340 (84 ta chizma)
@@ -262,8 +262,39 @@ IMG_0375 — 0376–0384 dagi 9 ta shirinlik qutisining umumiy rasmi, alohida ch
 | IMG_0400-2 | 0400-2 Egri sumka quti | Yostiq va konfet | `PETAL A` | 🟡 |
 | IMG_0400-3 | 0400-3 Tomli quti | Maxsus shakllar | `ROOF` | 🟡 |
 
+## 4-bosqich: IMG_0401 – IMG_0430 (25 ta chizma)
+
+Umumiy (ko'rgazma) rasmlar, alohida chizma emas: IMG_0405 (0406, 0407, 0409), IMG_0410 (0411, 0413, 0414), IMG_0415 (0402–0404), IMG_0420 (0421, 0422, 0425), IMG_0426 (0427–0429). 0416–0419 — 0401–0404 chizmalarining boshqa rasmi, qidirishda topilishi uchun alohida qator qilingan.
+
+| Rasm | Plagindagi nomi | Guruh | Quruvchi | Holat |
+|------|-----------------|-------|----------|-------|
+| IMG_0401-1 | 0401-1 Yostiqcha 222x189 | Yostiq va konfet | `PILLOW` | ✅ |
+| IMG_0402-1 | 0402-1 Yumaloq uchli konfet qutisi | Yostiq va konfet | `CAKE` | 🟡 |
+| IMG_0403-1 | 0403-1 Egri sumka quti | Yostiq va konfet | `PETAL A` | 🟡 |
+| IMG_0404-1 | 0404-1 Tomli quti | Maxsus shakllar | `ROOF` | 🟡 |
+| IMG_0406-1 | 0406-1 Uzun quti, qanotli | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0407-1 | 0407-1 Kub, doira oynali qopqoq | Tuck-end | `TUCK S OR` | 🟡 |
+| IMG_0408-1 | 0408-1 Quti, ichki bo'lakli | Tuck-end | `TUCK N` | 🟡 |
+| IMG_0409-1 | 0409-1 Besh qirrali quti | Ko'p burchak | `BIPYR` | 🟡 |
+| IMG_0411-1 | 0411-1 Olti qirrali, yulduz qopqoqli | Gulbargli sovg'a | `PETALN V B` | 🟡 |
+| IMG_0412-1 | 0412-1 Yostiqcha, tekis uchli | Yostiq va konfet | `PILLOW` | 🟡 |
+| IMG_0413-1 | 0413-1 Kapalak qopqoqli quti | Gulbargli sovg'a | `PETAL H` | ✅ |
+| IMG_0414-1 | 0414-1 Gumbaz qopqoqli quti | Gulbargli sovg'a | `PETAL P` | 🟡 |
+| IMG_0416-1 | 0416-1 Tomli quti | Maxsus shakllar | `ROOF` | 🟡 |
+| IMG_0417-1 | 0417-1 Egri sumka quti | Yostiq va konfet | `PETAL A` | 🟡 |
+| IMG_0418-1 | 0418-1 Yumaloq uchli konfet qutisi | Yostiq va konfet | `CAKE` | 🟡 |
+| IMG_0419-1 | 0419-1 Yostiqcha 222x189 | Yostiq va konfet | `PILLOW` | ✅ |
+| IMG_0421-1 | 0421-1 Kub, bukiladigan | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0422-1 | 0422-1 Fonar (derazali) | Maxsus shakllar | `HOUSE` | 🟡 |
+| IMG_0423-1 | 0423-1 Olti burchakli gul qopqoqli | Gulbargli sovg'a | `FLOWER` | 🟡 |
+| IMG_0424-1 | 0424-1 Sumka (yumaloq ruchkali) | Ruchkali va sumka | `GABLE R N` | 🟡 |
+| IMG_0425-1 | 0425-1 Quyon quloqli quti | Gulbargli sovg'a | `PETAL H` | ✅ |
+| IMG_0427-1 | 0427-1 Uchburchak tort bo'lagi | Tort | `PTRAY` | 🟡 |
+| IMG_0428-1 | 0428-1 Taglik + qopqoq (kvadrat) | Gofra | `TELESCOPE` | ✅ |
+| IMG_0429-1 | 0429-1 To'rt bargli tort qutisi | Tort | `CROSS` | 🟡 |
+| IMG_0430-1 | 0430-1 Yotiq silindr quti | Maxsus shakllar | `CYL` | 🟡 |
+
 ## Keyingi bosqichlar
 | Bosqich | Rasmlar | Holat |
 |---------|---------|-------|
-| 4 | IMG_0401 – IMG_0430 | ⬜ |
 | 5 | IMG_0431 – IMG_0466 | ⬜ |

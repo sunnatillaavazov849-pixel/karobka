@@ -25,6 +25,7 @@ Private Sub InitDefs()
     InitB1
     InitB2
     InitB3
+    InitB4
 End Sub
 
 ' 1-bosqich: IMG_0311 - IMG_0340 (har chizma alohida, nomida rasm raqami)
@@ -242,6 +243,35 @@ Private Sub InitB3()
     AddDef "Yostiq va konfet", "0400-1 Yumaloq uchli konfet qutisi", "CAKE", "L=191|W=120|H=120"
     AddDef "Yostiq va konfet", "0400-2 Egri sumka quti", "PETAL A", "A=164|H=175|G=13|P=60"
     AddDef "Maxsus shakllar", "0400-3 Tomli quti", "ROOF", "L=155|W=108|H=70|R=40"
+End Sub
+
+' 4-bosqich: IMG_0401 - IMG_0430
+Private Sub InitB4()
+    AddDef "Yostiq va konfet", "0401-1 Yostiqcha 222x189", "PILLOW", "L=189|W=222|G=15|D=33"
+    AddDef "Yostiq va konfet", "0402-1 Yumaloq uchli konfet qutisi", "CAKE", "L=191|W=120|H=120"
+    AddDef "Yostiq va konfet", "0403-1 Egri sumka quti", "PETAL A", "A=164|H=175|G=13|P=60"
+    AddDef "Maxsus shakllar", "0404-1 Tomli quti", "ROOF", "L=155|W=108|H=70|R=40"
+    AddDef "Tuck-end", "0406-1 Uzun quti, qanotli", "TUCK S", "L=156|W=81|H=201|G=15|TK=20|OY=0|IL=0"
+    AddDef "Tuck-end", "0407-1 Kub, doira oynali qopqoq", "TUCK S OR", "L=95|W=95|H=95|G=15|TK=20|OY=15|IL=0"
+    AddDef "Tuck-end", "0408-1 Quti, ichki bo'lakli", "TUCK N", "L=203|W=169|H=128|G=15|TK=25|OY=0|IL=0"
+    AddDef "Ko'p burchak", "0409-1 Besh qirrali quti", "BIPYR", "N=5|A=95|H=110|G=10"
+    AddDef "Gulbargli sovg'a", "0411-1 Olti qirrali, yulduz qopqoqli", "PETALN V B", "N=6|A=93|H=145|G=20|P=180"
+    AddDef "Yostiq va konfet", "0412-1 Yostiqcha, tekis uchli", "PILLOW", "L=174|W=158|G=16|D=30"
+    AddDef "Gulbargli sovg'a", "0413-1 Kapalak qopqoqli quti", "PETAL H", "A=185|H=231|G=34|P=135"
+    AddDef "Gulbargli sovg'a", "0414-1 Gumbaz qopqoqli quti", "PETAL P", "A=128|H=135|G=16|P=123"
+    AddDef "Maxsus shakllar", "0416-1 Tomli quti", "ROOF", "L=155|W=108|H=70|R=40"
+    AddDef "Yostiq va konfet", "0417-1 Egri sumka quti", "PETAL A", "A=164|H=175|G=13|P=60"
+    AddDef "Yostiq va konfet", "0418-1 Yumaloq uchli konfet qutisi", "CAKE", "L=191|W=120|H=120"
+    AddDef "Yostiq va konfet", "0419-1 Yostiqcha 222x189", "PILLOW", "L=189|W=222|G=15|D=33"
+    AddDef "Tuck-end", "0421-1 Kub, bukiladigan", "TUCK S", "L=175|W=175|H=170|G=15|TK=34|OY=0|IL=0"
+    AddDef "Maxsus shakllar", "0422-1 Fonar (derazali)", "HOUSE", "A=158|H=183|R=80|G=15|OY=14"
+    AddDef "Gulbargli sovg'a", "0423-1 Olti burchakli gul qopqoqli", "FLOWER", "N=6|A=171|H=100|P=100"
+    AddDef "Ruchkali va sumka", "0424-1 Sumka (yumaloq ruchkali)", "GABLE R N", "L=170|W=170|H=283|G=15|HH=102|HW=60|OY=0"
+    AddDef "Gulbargli sovg'a", "0425-1 Quyon quloqli quti", "PETAL H", "A=122|H=155|G=29|P=151"
+    AddDef "Tort", "0427-1 Uchburchak tort bo'lagi", "PTRAY", "N=3|A=178|H=74|G=15"
+    AddDef "Gofra", "0428-1 Taglik + qopqoq (kvadrat)", "TELESCOPE", "L=103|W=103|H=85|HL=51|K=2"
+    AddDef "Tort", "0429-1 To'rt bargli tort qutisi", "CROSS", "A=112|H=80|P=80|RT=0"
+    AddDef "Maxsus shakllar", "0430-1 Yotiq silindr quti", "CYL", "DI=122|H=176|G=13"
 End Sub
 
 ' Guruhlar tartibi (panel ro'yxatida shu tartibda)
@@ -478,7 +508,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
         Case "ROOF": Roof L, W, H, p("R")
         Case "PURSE": Purse L, W, H, p("HT")
         Case "STAR": Star p("DI"), H, p("G")
-        Case "PETALN": PetalN Int(p("N")), p("A"), H, p("G"), p("P")
+        Case "PETALN": PetalN Int(p("N")), p("A"), H, p("G"), p("P"), dB(i)
         Case "PETAL"
             Dim sty As String
             sty = "A"
@@ -2149,9 +2179,12 @@ Private Sub Star(ByVal dia As Double, ByVal H As Double, ByVal g As Double)
     Next b
 End Sub
 
-' n qirrali quti, ikki uchida o'tkir gulbarglar (yopiladi)
-Private Sub PetalN(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double, ByVal pet As Double)
+' n qirrali quti, ikki uchida o'tkir gulbarglar (yopiladi).
+' fx: V - gulbarg to'g'ri uchburchak, B - tagi ko'pburchak (0-panelga ulangan, qolganlarida quloq)
+Private Sub PetalN(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal g As Double, ByVal pet As Double, _
+                   ByVal fx As String)
     Dim k As Long, i As Long, xa As Double, xb As Double, t As Double, j As Long, b As Double, s As Double
+    Dim dh As Double
     If n < 3 Then n = 3
     Glue 0, H, g
     For k = 0 To n - 1
@@ -2159,20 +2192,38 @@ Private Sub PetalN(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal
         Rect xa, 0, xb, H
         For j = 0 To 1
             If j = 0 Then b = H: s = 1 Else b = 0: s = -1
-            PtBegin
-            For i = 0 To 10
-                t = i / 10
-                Pt xa + sd / 2 * (1 - Sqr(1 - t * t)), b + s * pet * t
-            Next i
-            For i = 9 To 0 Step -1
-                t = i / 10
-                Pt xb - sd / 2 * (1 - Sqr(1 - t * t)), b + s * pet * t
-            Next i
-            PtPoly
+            If j = 1 And Has(fx, "B") Then
+                If k > 0 Then                    ' tag quloqlari
+                    dh = Min2(sd * 0.3, 15)
+                    Poly xa, 0, xa + dh * 0.8, 0 - dh, xb - dh * 0.8, 0 - dh, xb, 0
+                End If
+            ElseIf Has(fx, "V") Then
+                Poly xa, b, (xa + xb) / 2, b + s * pet, xb, b
+            Else
+                PtBegin
+                For i = 0 To 10
+                    t = i / 10
+                    Pt xa + sd / 2 * (1 - Sqr(1 - t * t)), b + s * pet * t
+                Next i
+                For i = 9 To 0 Step -1
+                    t = i / 10
+                    Pt xb - sd / 2 * (1 - Sqr(1 - t * t)), b + s * pet * t
+                Next i
+                PtPoly
+            End If
         Next j
     Next k
+    If Has(fx, "B") Then                         ' ko'pburchak tag
+        RegPoly sd, 0, 0, 0, n
+        PtPoly
+    End If
     SetRoot sd / 2, H / 2, True
     For k = 1 To n - 1: SetFold k * sd, 0, k * sd, H, 360 / n: Next k
     SetFold 0, 0, 0, H, 360 / n
+    If Has(fx, "V") Then                         ' uchburchak gulbarglar tepada uchrashadi
+        t = sd / (2 * Tan(PI / n))
+        t = Atn(Sqr(Max2(pet * pet - t * t, 1)) / t) * 180 / PI
+        For k = 0 To n - 1: SetFold k * sd, H, (k + 1) * sd, H, 90 - t: Next k
+    End If
     SetLid 0, H, n * sd, H
 End Sub

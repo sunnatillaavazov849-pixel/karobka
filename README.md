@@ -32,11 +32,11 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya.
 
 Egri shakllar (yostiqcha, silindr, doira quti, sumka-quti, yulduz, tort qutilari, konfet, vstavka, olmos) buklanmaydi, ularda sodda 3D model ko'rsatiladi.
 
-## Shablonlar (271 ta)
+## Shablonlar (296 ta)
 Shablonlar 13 guruhga bo'lingan: Gofra · Mailer · Tuck-end · Ruchkali va sumka · Lotok · Lanch-boks · Tort · Ko'p burchak · Piramida · Gulbargli sovg'a · Yostiq va konfet · Kosmetika · Maxsus shakllar.
 
 - Har guruh boshida umumiy shablonlar turadi (66 ta): FEFCO 0201, Mailer, RTE/STE, Lotok, Lanch-boks va boshqalar.
-- Keyin `photo.rar` rasmlaridagi chizmalar keladi. Har chizma alohida qator, nomi rasm raqami bilan boshlanadi: `IMG_0311` dagi 1-chizma → **"0311-1 Mailer, osma + qulf"**. Hozircha `IMG_0311`–`IMG_0400` (205 ta chizma) kiritilgan, qolganlari bosqichma-bosqich qo'shiladi.
+- Keyin `photo.rar` rasmlaridagi chizmalar keladi. Har chizma alohida qator, nomi rasm raqami bilan boshlanadi: `IMG_0311` dagi 1-chizma → **"0311-1 Mailer, osma + qulf"**. Hozircha `IMG_0311`–`IMG_0430` (230 ta chizma) kiritilgan, qolganlari bosqichma-bosqich qo'shiladi.
 - Panelda **qidirish** maydoni bor. Rasm raqamini (`0311`) yoki nomdan so'zni (`oyna`, `ruchka`) yozing.
 
 Qaysi rasm qaysi shablonga to'g'ri kelishi [`templates/catalog.md`](templates/catalog.md) da yozilgan.
