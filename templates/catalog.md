@@ -29,6 +29,10 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | `FH` | g'ilofda barmoq teshiklari |
 | `HTRAY RS` | yon devorlari yarim doira |
 | `TUCK R` / `S` / `N` / `E` | teskari / to'g'ri qopqoq / qulf tag / yopishtiriladigan tag |
+| `OR` | doira oyna (tuck-end, ruchkali) |
+| `HL` | qopqoqda ruchka teshigi (mailer) |
+| `PYRAMID O` | uchlarida halqa teshigi, yelimsiz |
+| `PETAL T` | lentali quti: uchli qopqoq, lenta teshiklari |
 | `GABLE N` / `R` | 1-2-3 qulf tag / yumaloq ruchka |
 
 ## 1-bosqich: IMG_0311 – IMG_0340 (84 ta chizma)
@@ -120,10 +124,92 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | IMG_0339-1 | 0339-1 Lab bo'yog'i qutisi (uzun) | Kosmetika | `TUCK S` | ✅ |
 | IMG_0340-1 | 0340-1 Lab bo'yog'i displeyi | Kosmetika | `DISPLAY` | 🟡 |
 
+## 2-bosqich: IMG_0341 – IMG_0370 (78 ta chizma)
+
+| Rasm | Plagindagi nomi | Guruh | Quruvchi | Holat |
+|------|-----------------|-------|----------|-------|
+| IMG_0341-1 | 0341-1 Atir qutisi, oynali | Kosmetika | `TUCK S` | 🟡 |
+| IMG_0342-1 | 0342-1 Lab bo'yog'i qutisi | Kosmetika | `TUCK S` | 🟡 |
+| IMG_0343-1 | 0343-1 Piramida (4), halqali | Piramida | `PYRAMID O` | ✅ |
+| IMG_0343-2 | 0343-2 Lentali quti | Gulbargli sovg'a | `PETAL T` | ✅ |
+| IMG_0343-3 | 0343-3 Uchburchak quti (yotiq) | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0344-1 | 0344-1 Uchburchak quti, tik | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0345-1 | 0345-1 Piramida (4), halqali | Piramida | `PYRAMID O` | ✅ |
+| IMG_0346-1 | 0346-1 Lentali quti | Gulbargli sovg'a | `PETAL T` | ✅ |
+| IMG_0347-1 | 0347-1 Uchburchak quti (yotiq) | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0348-1 | 0348-1 Qulf tag, oyna + osma | Tuck-end | `TUCK N` | ✅ |
+| IMG_0348-2 | 0348-2 Konfet (burama uchli) | Yostiq va konfet | `CANDY` | ✅ |
+| IMG_0348-3 | 0348-3 Olti burchakli quti | Ko'p burchak | `PRISM` | ✅ |
+| IMG_0349-1 | 0349-1 Yumaloq tilli quti | Gulbargli sovg'a | `PETAL A` | 🟡 |
+| IMG_0349-2 | 0349-2 Ruchkali quti, qiya ruchka | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0349-3 | 0349-3 Qirrali ruchkali quti | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0350-1 | 0350-1 Lotok, o'rtada ruchka | Lotok | `TRAYW` | 🟡 |
+| IMG_0350-2 | 0350-2 Sut qutisi, oynali | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0350-3 | 0350-3 Ruchkali quti, qulf tag | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0351-1 | 0351-1 Qulf tag, baland osma | Tuck-end | `TUCK N` | ✅ |
+| IMG_0351-2 | 0351-2 Qopqoqli quti, ustida ruchka | Mailer | `MAILER S HL` | 🟡 |
+| IMG_0351-3 | 0351-3 Kub, doira oyna | Tuck-end | `TUCK S OR` | 🟡 |
+| IMG_0352-1 | 0352-1 Sut qutisi, baland | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0352-2 | 0352-2 Sut qutisi, ilmoqli | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0352-3 | 0352-3 Kub, doira oyna, yumaloq ruchka | Ruchkali va sumka | `GABLE R N OR` | 🟡 |
+| IMG_0353-1 | 0353-1 Sumka quti | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0353-2 | 0353-2 Ruchkali quti, past | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0353-3 | 0353-3 Qulf tag, osma + qulf | Tuck-end | `TUCK N` | ✅ |
+| IMG_0354-1 | 0354-1 Kub quti, ikki tomonlama | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0354-2 | 0354-2 Sumka (ruchkali) | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0354-3 | 0354-3 Yarim doira qopqoqli quti | Gulbargli sovg'a | `PETAL A` | ✅ |
+| IMG_0355-1 | 0355-1 Displey quti, osma | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0355-2 | 0355-2 Kub quti, rozetkali | Gofra | `RSC 3` | 🟡 |
+| IMG_0355-3 | 0355-3 G'ilofli quti | Lotok | `DRAWER` | 🟡 |
+| IMG_0356-1 | 0356-1 Quti, ustida ruchka | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0356-2 | 0356-2 Qulf tag | Tuck-end | `TUCK N` | ✅ |
+| IMG_0356-3 | 0356-3 Sut qutisi | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0357-1 | 0357-1 Qulf tag, qulf tilli | Tuck-end | `TUCK N` | ✅ |
+| IMG_0357-2 | 0357-2 Qulf tag, oyna + osma (tik) | Tuck-end | `TUCK N` | ✅ |
+| IMG_0357-3 | 0357-3 Ruchkali quti, V ruchka | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0358-1 | 0358-1 Tuck-end, qulf tag (katta) | Tuck-end | `TUCK N` | ✅ |
+| IMG_0358-2 | 0358-2 Qulf tag, past | Tuck-end | `TUCK N` | 🟡 |
+| IMG_0358-3 | 0358-3 Kub, oynali, yumaloq ruchka | Ruchkali va sumka | `GABLE R N` | ✅ |
+| IMG_0359-1 | 0359-1 Yassi quti (konvert) | Mailer | `MAILER S` | 🟡 |
+| IMG_0359-2 | 0359-2 Teskari qopqoq, oynali | Tuck-end | `TUCK R` | ✅ |
+| IMG_0359-3 | 0359-3 Teskari qopqoq | Tuck-end | `TUCK R` | ✅ |
+| IMG_0360-1 | 0360-1 Mailer, ilgakli quloq | Mailer | `MAILER HK` | ✅ |
+| IMG_0360-2 | 0360-2 To'g'ri qopqoq, osma | Tuck-end | `TUCK S` | ✅ |
+| IMG_0360-3 | 0360-3 Qopqoqli lotok | Mailer | `MAILER S` | ✅ |
+| IMG_0361-1 | 0361-1 Lotok, ustida ruchka | Ruchkali va sumka | `HTRAY` | 🟡 |
+| IMG_0361-2 | 0361-2 Qulf tag (tik) | Tuck-end | `TUCK N` | ✅ |
+| IMG_0361-3 | 0361-3 Yassi mailer, o'yiqli | Mailer | `MAILER S TN` | ✅ |
+| IMG_0362-1 | 0362-1 Taglik + qopqoq | Gofra | `TELESCOPE` | 🟡 |
+| IMG_0362-2 | 0362-2 Qulf tag, o'yiqli | Tuck-end | `TUCK N` | ✅ |
+| IMG_0362-3 | 0362-3 Tik qopqoqli quti, qulf | Mailer | `MAILER S` | 🟡 |
+| IMG_0363-1 | 0363-1 Mailer, oynali (kvadrat) | Mailer | `MAILER` | ✅ |
+| IMG_0363-2 | 0363-2 Pitsa qutisi, o'yiqli | Mailer | `MAILER TN` | ✅ |
+| IMG_0363-3 | 0363-3 Mailer, yarim doira oyna | Mailer | `MAILER` | 🟡 |
+| IMG_0364-1 | 0364-1 To'g'ri qopqoq, uzun | Tuck-end | `TUCK S` | ✅ |
+| IMG_0364-2 | 0364-2 Konvert quti, tilli | Mailer | `MAILER S LR` | 🟡 |
+| IMG_0364-3 | 0364-3 Osma, evro teshik | Tuck-end | `TUCK S` | ✅ |
+| IMG_0365-1 | 0365-1 Mailer, osma | Mailer | `MAILER` | ✅ |
+| IMG_0365-2 | 0365-2 Osma, baland | Tuck-end | `TUCK S` | ✅ |
+| IMG_0365-3 | 0365-3 Sakkiz burchakli lanch-boks | Lanch-boks | `PLUNCH` | 🟡 |
+| IMG_0366-1 | 0366-1 FEFCO 0201 | Gofra | `RSC 1` | ✅ |
+| IMG_0366-2 | 0366-2 Kub, qulf tag | Tuck-end | `TUCK N` | 🟡 |
+| IMG_0366-3 | 0366-3 Qiya displey lotok | Lotok | `TAPER` | 🟡 |
+| IMG_0367-1 | 0367-1 FEFCO 0201 (keng) | Gofra | `RSC 1` | ✅ |
+| IMG_0367-2 | 0367-2 Burama qopqoqli quti | Gulbargli sovg'a | `PETAL A` | 🟡 |
+| IMG_0367-3 | 0367-3 Qiya devorli lotok, chuqur | Lotok | `TAPER` | 🟡 |
+| IMG_0368-1 | 0368-1 Lanch-boks, ruchkali | Lanch-boks | `LUNCH` | 🟡 |
+| IMG_0368-2 | 0368-2 Olti burchakli quti, osma | Ko'p burchak | `PRISM` | ✅ |
+| IMG_0368-3 | 0368-3 To'g'ri qopqoq, osma (uzun) | Tuck-end | `TUCK S` | ✅ |
+| IMG_0369-1 | 0369-1 Qirrali quti (yotiq) | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0369-2 | 0369-2 Ko'p qirrali shar | Ko'p burchak | `BIPYR` | 🟡 |
+| IMG_0369-3 | 0369-3 To'rt qirrali baland quti | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0370-1 | 0370-1 Uchburchak prizma (yotiq) | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0370-2 | 0370-2 Ko'p qirrali shar (katta) | Ko'p burchak | `BIPYR` | 🟡 |
+| IMG_0370-3 | 0370-3 Uycha tomli quti | Maxsus shakllar | `HOUSE` | 🟡 |
+
 ## Keyingi bosqichlar
 | Bosqich | Rasmlar | Holat |
 |---------|---------|-------|
-| 2 | IMG_0341 – IMG_0370 | ⬜ |
 | 3 | IMG_0371 – IMG_0400 | ⬜ |
 | 4 | IMG_0401 – IMG_0430 | ⬜ |
 | 5 | IMG_0431 – IMG_0466 | ⬜ |
