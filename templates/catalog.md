@@ -33,6 +33,11 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | `HL` | qopqoqda ruchka teshigi (mailer) |
 | `PYRAMID O` | uchlarida halqa teshigi, yelimsiz |
 | `PETAL T` | lentali quti: uchli qopqoq, lenta teshiklari |
+| `PYRAMID SC` | taroqli (to'lqinsimon) qirrali piramida |
+| `ROOF` | ikki qiyali tomli quti |
+| `PURSE` | sumka-quti: qavariq old/orqa devor, ruchka |
+| `STAR` | yulduz quti: yon tasma + ikki yulduz qopqoq |
+| `PETALN` | n qirrali quti, ikki uchida gulbarglar |
 | `GABLE N` / `R` | 1-2-3 qulf tag / yumaloq ruchka |
 
 ## 1-bosqich: IMG_0311 – IMG_0340 (84 ta chizma)
@@ -207,9 +212,58 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | IMG_0370-2 | 0370-2 Ko'p qirrali shar (katta) | Ko'p burchak | `BIPYR` | 🟡 |
 | IMG_0370-3 | 0370-3 Uycha tomli quti | Maxsus shakllar | `HOUSE` | 🟡 |
 
+## 3-bosqich: IMG_0371 – IMG_0400 (43 ta chizma)
+
+IMG_0375 — 0376–0384 dagi 9 ta shirinlik qutisining umumiy rasmi, alohida chizma emas. Bir rasmda bir xil chizma ikki marta (oq va rangli) bo'lsa, bitta qator qilingan: 0396, 0397, 0399.
+
+| Rasm | Plagindagi nomi | Guruh | Quruvchi | Holat |
+|------|-----------------|-------|----------|-------|
+| IMG_0371-1 | 0371-1 Quti, yirtiladigan tasma | Tuck-end | `TUCK S TS` | 🟡 |
+| IMG_0371-2 | 0371-2 Tik quti, yirtiladigan tasma | Tuck-end | `TUCK S TS` | 🟡 |
+| IMG_0371-3 | 0371-3 Olti qirrali uzun quti | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0372-1 | 0372-1 Olti burchakli baland quti | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0372-2 | 0372-2 FEFCO 0201, yon ruchkali | Gofra | `RSC 1` | ✅ |
+| IMG_0372-3 | 0372-3 FEFCO 0203 (to'liq qopqoq) | Gofra | `RSC 3` | ✅ |
+| IMG_0373-1 | 0373-1 FEFCO 0201 | Gofra | `RSC 1` | ✅ |
+| IMG_0373-2 | 0373-2 FEFCO 0201, ruchkali | Gofra | `RSC 1` | ✅ |
+| IMG_0373-3 | 0373-3 Olti burchakli quti, qulf tag | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0374-1 | 0374-1 FEFCO 0201 (yassi qanot) | Gofra | `RSC 1` | ✅ |
+| IMG_0374-2 | 0374-2 Olti qirrali, gulbargli uchlar | Gulbargli sovg'a | `PETALN` | 🟡 |
+| IMG_0374-3 | 0374-3 FEFCO 0201 (kub) | Gofra | `RSC 1` | ✅ |
+| IMG_0376-1 | 0376-1 Baland shirinlik qutisi | Yostiq va konfet | `PETALN` | 🟡 |
+| IMG_0377-1 | 0377-1 Minora quti | Yostiq va konfet | `PETAL P` | 🟡 |
+| IMG_0378-1 | 0378-1 Kub, gulbargli qopqoq | Yostiq va konfet | `PETAL A` | 🟡 |
+| IMG_0379-1 | 0379-1 Sumka konfet qutisi | Yostiq va konfet | `PETAL P` | 🟡 |
+| IMG_0380-1 | 0380-1 Konfet (cracker) | Yostiq va konfet | `CANDY` | 🟡 |
+| IMG_0381-1 | 0381-1 Tomli quti (lentali) | Maxsus shakllar | `ROOF` | 🟡 |
+| IMG_0382-1 | 0382-1 Sumka-quti, yumaloq | Ruchkali va sumka | `PURSE` | 🟡 |
+| IMG_0383-1 | 0383-1 Pagoda quti | Maxsus shakllar | `HOUSE` | 🟡 |
+| IMG_0384-1 | 0384-1 Kub, lentali qopqoq | Yostiq va konfet | `PETAL A` | 🟡 |
+| IMG_0385-1 | 0385-1 Pitsa qutisi 470 | Mailer | `MAILER` | ✅ |
+| IMG_0386-1 | 0386-1 Ruchkali quti, oynali | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0386-2 | 0386-2 Osma displey | Kosmetika | `DISPLAY` | 🟡 |
+| IMG_0387-1 | 0387-1 Krujka qutisi, oynali | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0388-1 | 0388-1 Flakon qutisi, vstavkali | Kosmetika | `TUCK S` | 🟡 |
+| IMG_0389-1 | 0389-1 G'ilof + lotok (uzun) | Lotok | `DRAWER` | ✅ |
+| IMG_0390-1 | 0390-1 Tortma, ikki qavat | Lotok | `DRAWER D` | 🟡 |
+| IMG_0391-1 | 0391-1 Taroqli piramida | Piramida | `PYRAMID SC` | ✅ |
+| IMG_0391-2 | 0391-2 Kapalak qopqoqli quti | Gulbargli sovg'a | `PETAL H` | 🟡 |
+| IMG_0391-3 | 0391-3 Sumka-quti | Ruchkali va sumka | `PURSE` | 🟡 |
+| IMG_0392-1 | 0392-1 Taroqli piramida (katta) | Piramida | `PYRAMID SC` | ✅ |
+| IMG_0393-1 | 0393-1 Kapalak qopqoqli quti (katta) | Gulbargli sovg'a | `PETAL H` | 🟡 |
+| IMG_0394-1 | 0394-1 Sumka-quti, ruchkali | Ruchkali va sumka | `PURSE` | 🟡 |
+| IMG_0395-1 | 0395-1 Yulduz quti | Maxsus shakllar | `STAR` | 🟡 |
+| IMG_0396-1 | 0396-1 Olti barg, ruchkali | Gulbargli sovg'a | `FLOWER` | 🟡 |
+| IMG_0397-1 | 0397-1 Ruchkali quti 120x80x80 | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0398-1 | 0398-1 Olti burchakli qopqoq | Lanch-boks | `PTRAY` | ✅ |
+| IMG_0398-2 | 0398-2 Olti burchakli taglik | Lanch-boks | `PTRAY` | ✅ |
+| IMG_0399-1 | 0399-1 Ruchkali quti 200x200x180 | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0400-1 | 0400-1 Yumaloq uchli konfet qutisi | Yostiq va konfet | `CAKE` | 🟡 |
+| IMG_0400-2 | 0400-2 Egri sumka quti | Yostiq va konfet | `PETAL A` | 🟡 |
+| IMG_0400-3 | 0400-3 Tomli quti | Maxsus shakllar | `ROOF` | 🟡 |
+
 ## Keyingi bosqichlar
 | Bosqich | Rasmlar | Holat |
 |---------|---------|-------|
-| 3 | IMG_0371 – IMG_0400 | ⬜ |
 | 4 | IMG_0401 – IMG_0430 | ⬜ |
 | 5 | IMG_0431 – IMG_0466 | ⬜ |
