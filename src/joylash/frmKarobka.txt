@@ -15,7 +15,9 @@ Private Const PAD As Single = 12
 
 Private WithEvents lst As MSForms.ListBox
 Private WithEvents cmbGroup As MSForms.ComboBox
+Private WithEvents txtFind As MSForms.TextBox
 Private ids() As Long                 ' ro'yxat qatori -> shablon raqami
+Private curT As Long                  ' maydonlari ko'rsatilgan shablon
 Private WithEvents chk3D As MSForms.CheckBox
 Private WithEvents chkLive As MSForms.CheckBox
 Private WithEvents btnDraw As MSForms.Label
@@ -75,7 +77,7 @@ Private Function NewCheck(ByVal txt As String, ByVal l As Single, ByVal t As Sin
 End Function
 
 Private Sub UserForm_Initialize()
-    Dim i As Long, cardL As MSForms.Frame
+    Dim i As Long, cardL As MSForms.Frame, gl() As String
     Me.Caption = "Karobka"
     Me.BackColor = C_BG
     Me.Width = 700: Me.Height = 420
@@ -98,12 +100,24 @@ Private Sub UserForm_Initialize()
         .ControlTipText = "Guruh bo'yicha saralash"
         .AddItem "Hammasi"
     End With
+    gl = Split(TGroups, "|")
+    For i = 0 To UBound(gl)
+        cmbGroup.AddItem gl(i)
+    Next i
     For i = 1 To TCount
         If Not HasItem(cmbGroup, TGroup(i)) Then cmbGroup.AddItem TGroup(i)
     Next i
+    Set txtFind = cardL.Controls.Add("Forms.TextBox.1", "txtFind")
+    With txtFind
+        .Left = 8: .Top = 52: .Width = 182: .Height = 18
+        .BorderStyle = fmBorderStyleSingle: .BorderColor = C_LINE: .SpecialEffect = fmSpecialEffectFlat
+        .BackColor = C_FIELD: .ForeColor = C_TEXT
+        .Font.Name = FONT_NAME: .Font.Size = 9
+        .ControlTipText = "Qidirish: rasm raqami (masalan 0311) yoki nomi"
+    End With
     Set lst = cardL.Controls.Add("Forms.ListBox.1", "lst")
     With lst
-        .Left = 6: .Top = 54: .Width = 186: .Height = 290
+        .Left = 6: .Top = 76: .Width = 186: .Height = 268
         .BorderStyle = fmBorderStyleNone: .SpecialEffect = fmSpecialEffectFlat
         .BackColor = C_CARD: .ForeColor = C_TEXT
         .Font.Name = FONT_NAME: .Font.Size = 9
@@ -315,28 +329,45 @@ Private Function HasItem(c As MSForms.ComboBox, ByVal txt As String) As Boolean
     Next k
 End Function
 
-' Tanlangan guruh shablonlari bilan ro'yxatni to'ldirish
 Private Sub cmbGroup_Change()
-    Dim i As Long, n As Long, g As String
-    g = cmbGroup.Text
-    lst.Clear
-    ReDim ids(0 To TCount)
-    For i = 1 To TCount
-        If g = "Hammasi" Or g = TGroup(i) Then
-            If g = "Hammasi" Then lst.AddItem TGroup(i) & "  -  " & TName(i) Else lst.AddItem TName(i)
-            ids(n) = i: n = n + 1
-        End If
-    Next i
-    If n > 0 Then lst.ListIndex = 0
+    FillList
 End Sub
 
-' Tanlangan shablon raqami
+Private Sub txtFind_Change()
+    FillList
+End Sub
+
+' Ro'yxatni guruh va qidiruv bo'yicha to'ldirish. Joriy shablon ro'yxatda qolsa, tanlangan bo'lib turadi
+Private Sub FillList()
+    Dim i As Long, n As Long, g As String, q As String, sel As Long
+    g = cmbGroup.Text
+    q = LCase(Trim(txtFind.Text))
+    lst.Clear
+    ReDim ids(0 To TCount)
+    sel = -1
+    For i = 1 To TCount
+        If g = "Hammasi" Or g = TGroup(i) Then
+            If q = "" Or InStr(LCase(TGroup(i) & " " & TName(i)), q) > 0 Then
+                If g = "Hammasi" Then lst.AddItem TGroup(i) & "  -  " & TName(i) Else lst.AddItem TName(i)
+                If i = curT Then sel = n
+                ids(n) = i: n = n + 1
+            End If
+        End If
+    Next i
+    If sel < 0 And n > 0 Then sel = 0
+    If sel >= 0 Then lst.ListIndex = sel
+    If n = 0 Then SetStatus "Topilmadi", False Else SetStatus "", False
+End Sub
+
+' Maydonlari ko'rsatilgan shablon raqami
 Private Function CurId() As Long
-    CurId = ids(lst.ListIndex)
+    CurId = curT
 End Function
 
 Private Sub lst_Change()
     If lst.ListIndex < 0 Then Exit Sub
+    If ids(lst.ListIndex) = curT And Not fields Is Nothing Then Exit Sub
+    curT = ids(lst.ListIndex)
     BuildFields
     FieldChanged
 End Sub
@@ -442,6 +473,7 @@ End Sub
 
 Private Sub btnDraw_Click()
     Dim p As Object
+    If curT = 0 Or fields Is Nothing Then Exit Sub
     Set p = ReadParams()
     If p Is Nothing Then Exit Sub
     TBuild CurId, p

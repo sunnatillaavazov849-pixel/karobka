@@ -30,23 +30,18 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya.
 2. Dizaynni yoyilma ustiga **"Dizayn"** nomli qatlamga joylang. Qatlam yo'q bo'lsa, **Mockup** tugmasini birinchi bosganda o'zi yaratiladi.
 3. **Mockup** ni bosing: dizayn har bir yuzaga to'g'ri joylanadi. Slayderlarni qimirlatsangiz, oddiy 3D ko'rinishga qaytadi.
 
-Egri shakllar (yostiqcha, silindr, tort qutilari, konfet, vstavka, olmos) buklanmaydi, ularda sodda 3D model ko'rsatiladi.
+Egri shakllar (yostiqcha, silindr, doira quti, tort qutilari, konfet, vstavka, olmos) buklanmaydi, ularda sodda 3D model ko'rsatiladi.
 
-## Shablonlar (66 ta)
-| Guruh | Shablonlar |
-|-------|-----------|
-| Gofra | FEFCO 0201, 0201 ruchkali, 0200, 0203, 0300 (taglik + qopqoq) |
-| Mailer | FEFCO 0427: oddiy, quloqsiz, oynali, osma teshikli, qulfli til, ruchkali; Pitsa qutisi; Qopqoqli lotok |
-| Tuck-end | RTE, STE, Kub, Oynali, Osma, Qulf tag (1-2-3), Qulf tag oynali, Seal end, Lab bo'yog'i, Uzun quti, Flakon oynali |
-| Ruchkali | Ruchkali quti, qulf tagli, yumaloq ruchkali, Vino qutisi, Pirojniy qutisi, Sut qutisi |
-| Lotok | Lotok, ruchkali, ikki qavat, ikki qavat ruchkali, bukiladigan burchak, olti/sakkiz burchakli, G'ilof, Tortma quti, Bo'lakli vstavka (2x2, 3x4) |
-| Ko'p burchak | Uchburchak prizma, olti/sakkiz burchakli quti, Piramida (3/4/6), Gul quti (6/8), Olmos (4/6) |
-| Sovg'a | Gulbargli (yarim doira, yurak, o'tkir uchli), Yostiqcha, Konfet, Lentali piramida, Uycha, Uycha oynali, Silindr |
-| Tort | To'rt bargli, To'rt bargli ruchkali, Yumaloq uchli, Lanch-boks (to'rtburchak, olti, sakkiz burchakli) |
+## Shablonlar (150 ta)
+Shablonlar 13 guruhga bo'lingan: Gofra · Mailer · Tuck-end · Ruchkali va sumka · Lotok · Lanch-boks · Tort · Ko'p burchak · Piramida · Gulbargli sovg'a · Yostiq va konfet · Kosmetika · Maxsus shakllar.
+
+- Har guruh boshida umumiy shablonlar turadi (66 ta): FEFCO 0201, Mailer, RTE/STE, Lotok, Lanch-boks va boshqalar.
+- Keyin `photo.rar` rasmlaridagi chizmalar keladi. Har chizma alohida qator, nomi rasm raqami bilan boshlanadi: `IMG_0311` dagi 1-chizma → **"0311-1 Mailer, osma + qulf"**. Hozircha `IMG_0311`–`IMG_0340` (84 ta chizma) kiritilgan, qolganlari bosqichma-bosqich qo'shiladi.
+- Panelda **qidirish** maydoni bor. Rasm raqamini (`0311`) yoki nomdan so'zni (`oyna`, `ruchka`) yozing.
 
 Qaysi rasm qaysi shablonga to'g'ri kelishi [`templates/catalog.md`](templates/catalog.md) da yozilgan.
 
-Qo'shimcha maydonlar 0 bo'lsa, o'sha xususiyat o'chadi: Oyna, Osma, Ruchka, Qulf, Qopqoq quloq.
+Qo'shimcha maydonlar 0 bo'lsa, o'sha xususiyat o'chadi: Oyna, Osma, Ruchka, Qulf (tillar soni), Qopqoq quloq, Qiyalik.
 
 ## Yangi shablon qo'shish
 `src/modTemplates.bas` dagi `InitDefs` ga bitta `AddDef` qatori qo'shing: guruh, nom, quruvchi va standart o'lchamlar. Mavjud quruvchining yangi varianti uchun shu kifoya. Yangi oila bo'lsa, `TBuild` ga yangi quruvchi qo'shing.
@@ -57,4 +52,5 @@ Panellar `Rect` / `Poly` bilan chiziladi: ikki panelga umumiy qirra bukish, qolg
 
 Koddagi o'zgarishdan keyin:
 - `python3 tools/preview.py` — hamma modullarni tekshiradi (lint: e'lon qilinmagan nom, takroriy e'lon, label xatosi) va shablonlarni Corelsiz chizadi: yoyilma, 50% / 100% yig'ilgan va qopqoq ochiq holatlar. VBA kodi `tools/vba2py.py` bilan Python'ga o'giriladi, natija `preview/` papkasida;
+- `python3 tools/compare.py RASMLAR CHIQISH 0311 0340` — asl rasmdagi chizma, plagin yoyilmasi va 3D yonma-yon turgan taqqoslash varaqlari;
 - `python3 tools/make_paste.py` — `src/joylash` dagi nusxalarni yangilaydi.
