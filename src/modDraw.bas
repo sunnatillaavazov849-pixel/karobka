@@ -9,6 +9,8 @@ Public Const D3_NAME As String = "KAROBKA_3D"
 
 ' Oxirgi chizilgan yoyilma chegarasi (3D shu yerning o'ng tomoniga qo'yiladi)
 Private dieL As Double, dieR As Double, dieB As Double, dieT As Double, haveDie As Boolean
+Private dieGroup As Shape                         ' oxirgi yoyilma guruhi (mockup koordinata boshi uchun)
+Public Const DESIGN_LAYER As String = "Dizayn"
 
 Private Sub DeleteNamed(ByVal nm As String)
     Dim s As Shape
@@ -89,6 +91,7 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
     g.CenterY = ActivePage.CenterY
     If final Then g.Name = "Karobka" Else g.Name = PREVIEW_NAME
     dieL = g.LeftX: dieR = g.RightX: dieB = g.BottomY: dieT = g.TopY: haveDie = True
+    Set dieGroup = g
 
 Done:
     Optimization = False
@@ -100,15 +103,20 @@ End Sub
 ' yaw/pitch - aylantirish va qiyalik (gradus), zoom - masshtab (1 = yoyilma balandligining 60%),
 ' rgbColor - karton rangi, final = True bo'lsa doimiy nusxa qoladi
 Public Sub Redraw3D(ByVal yaw As Double, ByVal pitch As Double, ByVal zoom As Double, ByVal rgbColor As Long, _
-                    Optional ByVal final As Boolean = False)
-    Dim sr As New ShapeRange, g As Shape
+                    Optional ByVal final As Boolean = False, Optional dsg As Object = Nothing)
+    Dim sr As New ShapeRange, g As Shape, org As Shape, ox As Double, oy As Double
     If ActiveDocument Is Nothing Or Not haveDie Then Exit Sub
     ActiveDocument.Unit = cdrMillimeter
     ActiveDocument.BeginCommandGroup "Karobka 3D"
     Optimization = True
     On Error GoTo Done
     DeleteNamed D3_NAME
-    Draw3D sr, dieR + 40, dieB, (dieT - dieB) * 0.6 * zoom, yaw, pitch, rgbColor
+    If LCase(ActiveLayer.Name) = LCase(DESIGN_LAYER) Then OtherLayer.Activate   ' 3D dizayn qatlamiga tushmasin
+    If Not dsg Is Nothing Then
+        Set org = dieGroup.Shapes.FindShape(Name:="KAROBKA_ORIGIN")
+        ox = org.LeftX: oy = org.BottomY
+    End If
+    Draw3D sr, dieR + 40, dieB, (dieT - dieB) * 0.6 * zoom, yaw, pitch, rgbColor, dsg, ox, oy
     If sr.Count > 0 Then
         Set g = sr.Group
         If final Then g.Name = "Karobka 3D" Else g.Name = D3_NAME
@@ -118,3 +126,28 @@ Done:
     ActiveDocument.EndCommandGroup
     ActiveWindow.Refresh
 End Sub
+
+' Dizayn qatlami (yo'q bo'lsa yaratiladi). created = True - hozir yaratildi
+Public Function DesignLayer(created As Boolean) As Object
+    Dim ly As Object
+    created = False
+    If ActiveDocument Is Nothing Then Exit Function
+    For Each ly In ActivePage.Layers
+        If LCase(ly.Name) = LCase(DESIGN_LAYER) Then Set DesignLayer = ly: Exit Function
+    Next ly
+    Set DesignLayer = ActivePage.CreateLayer(DESIGN_LAYER)
+    created = True
+End Function
+
+Private Function OtherLayer() As Object
+    Dim ly As Object
+    For Each ly In ActivePage.Layers
+        If LCase(ly.Name) <> LCase(DESIGN_LAYER) And Not ly.IsSpecialLayer Then Set OtherLayer = ly: Exit Function
+    Next ly
+    Set OtherLayer = ActivePage.CreateLayer("Karobka")
+End Function
+
+' Yoyilma bormi (mockup uchun)
+Public Function HasDie() As Boolean
+    HasDie = haveDie And Not dieGroup Is Nothing
+End Function

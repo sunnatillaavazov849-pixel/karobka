@@ -44,6 +44,7 @@ Private WithEvents sbZoom As MSForms.ScrollBar
 Private WithEvents cmbColor As MSForms.ComboBox
 Private WithEvents btnFoldAnim As MSForms.Label
 Private WithEvents btnLidAnim As MSForms.Label
+Private WithEvents btnMockup As MSForms.Label
 Private lblFoldV As MSForms.Label, lblLidV As MSForms.Label
 Private busy3D As Boolean
 Private fields As Collection
@@ -197,6 +198,26 @@ Private Sub Build3DBlock(ByVal l As Single)
         .AddItem "Ko'k": .AddItem "Yashil": .AddItem "Pushti"
         .ListIndex = 0
     End With
+    Set btnMockup = NewButton(f3, "Mockup", PAD, 306, 184, 24, C_TEXT, C_CARD, 10)
+    btnMockup.ControlTipText = "Dizayn qatlamidagi rasmni 3D qutiga joylash"
+End Sub
+
+' Mockup: "Dizayn" qatlamidagi dizayn 3D qutining yuzalariga joylanadi
+Private Sub btnMockup_Click()
+    Dim dsg As Object, created As Boolean
+    If Not HasDie Then SetStatus "Avval yoyilmani chizing", True: Exit Sub
+    Set dsg = DesignLayer(created)
+    If dsg Is Nothing Then Exit Sub
+    If created Or dsg.Shapes.Count = 0 Then
+        MsgBox "Dizaynni yoyilma ustiga '" & DESIGN_LAYER & "' qatlamiga joylang va Mockup ni qayta bosing." & _
+               vbCrLf & "(Qatlam Object Manager oynasida ko'rinadi.)", vbInformation, "Karobka"
+        Exit Sub
+    End If
+    SetStatus "Mockup chizilmoqda...", False
+    DoEvents
+    Fold3D sbFold.Value / 100, sbLid.Value / 100
+    Redraw3D sbYaw.Value, sbPitch.Value, sbZoom.Value / 100, BoxColor, False, dsg
+    SetStatus "Mockup tayyor", False
 End Sub
 
 Private Function BoxColor() As Long

@@ -97,6 +97,7 @@ RUNTIME = dict(
     cstr=lambda v: VStr(fmt(v)), val=lambda s: float(re.match(r"\s*([-+]?\d*\.?\d*)", s).group(1) or 0),
     replace=lambda s, a, b: VStr(s.replace(a, b)), split=lambda s, d: PArr(VStr(x) for x in s.split(d)),
     len=lambda s: len(s), createobject=lambda name: VDict(),
+    lcase=lambda s: VStr(s.lower()), ucase=lambda s: VStr(s.upper()), trim=lambda s: VStr(s.strip()),
 )
 
 # ------------------------------------------------------------------ o'giruvchi

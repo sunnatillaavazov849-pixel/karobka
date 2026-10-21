@@ -18,7 +18,7 @@ ROOT = os.path.join(os.path.dirname(__file__), "..", "src")
 
 def load():
     files = [os.path.join(ROOT, f) for f in ("modGeom.bas", "mod3D.bas", "modTemplates.bas")]
-    ns, _ = vba2py.load(files, skip=("Draw3D",))
+    ns, _ = vba2py.load(files, skip=("Draw3D", "AddDesign", "NearBox", "InvAffine"))  # Corel API ishlatadi
     return ns
 
 

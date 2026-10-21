@@ -357,10 +357,12 @@ Private Function SideAll(ByVal f As Long, ByVal pl As Long, ByVal want As Long) 
 End Function
 
 ' 3D ni sahifaga chizadi. (ox, oy) - chap past burchak, targetH - balandlik (mm), yaw/pitch - ko'rinish burchaklari,
-' rgbColor - karton rangi. Shape lar sr ga qo'shiladi
+' rgbColor - karton rangi. dsg (qatlam) berilsa - mockup: uning shakllari panellarga joylanadi,
+' (orgX, orgY) - sahifadagi yoyilma koordinata boshi. Shape lar sr ga qo'shiladi
 Public Sub Draw3D(sr As ShapeRange, ByVal ox As Double, ByVal oy As Double, ByVal targetH As Double, _
                   Optional ByVal yaw As Double = -35, Optional ByVal pitch As Double = 25, _
-                  Optional ByVal rgbColor As Long = &H7EA9CF)
+                  Optional ByVal rgbColor As Long = &H7EA9CF, Optional dsg As Object = Nothing, _
+                  Optional ByVal orgX As Double = 0, Optional ByVal orgY As Double = 0)
     Dim i As Long, j As Long, k As Long, n As Long, sc As Double, lit As Double
     Dim cr As Long, cg As Long, cb As Long
     Dim crv As Curve, sub_ As SubPath, s As Shape
@@ -383,6 +385,92 @@ Public Sub Draw3D(sr As ShapeRange, ByVal ox As Double, ByVal oy As Double, ByVa
             s.Fill.UniformColor.RGBAssign Int(cr * lit), Int(cg * lit), Int(cb * lit)
             s.Outline.SetProperties Width:=0.2, Color:=CreateRGBColor(Int(cr * 0.4), Int(cg * 0.4), Int(cb * 0.4))
             sr.Add s
+            If Not dsg Is Nothing Then
+                If Not fBack(i) And fPan(i) >= 0 Then AddDesign sr, dsg, i, sc, ox, oy, orgX, orgY
+            End If
         End If
     Next k
+End Sub
+
+' Mockup: dizayn qatlami nusxasi panel shakliga PowerClip qilinadi va 3D yuzaga affin o'zgartiriladi
+Private Sub AddDesign(sr As ShapeRange, dsg As Object, ByVal i As Long, ByVal sc As Double, _
+                      ByVal ox As Double, ByVal oy As Double, ByVal orgX As Double, ByVal orgY As Double)
+    Dim k As Long, n As Long, j As Long, j2 As Long, best As Double, cr As Double
+    Dim p1x As Double, p1y As Double, p2x As Double, p2y As Double, s1x As Double, s1y As Double, s2x As Double, s2y As Double
+    Dim det As Double, m11 As Double, m12 As Double, m21 As Double, m22 As Double, tx As Double, ty As Double
+    Dim crv As Curve, sp As SubPath, pc As Shape, dup As ShapeRange
+    Dim exL As Double, exB As Double, exR As Double, exT As Double, sx As Double, sy As Double
+    k = fPan(i): n = fStart(i)
+    If pnCnt(k) <> fCnt(i) Or pnCnt(k) < 3 Then Exit Sub
+    ' asos nuqtalari: 0, 1 va 0-1 chizig'idan eng uzoq uch
+    For j = 2 To pnCnt(k) - 1
+        cr = Abs((pvX(pnStart(k) + 1) - pvX(pnStart(k))) * (pvY(pnStart(k) + j) - pvY(pnStart(k))) - _
+                 (pvY(pnStart(k) + 1) - pvY(pnStart(k))) * (pvX(pnStart(k) + j) - pvX(pnStart(k))))
+        If cr > best Then best = cr: j2 = j
+    Next j
+    If best < 0.01 Then Exit Sub
+    p1x = pvX(pnStart(k) + 1) - pvX(pnStart(k)): p1y = pvY(pnStart(k) + 1) - pvY(pnStart(k))
+    p2x = pvX(pnStart(k) + j2) - pvX(pnStart(k)): p2y = pvY(pnStart(k) + j2) - pvY(pnStart(k))
+    s1x = (vX(n + 1) - vX(n)) * sc: s1y = (vY(n + 1) - vY(n)) * sc
+    s2x = (vX(n + j2) - vX(n)) * sc: s2y = (vY(n + j2) - vY(n)) * sc
+    det = p1x * p2y - p2x * p1y
+    m11 = (s1x * p2y - s2x * p1y) / det: m12 = (s2x * p1x - s1x * p2x) / det
+    m21 = (s1y * p2y - s2y * p1y) / det: m22 = (s2y * p1x - s1y * p2x) / det
+    ' sahifadagi nuqta (x, y) -> ekran: m * (x, y) + t
+    tx = ox + (vX(n) - vMinX) * sc - (m11 * (pvX(pnStart(k)) + orgX) + m12 * (pvY(pnStart(k)) + orgY))
+    ty = oy + (vY(n) - vMinY) * sc - (m21 * (pvX(pnStart(k)) + orgX) + m22 * (pvY(pnStart(k)) + orgY))
+    ' kutilgan chegara
+    exL = 1E+30: exB = 1E+30: exR = -1E+30: exT = -1E+30
+    For j = 0 To fCnt(i) - 1
+        sx = ox + (vX(n + j) - vMinX) * sc: sy = oy + (vY(n + j) - vMinY) * sc
+        If sx < exL Then exL = sx
+        If sx > exR Then exR = sx
+        If sy < exB Then exB = sy
+        If sy > exT Then exT = sy
+    Next j
+    On Error GoTo Fail
+    Set crv = Application.CreateCurve(ActiveDocument)
+    Set sp = crv.CreateSubPath(pvX(pnStart(k)) + orgX, pvY(pnStart(k)) + orgY)
+    For j = 1 To pnCnt(k) - 1
+        sp.AppendLineSegment pvX(pnStart(k) + j) + orgX, pvY(pnStart(k) + j) + orgY
+    Next j
+    sp.Closed = True
+    Set pc = ActiveLayer.CreateCurve(crv)
+    pc.Outline.SetNoOutline
+    Set dup = dsg.Shapes.All.Duplicate
+    dup.MoveToLayer ActiveLayer
+    dup.AddToPowerClip pc, 0                     ' 0 - markazlashtirmasdan
+    ' AffineTransform tartibi: avval (d11 d12 / d21 d22), mos kelmasa transpozitsiyasi
+    pc.AffineTransform m11, m12, m21, m22, tx, ty
+    If Not NearBox(pc, exL, exB, exR, exT) Then
+        InvAffine pc, m11, m12, m21, m22, tx, ty, True       ' Corel transpozitsiya bilan qo'llagan
+        pc.AffineTransform m11, m21, m12, m22, tx, ty
+        If Not NearBox(pc, exL, exB, exR, exT) Then
+            pc.Delete
+            Exit Sub
+        End If
+    End If
+    sr.Add pc
+    Exit Sub
+Fail:
+    On Error Resume Next
+    If Not pc Is Nothing Then pc.Delete
+End Sub
+
+Private Function NearBox(s As Shape, ByVal l As Double, ByVal b As Double, ByVal r As Double, ByVal t As Double) As Boolean
+    Const E As Double = 1
+    NearBox = Abs(s.LeftX - l) < E And Abs(s.BottomY - b) < E And Abs(s.RightX - r) < E And Abs(s.TopY - t) < E
+End Function
+
+' AffineTransform a, b, c, d, tx, ty ni bekor qilish. transposed = True - Corel matritsani (a c / b d) deb olgan
+Private Sub InvAffine(s As Shape, ByVal a As Double, ByVal b As Double, ByVal c As Double, ByVal d As Double, _
+                      ByVal tx As Double, ByVal ty As Double, ByVal transposed As Boolean)
+    Dim det As Double, ia As Double, ib As Double, ic As Double, id As Double
+    det = a * d - b * c
+    ia = d / det: ib = -b / det: ic = -c / det: id = a / det
+    If transposed Then
+        s.AffineTransform ia, ib, ic, id, -(ia * tx + ic * ty), -(ib * tx + id * ty)
+    Else
+        s.AffineTransform ia, ib, ic, id, -(ia * tx + ib * ty), -(ic * tx + id * ty)
+    End If
 End Sub
