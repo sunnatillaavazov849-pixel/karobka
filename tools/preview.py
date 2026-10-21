@@ -162,6 +162,10 @@ def tile(segs, faces, title, size=500, states=()):
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "preview"
     os.makedirs(out, exist_ok=True)
+    import glob
+    vba2py.lint(sorted(glob.glob(os.path.join(ROOT, "*.bas"))) + glob.glob(os.path.join(ROOT, "*.cls")) +
+                glob.glob(os.path.join(ROOT, "*.frm")))   # forma va Corel kodi ham tekshiriladi
+    print("lint: xato yo'q")
     ns = load()
     n = ns["modtemplates__tcount"]()
     tiles, bad = [], 0

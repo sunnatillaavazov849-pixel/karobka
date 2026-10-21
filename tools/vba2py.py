@@ -101,10 +101,17 @@ RUNTIME = dict(
 
 # ------------------------------------------------------------------ o'giruvchi
 
-TOK = re.compile(r'"(?:[^"]|"")*"|\d+\.\d*(?:[eE][-+]?\d+)?|\d*\.\d+(?:[eE][-+]?\d+)?|\d+(?:[eE][-+]?\d+)?'
+TOK = re.compile(r'"(?:[^"]|"")*"|&[Hh][0-9A-Fa-f]+&?|\d+\.\d*(?:[eE][-+]?\d+)?|\d*\.\d+(?:[eE][-+]?\d+)?|\d+(?:[eE][-+]?\d+)?'
                  r'|[A-Za-z_]\w*|<>|<=|>=|:=|[-+*/\\^&=<>(),.:]|\s+')
 PYKW = set(keyword.kwlist) | {"print", "exec", "type", "id", "list", "dict", "str", "min", "max", "sum", "map", "range"}
-OPS = {"and": " and ", "or": " or ", "not": " not ", "mod": " % ", "true": "True", "false": "False"}
+OPS = {"and": " and ", "or": " or ", "not": " not ", "mod": " % ", "true": "True", "false": "False",
+       "is": " is ", "nothing": "None", "new": " "}
+
+# Lint rejimida ruxsat etilgan tashqi nomlar (CorelDRAW, MSForms, VBA)
+EXTERNAL = {"me", "activedocument", "activepage", "activelayer", "activewindow", "application", "createdocument",
+            "creatergbcolor", "outlinestyles", "optimization", "timer", "doevents", "rgb", "msgbox", "unload",
+            "array", "msforms", "shape", "shaperange", "curve", "subpath", "collection", "object", "variant"}
+EXT_PREFIX = ("cdr", "fm", "vb")
 
 
 def tokens(s):
@@ -171,7 +178,20 @@ class Module:
         while i < len(joined):
             ln = joined[i].strip()
             low = ln.lower()
-            m = re.match(r"(public |private )?(sub|function) (\w+)\s*\((.*)\)(\s+as\s+\w+)?$", ln, re.I)
+            if re.match(r"begin\b", low):              # .frm / .cls sarlavha bloki
+                depth = 1
+                while depth and i + 1 < len(joined):
+                    i += 1
+                    l2 = joined[i].strip().lower()
+                    if re.match(r"begin\b", l2):
+                        depth += 1
+                    elif l2 == "end":
+                        depth -= 1
+                i += 1
+                continue
+            ln = re.sub(r"\bWithEvents\s+", "", ln, flags=re.I)
+            low = ln.lower()
+            m = re.match(r"(public |private )?(sub|function) (\w+)\s*\((.*)\)(\s+as\s+[\w.]+)?$", ln, re.I)
             if m:
                 kind, pname = m.group(2).lower(), m.group(3)
                 body = []
@@ -190,6 +210,8 @@ class Module:
                     self.consts[m.group(2).lower()] = (m.group(1) or "").strip().lower() == "public"
                 else:
                     m = re.match(r"(public|private|dim)\s+(.*)$", ln, re.I)
+                    if not m:
+                        raise SyntaxError("%s: tushunarsiz qator: %s" % (name, ln))
                     for part in split_args(m.group(2)):
                         nm = re.match(r"(\w+)", part.strip()).group(1)
                         self.vars[nm.lower()] = m.group(1).lower() == "public"
@@ -229,8 +251,10 @@ def init_for(decl):
 
 
 class Translator:
-    def __init__(self, modules):
+    def __init__(self, modules, lint=False):
         self.mods = {m.name.lower(): m for m in modules}
+        self.lint = lint
+        self.withs = []
 
     def resolve(self, name, mod, local):
         n = name.lower()
@@ -250,7 +274,13 @@ class Translator:
                 return "%s__%s" % (k, pyname(n))
         if n in RUNTIME:
             return n
+        if self.lint and (n in EXTERNAL or n.startswith(EXT_PREFIX) or n in self.mods):
+            return "_ext"
         raise NameError("%s: e'lon qilinmagan nom '%s'" % (mod, name))
+
+    def is_label_proc(self, name, mod):
+        n = name.lower()
+        return any(n in o.procs for o in self.mods.values())
 
     def is_proc(self, name, mod, local):
         r = self.resolve(name, mod, local) if name.lower() not in local else ""
@@ -264,8 +294,14 @@ class Translator:
             nxt = toks[i + 1] if i + 1 < len(toks) else ""
             if t.startswith('"'):
                 out.append('VStr(%s)' % ('"' + t[1:-1].replace('""', '\\"') + '"'))
+            elif t[:2] in ("&H", "&h"):
+                out.append(str(int(t[2:].rstrip("&"), 16)))
+            elif t == "." and self.withs and (not prev or not re.match(r"[A-Za-z_0-9)]", prev[-1])):
+                out.append(self.withs[-1] + ".")            # With bloki a'zosi
             elif re.match(r"[A-Za-z_]", t):
-                if prev == ".":
+                if nxt == ":=":
+                    out.append(t.lower())                    # nomli argument
+                elif prev == ".":
                     out.append(t.lower())
                 elif fnname and t.lower() == fnname.lower() and nxt != "(":
                     out.append("_ret")
@@ -285,16 +321,21 @@ class Translator:
             elif t == "^":
                 out.append("**")
             elif t == ":=":
-                raise SyntaxError("nomli argumentlar qo'llanmaydi: " + s)
+                if not self.lint:
+                    raise SyntaxError("nomli argumentlar qo'llanmaydi: " + s)
+                out.append("=")
             else:
                 out.append(t)
-        return " ".join(out).replace(" . ", ".").replace("( ", "(").replace(" )", ")").replace(" ,", ",")
+        r = " ".join(out).replace(" . ", ".").replace("( ", "(").replace(" )", ")").replace(" ,", ",")
+        while re.search(r"[(,]\s*,", r):                     # tushirib qoldirilgan argumentlar
+            r = re.sub(r"([(,])\s*,", r"\1 None,", r)
+        return r
 
     def proc(self, kind, name, params, body, mod):
         local, pyparams, decl_seen = set(), [], set()
         for p in split_args(params):
             p = p.strip()
-            pm = re.match(r"(optional\s+)?(byval\s+|byref\s+)?(paramarray\s+)?(\w+)(\(\))?(\s+as\s+\w+)?(\s*=\s*(.+))?$", p, re.I)
+            pm = re.match(r"(optional\s+)?(byval\s+|byref\s+)?(paramarray\s+)?(\w+)(\(\))?(\s+as\s+[\w.]+)?(\s*=\s*(.+))?$", p, re.I)
             nm = pm.group(4)
             if nm.lower() in decl_seen:
                 raise SyntaxError("%s.%s: takroriy nom %s" % (mod, name, nm))
@@ -409,6 +450,18 @@ class Translator:
                 if not sel.pop()[1]:
                     ind -= 1
                 return
+            m = re.match(r"with (.+)$", st, re.I)
+            if m:
+                v = "_w%d" % len(self.withs)
+                emit("%s = %s" % (v, E(m.group(1))))
+                self.withs.append(v)
+                return
+            if low == "end with":
+                self.withs.pop()
+                return
+            if low.startswith("on error") or low.startswith("goto ") or re.match(r"[A-Za-z_]\w*:$", st):
+                emit("pass")
+                return
             if low in ("exit sub", "exit function"):
                 emit("return _ret" if kind == "function" else "return")
                 return
@@ -464,8 +517,11 @@ class Translator:
             raise SyntaxError("tushunilmadi: " + st)
 
         for ln in body:
-            if re.match(r"\s*[A-Za-z_]\w*:(\s|$)", ln) and not re.match(r"\s*(case|else)\b", ln, re.I):
+            lm = re.match(r"\s*([A-Za-z_]\w*):(\s|$)", ln)
+            if lm and not re.match(r"\s*(case|else)\b", ln, re.I) and self.is_label_proc(lm.group(1), mod):
                 raise SyntaxError("%s.%s: VBA buni label deb tushunadi (qator boshida 'Nom:'): %s" % (mod, name, ln.strip()))
+            if re.match(r"\s*[A-Za-z_]\w*:\s*$", ln) and not self.is_label_proc(ln.strip()[:-1], mod):
+                continue                                  # label qatori (masalan "Done:")
             parts = split_colon(ln.strip())
             for i, st in enumerate(parts):
                 m = re.match(r"if .+? then\s*\S", st, re.I)
@@ -496,6 +552,19 @@ class Translator:
             for kind, name, params, body in m.body:
                 code.append(self.proc(kind, name, params, body, k))
         return "\n\n".join(code)
+
+
+def lint(paths):
+    """Hamma modullarni (forma va Corel kodi bilan) o'girib ko'radi: e'lon qilinmagan nom, takroriy e'lon,
+    label xatosi va sintaksisni topadi. Kod ishga tushirilmaydi"""
+    mods = []
+    for p in paths:
+        text = open(p, encoding="latin-1").read()
+        name = re.search(r'Attribute VB_Name = "(\w+)"', text).group(1)
+        mods.append(Module(name, text))
+    src = Translator(mods, lint=True).run()
+    compile(src, "<vba-lint>", "exec")
+    return src
 
 
 def load(paths, skip=()):

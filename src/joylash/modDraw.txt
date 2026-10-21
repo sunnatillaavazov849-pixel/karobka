@@ -1,17 +1,32 @@
-' Natijani CorelDRAW sahifasiga chizish
+' Natijani CorelDRAW sahifasiga chizish: yoyilma (DrawDie) va uning yonida 3D (Redraw3D).
+' 3D alohida guruh - slayderlar o'zgarganda faqat u qayta chiziladi.
 Option Explicit
 Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
 Public Const PREVIEW_NAME As String = "KAROBKA_PREVIEW"
+Public Const D3_NAME As String = "KAROBKA_3D"
 
-Public Sub DeletePreview()
+' Oxirgi chizilgan yoyilma chegarasi (3D shu yerning o'ng tomoniga qo'yiladi)
+Private dieL As Double, dieR As Double, dieB As Double, dieT As Double, haveDie As Boolean
+
+Private Sub DeleteNamed(ByVal nm As String)
     Dim s As Shape
     If ActiveDocument Is Nothing Then Exit Sub
-    Set s = ActivePage.FindShape(Name:=PREVIEW_NAME)
+    Set s = ActivePage.FindShape(Name:=nm)
     Do While Not s Is Nothing
         s.Delete
-        Set s = ActivePage.FindShape(Name:=PREVIEW_NAME)
+        Set s = ActivePage.FindShape(Name:=nm)
     Loop
+End Sub
+
+Public Sub DeletePreview()
+    DeleteNamed PREVIEW_NAME
+    DeleteNamed D3_NAME
+End Sub
+
+Public Sub Delete3D()
+    DeleteNamed D3_NAME
+    If Not ActiveWindow Is Nothing Then ActiveWindow.Refresh
 End Sub
 
 Private Function MakeCurve(ByVal kind As Integer) As Shape
@@ -28,8 +43,8 @@ Private Function MakeCurve(ByVal kind As Integer) As Shape
 End Function
 
 ' TBuild dan keyin chaqiriladi. final = False bo'lsa ko'rish (preview) sifatida chiziladi
-Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String, ByVal with3D As Boolean)
-    Dim sr As New ShapeRange, sCut As Shape, sFold As Shape, txt As Shape, g As Shape
+Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String)
+    Dim sr As New ShapeRange, sCut As Shape, sFold As Shape, txt As Shape, g As Shape, org As Shape
 
     If ActiveDocument Is Nothing Then CreateDocument
     ActiveDocument.Unit = cdrMillimeter
@@ -37,7 +52,7 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String, ByVal with3D
     Optimization = True
     On Error GoTo Done
 
-    DeletePreview
+    DeleteNamed PREVIEW_NAME
     If segN = 0 Then GoTo Done
 
     Set sCut = MakeCurve(KIND_CUT)
@@ -57,8 +72,11 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String, ByVal with3D
     End If
     If sr.Count = 0 Then GoTo Done
 
-    ' 3D ko'rinish yoyilmaning o'ng tomonida
-    If with3D Then Draw3D sr, sr.RightX + 40, sr.BottomY, sr.SizeHeight * 0.6
+    ' yoyilma koordinata boshi belgisi (mockup dizaynni shu bo'yicha joylaydi)
+    Set org = ActiveLayer.CreateRectangle(0, 0, 0.01, 0.01)
+    org.Outline.SetNoOutline
+    org.Name = "KAROBKA_ORIGIN"
+    sr.Add org
 
     On Error Resume Next
     Set txt = ActiveLayer.CreateArtisticText(sr.LeftX, sr.BottomY - 8, caption, , , "Segoe UI", 10)
@@ -69,7 +87,31 @@ Public Sub DrawDie(ByVal final As Boolean, ByVal caption As String, ByVal with3D
     g.CenterX = ActivePage.CenterX
     g.CenterY = ActivePage.CenterY
     If final Then g.Name = "Karobka" Else g.Name = PREVIEW_NAME
+    dieL = g.LeftX: dieR = g.RightX: dieB = g.BottomY: dieT = g.TopY: haveDie = True
 
+Done:
+    Optimization = False
+    ActiveDocument.EndCommandGroup
+    ActiveWindow.Refresh
+End Sub
+
+' 3D ni yoyilma yonida qayta chizadi (mod3D dagi joriy holat: Fold3D dan keyin).
+' yaw/pitch - aylantirish va qiyalik (gradus), zoom - masshtab (1 = yoyilma balandligining 60%),
+' rgbColor - karton rangi, final = True bo'lsa doimiy nusxa qoladi
+Public Sub Redraw3D(ByVal yaw As Double, ByVal pitch As Double, ByVal zoom As Double, ByVal rgbColor As Long, _
+                    Optional ByVal final As Boolean = False)
+    Dim sr As New ShapeRange, g As Shape
+    If ActiveDocument Is Nothing Or Not haveDie Then Exit Sub
+    ActiveDocument.Unit = cdrMillimeter
+    ActiveDocument.BeginCommandGroup "Karobka 3D"
+    Optimization = True
+    On Error GoTo Done
+    DeleteNamed D3_NAME
+    Draw3D sr, dieR + 40, dieB, (dieT - dieB) * 0.6 * zoom, yaw, pitch, rgbColor
+    If sr.Count > 0 Then
+        Set g = sr.Group
+        If final Then g.Name = "Karobka 3D" Else g.Name = D3_NAME
+    End If
 Done:
     Optimization = False
     ActiveDocument.EndCommandGroup
