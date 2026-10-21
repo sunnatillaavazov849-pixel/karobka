@@ -555,6 +555,19 @@ class Translator:
         return "\n\n".join(code)
 
 
+def decl_order(mod, text):
+    """VBA modul darajasidagi e'lonlar (Dim/Public/Private/Const) faqat birinchi protseduradan oldin turishi mumkin"""
+    inside, seen = False, False
+    for no, line in enumerate(text.replace("\r\n", "\n").split("\n"), 1):
+        s = line.strip()
+        if re.match(r"(Public |Private |Friend )?(Static )?(Sub|Function|Property) ", s):
+            inside = seen = True
+        elif re.match(r"End (Sub|Function|Property)\b", s):
+            inside = False
+        elif seen and not inside and s and not s.startswith("'"):
+            raise SyntaxError("%s:%d: e'lon protseduralar orasida (modul boshiga ko'chiring): %s" % (mod, no, s))
+
+
 def lint(paths):
     """Hamma modullarni (forma va Corel kodi bilan) o'girib ko'radi: e'lon qilinmagan nom, takroriy e'lon,
     label xatosi va sintaksisni topadi. Kod ishga tushirilmaydi"""
@@ -562,6 +575,7 @@ def lint(paths):
     for p in paths:
         text = open(p, encoding="latin-1").read()
         name = re.search(r'Attribute VB_Name = "(\w+)"', text).group(1)
+        decl_order(name, text)
         mods.append(Module(name, text))
     src = Translator(mods, lint=True).run()
     compile(src, "<vba-lint>", "exec")

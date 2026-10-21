@@ -13,6 +13,13 @@ Private px() As Double, py() As Double, pz() As Double, pN As Long
 Public fPan() As Long                ' yuza qaysi panel (-1 - sodda model yuzasi)
 Public Kinematic As Boolean          ' True - 3D yoyilmadan buklangan
 Private pm() As Double               ' panel matritsalari: a11 a12 a13 a21 a22 a23 a31 a32 a33 t1 t2 t3
+' Proyeksiya natijasi (ViewProject): nuqtalar ekran koordinatasida (vZ - ko'ruvchiga yaqinligi),
+' fOrd - chizish tartibi (uzoqdan yaqinga), fLit - yorug'lik (0..1), fBack - yuzaning ichki tomoni ko'rinadi
+Public vX() As Double, vY() As Double, vZ() As Double
+Public fOrd() As Long, fLit() As Double, fBack() As Boolean
+Public vMinX As Double, vMinY As Double, vMaxX As Double, vMaxY As Double
+Private fNx() As Double, fNy() As Double, fNz() As Double, fD() As Double
+Private fBx0() As Double, fBx1() As Double, fBy0() As Double, fBy1() As Double
 
 Public Sub M3Reset()
     fN = 0: pN = 0
@@ -235,14 +242,6 @@ Public Sub Lid3(ByVal L As Double, ByVal H As Double, ByVal W As Double, ByVal a
 End Sub
 
 ' ================================================================ ko'rinish
-
-' Proyeksiya natijasi (ViewProject): nuqtalar ekran koordinatasida (vZ - ko'ruvchiga yaqinligi),
-' fOrd - chizish tartibi (uzoqdan yaqinga), fLit - yorug'lik (0..1), fBack - yuzaning ichki tomoni ko'rinadi
-Public vX() As Double, vY() As Double, vZ() As Double
-Public fOrd() As Long, fLit() As Double, fBack() As Boolean
-Public vMinX As Double, vMinY As Double, vMaxX As Double, vMaxY As Double
-Private fNx() As Double, fNy() As Double, fNz() As Double, fD() As Double
-Private fBx0() As Double, fBx1() As Double, fBy0() As Double, fBy1() As Double
 
 Public Function FaceCount() As Long
     FaceCount = fN
