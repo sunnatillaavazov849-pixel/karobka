@@ -20,12 +20,13 @@ End Sub
 
 Private Sub InitDefs()
     If dCnt > 0 Then Exit Sub
-    ReDim dG(1 To 400): ReDim dN(1 To 400): ReDim dB(1 To 400): ReDim dP(1 To 400)
+    ReDim dG(1 To 500): ReDim dN(1 To 500): ReDim dB(1 To 500): ReDim dP(1 To 500)
     InitBase
     InitB1
     InitB2
     InitB3
     InitB4
+    InitB5
 End Sub
 
 ' 1-bosqich: IMG_0311 - IMG_0340 (har chizma alohida, nomida rasm raqami)
@@ -274,6 +275,53 @@ Private Sub InitB4()
     AddDef "Maxsus shakllar", "0430-1 Yotiq silindr quti", "CYL", "DI=122|H=176|G=13"
 End Sub
 
+' 5-bosqich: IMG_0431 - IMG_0466
+Private Sub InitB5()
+    AddDef "Maxsus shakllar", "0431-1 Mushuk qutisi (kichik)", "FIG", "L=60|W=30|H=90|HH=70|G=12"
+    AddDef "Maxsus shakllar", "0431-2 Mushuk qutisi (katta)", "FIG", "L=90|W=40|H=140|HH=100|G=15"
+    AddDef "Ko'p burchak", "0432-1 Uchburchak (chodir) quti", "PRISM", "N=3|A=130|H=45|G=15|TK=15"
+    AddDef "Ruchkali va sumka", "0433-1 Sumka-quti (ayiqchalar)", "PURSE", "L=120|W=70|H=130|HT=45"
+    AddDef "Ruchkali va sumka", "0434-1 Klatch quti, ruchkali", "GABLE R N", "L=200|W=80|H=100|G=15|HH=60|HW=50|OY=0"
+    AddDef "Tort", "0435-1 Mont Blanc tort qutisi", "CROSS", "A=100|H=80|P=60|RT=40"
+    AddDef "Tuck-end", "0436-1 Karamel qutisi", "TUCK S", "L=120|W=60|H=150|G=15|TK=20|OY=0|IL=0"
+    AddDef "Tort", "0437-1 Tort qutisi 6x6x6 dyuym", "MAILER S HC", "L=152|W=152|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0437-2 Tort qutisi 8x8x6 dyuym", "MAILER S HC", "L=203|W=203|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0437-3 Tort qutisi 10x10x6 dyuym", "MAILER S HC", "L=254|W=254|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0438-1 Tort qutisi 12x12x6 dyuym", "MAILER S HC", "L=305|W=305|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0438-2 Tort qutisi 14x14x6 dyuym", "MAILER S HC", "L=356|W=356|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0438-3 Tort qutisi 16x16x6 dyuym", "MAILER S HC", "L=406|W=406|H=152|T=1|LF=1|OY=0|IL=0|QF=0|RT=0"
+    AddDef "Tort", "0439-1 Tort qutisi, ruchkali", "GABLE N", "L=200|W=150|H=100|G=15|HH=80|HW=80|OY=0"
+    AddDef "Tort", "0440-1 Ruchkali tort qutisi (yumaloq)", "CROSS", "A=90|H=70|P=50|RT=40"
+    AddDef "Ko'p burchak", "0441-1 Olti qirrali, piramida qopqoq", "PETALN V B", "N=6|A=60|H=80|G=15|P=110"
+    AddDef "Gofra", "0442-1 Kub, qopqoqli (taglik + qopqoq)", "TELESCOPE", "L=80|W=80|H=80|HL=40|K=2"
+    AddDef "Tuck-end", "0442-2 Dispenser quti", "TUCK S", "L=80|W=80|H=180|G=15|TK=20|OY=0|IL=0"
+    AddDef "Ruchkali va sumka", "0443-1 Krujka qutisi", "GABLE N", "L=100|W=100|H=120|G=15|HH=40|HW=0|OY=15"
+    AddDef "Gulbargli sovg'a", "0444-1 Pasxa quyoni qutisi", "PETAL H", "A=100|H=100|G=15|P=110"
+    AddDef "Ruchkali va sumka", "0445-1 Vino ko'targich (1-variant)", "GABLE N", "L=90|W=90|H=330|G=15|HH=80|HW=50|OY=0"
+    AddDef "Ruchkali va sumka", "0445-2 Vino ko'targich (2-variant)", "GABLE R N", "L=90|W=90|H=330|G=15|HH=80|HW=50|OY=0"
+    AddDef "Lotok", "0446-1 Tortma quti, o'yiqli", "DRAWER TN", "L=150|W=150|H=50|G=15|K=2|OY=0"
+    AddDef "Tuck-end", "0447-1 Kub, osma", "TUCK S", "L=100|W=100|H=100|G=15|TK=15|OY=0|IL=25"
+    AddDef "Ko'p burchak", "0448-1 Olmos quti (to'rt qirrali)", "BIPYR", "N=4|A=100|H=60|G=12"
+    AddDef "Ko'p burchak", "0449-1 Olmos quti (ko'k)", "BIPYR", "N=4|A=90|H=55|G=12"
+    AddDef "Tuck-end", "0450-1 Dispenser quti (baland)", "TUCK S", "L=80|W=80|H=200|G=15|TK=20|OY=0|IL=0"
+    AddDef "Yostiq va konfet", "0451-1 Konfet (cracker)", "CANDY", "A=45|L=140|E=40|G=12"
+    AddDef "Piramida", "0452-1 Gulbargli piramida (lenta)", "PYRAMID C", "N=4|A=100|H=100|G=0"
+    AddDef "Tort", "0453-1 Uchburchak tort bo'lagi (yopiq)", "PRISM", "N=3|A=150|H=50|G=15|TK=20"
+    AddDef "Gulbargli sovg'a", "0454-1 Olti barg, ruchkali", "FLOWER", "N=6|A=60|H=60|P=100"
+    AddDef "Ruchkali va sumka", "0455-1 Ruchkali quti (arka)", "GABLE R N", "L=120|W=100|H=120|G=15|HH=60|HW=50|OY=0"
+    AddDef "Lanch-boks", "0456-1 Olti burchakli burger qutisi", "PLUNCH", "N=6|A=60|H=40|G=12"
+    AddDef "Gulbargli sovg'a", "0457-1 Uchli qopqoqli kub", "PETALN V B", "N=4|A=90|H=90|G=15|P=75"
+    AddDef "Tuck-end", "0458-1 Baland quti, dispenser", "TUCK S", "L=80|W=60|H=180|G=15|TK=20|OY=0|IL=0"
+    AddDef "Gofra", "0459-1 Kub, qanotli qopqoq", "RSC 1", "L=120|W=120|H=120|G=15|RT=0"
+    AddDef "Lotok", "0460-1 Olti qirrali stakan", "PTRAY", "N=6|A=60|H=80|G=12"
+    AddDef "Ruchkali va sumka", "0461-1 Ruchkali quti", "GABLE N", "L=160|W=100|H=110|G=15|HH=50|HW=70|OY=0"
+    AddDef "Ko'p burchak", "0462-1 Sakkiz qirrali halqa quti", "PRISM", "N=8|A=50|H=60|G=15|TK=15"
+    AddDef "Ruchkali va sumka", "0463-1 Konfet qutisi, ruchkali", "GABLE R N", "L=100|W=70|H=90|G=15|HH=50|HW=40|OY=0"
+    AddDef "Gulbargli sovg'a", "0464-1 Yurak qopqoqli kub", "PETAL H", "A=80|H=90|G=15|P=70"
+    AddDef "Yostiq va konfet", "0465-1 Konfet qutisi (burama)", "CANDY", "A=60|L=120|E=45|G=15"
+    AddDef "Gulbargli sovg'a", "0466-1 Arka qopqoqli quti", "PETAL A", "A=80|H=100|G=15|P=55"
+End Sub
+
 ' Guruhlar tartibi (panel ro'yxatida shu tartibda)
 Public Function TGroups() As String
     TGroups = "Gofra|Mailer|Tuck-end|Ruchkali va sumka|Lotok|Lanch-boks|Tort|Ko'p burchak|Piramida|" & _
@@ -509,6 +557,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
         Case "PURSE": Purse L, W, H, p("HT")
         Case "STAR": Star p("DI"), H, p("G")
         Case "PETALN": PetalN Int(p("N")), p("A"), H, p("G"), p("P"), dB(i)
+        Case "FIG": FigBox L, W, H, p("HH"), p("G")
         Case "PETAL"
             Dim sty As String
             sty = "A"
@@ -938,6 +987,14 @@ Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVa
     End If
     If il Then CutEuroSlot L / 2, y0 + ht / 2, Min2(L * 0.3, 40)
     If Has(fx, "HL") Then CutStadium L / 2, W + H + W * 0.5, Min2(L * 0.4, 100), Min2(25, W * 0.15)   ' qopqoqda ruchka
+    If Has(fx, "HC") Then                        ' qopqoqda ko'tariladigan ruchka: ikki kesish, yonlari bukiladi
+        tw = Min2(L * 0.45, 110): tdp = Min2(W * 0.3, 45): cx = W + H + W / 2
+        CutPoly L / 2 - tw / 2, cx + tdp / 2, L / 2 + tw / 2, cx + tdp / 2
+        CutPoly L / 2 - tw / 2, cx - tdp / 2, L / 2 + tw / 2, cx - tdp / 2
+        Crease L / 2 - tw / 2, cx - tdp / 2, L / 2 - tw / 2, cx + tdp / 2
+        Crease L / 2 + tw / 2, cx - tdp / 2, L / 2 + tw / 2, cx + tdp / 2
+        CutStadium L / 2, cx, tw * 0.6, Min2(18, tdp * 0.45)
+    End If
     If Has(fx, "TS") Then                        ' yirtiladigan tasma qopqoq bo'ylab
         Perf 0, y0 - 12, L, y0 - 12
         Perf 0, y0 - 20, L, y0 - 20
@@ -2226,4 +2283,32 @@ Private Sub PetalN(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal
         For k = 0 To n - 1: SetFold k * sd, H, (k + 1) * sd, H, 90 - t: Next k
     End If
     SetLid 0, H, n * sd, H
+End Sub
+
+' ================================================================ 5-bosqich: yangi quruvchilar
+
+' Mushuk qutisi: old va orqa panel tepasi mushuk boshi (balandligi hh, quloqli), yon panellarda qopqoq quloqlari,
+' tag 1-2-3 qulf
+Private Sub FigBox(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal hh As Double, ByVal g As Double)
+    Dim xs(0 To 4) As Double, k As Long, xa As Double, xb As Double, xm As Double, f As Double, c As Double
+    xs(1) = L: xs(2) = L + W: xs(3) = 2 * L + W: xs(4) = 2 * L + 2 * W
+    Glue 0, H, g
+    For k = 0 To 3
+        xa = xs(k): xb = xs(k + 1): xm = (xa + xb) / 2
+        If k Mod 2 = 0 Then                      ' bosh
+            PtBegin
+            Pt xa, 0: Pt xb, 0: Pt xb, H + hh * 0.55
+            Pt xb - L * 0.06, H + hh
+            EllPt xm, H + hh * 0.66, L * 0.18, hh * 0.08, 0, 180, 8
+            Pt xa + L * 0.06, H + hh
+            Pt xa, H + hh * 0.55
+            PtPoly
+        Else
+            Rect xa, 0, xb, H
+            f = Min2(W * 0.45, hh * 0.5): c = f * 0.4
+            Poly xa, H, xb, H, xb - c, H + f, xa + c, H + f
+        End If
+    Next k
+    SnapBottom xs, L, W
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True
 End Sub

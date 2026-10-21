@@ -38,6 +38,8 @@ Quruvchi ustunidagi qo'shimcha belgilar:
 | `PURSE` | sumka-quti: qavariq old/orqa devor, ruchka |
 | `STAR` | yulduz quti: yon tasma + ikki yulduz qopqoq |
 | `PETALN` | n qirrali quti, ikki uchida gulbarglar (`V` — uchburchak gulbarg, `B` — tagi ko'pburchak) |
+| `FIG` | mushuk qutisi: old/orqa panel tepasi quloqli bosh |
+| `HC` | qopqoqda ko'tariladigan ruchka (tort qutilari) |
 | `GABLE N` / `R` | 1-2-3 qulf tag / yumaloq ruchka |
 
 ## 1-bosqich: IMG_0311 – IMG_0340 (84 ta chizma)
@@ -294,7 +296,59 @@ Umumiy (ko'rgazma) rasmlar, alohida chizma emas: IMG_0405 (0406, 0407, 0409), IM
 | IMG_0429-1 | 0429-1 To'rt bargli tort qutisi | Tort | `CROSS` | 🟡 |
 | IMG_0430-1 | 0430-1 Yotiq silindr quti | Maxsus shakllar | `CYL` | 🟡 |
 
-## Keyingi bosqichlar
-| Bosqich | Rasmlar | Holat |
-|---------|---------|-------|
-| 5 | IMG_0431 – IMG_0466 | ⬜ |
+## 5-bosqich: IMG_0431 – IMG_0466 (43 ta chizma)
+
+| Rasm | Plagindagi nomi | Guruh | Quruvchi | Holat |
+|------|-----------------|-------|----------|-------|
+| IMG_0431-1 | 0431-1 Mushuk qutisi (kichik) | Maxsus shakllar | `FIG` | 🟡 |
+| IMG_0431-2 | 0431-2 Mushuk qutisi (katta) | Maxsus shakllar | `FIG` | 🟡 |
+| IMG_0432-1 | 0432-1 Uchburchak (chodir) quti | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0433-1 | 0433-1 Sumka-quti (ayiqchalar) | Ruchkali va sumka | `PURSE` | 🟡 |
+| IMG_0434-1 | 0434-1 Klatch quti, ruchkali | Ruchkali va sumka | `GABLE R N` | 🟡 |
+| IMG_0435-1 | 0435-1 Mont Blanc tort qutisi | Tort | `CROSS` | 🟡 |
+| IMG_0436-1 | 0436-1 Karamel qutisi | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0437-1 | 0437-1 Tort qutisi 6x6x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0437-2 | 0437-2 Tort qutisi 8x8x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0437-3 | 0437-3 Tort qutisi 10x10x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0438-1 | 0438-1 Tort qutisi 12x12x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0438-2 | 0438-2 Tort qutisi 14x14x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0438-3 | 0438-3 Tort qutisi 16x16x6 dyuym | Tort | `MAILER S HC` | 🟡 |
+| IMG_0439-1 | 0439-1 Tort qutisi, ruchkali | Tort | `GABLE N` | 🟡 |
+| IMG_0440-1 | 0440-1 Ruchkali tort qutisi (yumaloq) | Tort | `CROSS` | 🟡 |
+| IMG_0441-1 | 0441-1 Olti qirrali, piramida qopqoq | Ko'p burchak | `PETALN V B` | 🟡 |
+| IMG_0442-1 | 0442-1 Kub, qopqoqli (taglik + qopqoq) | Gofra | `TELESCOPE` | 🟡 |
+| IMG_0442-2 | 0442-2 Dispenser quti | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0443-1 | 0443-1 Krujka qutisi | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0444-1 | 0444-1 Pasxa quyoni qutisi | Gulbargli sovg'a | `PETAL H` | 🟡 |
+| IMG_0445-1 | 0445-1 Vino ko'targich (1-variant) | Ruchkali va sumka | `GABLE N` | 🟡 |
+| IMG_0445-2 | 0445-2 Vino ko'targich (2-variant) | Ruchkali va sumka | `GABLE R N` | 🟡 |
+| IMG_0446-1 | 0446-1 Tortma quti, o'yiqli | Lotok | `DRAWER TN` | 🟡 |
+| IMG_0447-1 | 0447-1 Kub, osma | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0448-1 | 0448-1 Olmos quti (to'rt qirrali) | Ko'p burchak | `BIPYR` | 🟡 |
+| IMG_0449-1 | 0449-1 Olmos quti (ko'k) | Ko'p burchak | `BIPYR` | 🟡 |
+| IMG_0450-1 | 0450-1 Dispenser quti (baland) | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0451-1 | 0451-1 Konfet (cracker) | Yostiq va konfet | `CANDY` | 🟡 |
+| IMG_0452-1 | 0452-1 Gulbargli piramida (lenta) | Piramida | `PYRAMID C` | ✅ |
+| IMG_0453-1 | 0453-1 Uchburchak tort bo'lagi (yopiq) | Tort | `PRISM` | 🟡 |
+| IMG_0454-1 | 0454-1 Olti barg, ruchkali | Gulbargli sovg'a | `FLOWER` | 🟡 |
+| IMG_0455-1 | 0455-1 Ruchkali quti (arka) | Ruchkali va sumka | `GABLE R N` | ✅ |
+| IMG_0456-1 | 0456-1 Olti burchakli burger qutisi | Lanch-boks | `PLUNCH` | ✅ |
+| IMG_0457-1 | 0457-1 Uchli qopqoqli kub | Gulbargli sovg'a | `PETALN V B` | 🟡 |
+| IMG_0458-1 | 0458-1 Baland quti, dispenser | Tuck-end | `TUCK S` | 🟡 |
+| IMG_0459-1 | 0459-1 Kub, qanotli qopqoq | Gofra | `RSC 1` | 🟡 |
+| IMG_0460-1 | 0460-1 Olti qirrali stakan | Lotok | `PTRAY` | 🟡 |
+| IMG_0461-1 | 0461-1 Ruchkali quti | Ruchkali va sumka | `GABLE N` | ✅ |
+| IMG_0462-1 | 0462-1 Sakkiz qirrali halqa quti | Ko'p burchak | `PRISM` | 🟡 |
+| IMG_0463-1 | 0463-1 Konfet qutisi, ruchkali | Ruchkali va sumka | `GABLE R N` | 🟡 |
+| IMG_0464-1 | 0464-1 Yurak qopqoqli kub | Gulbargli sovg'a | `PETAL H` | ✅ |
+| IMG_0465-1 | 0465-1 Konfet qutisi (burama) | Yostiq va konfet | `CANDY` | 🟡 |
+| IMG_0466-1 | 0466-1 Arka qopqoqli quti | Gulbargli sovg'a | `PETAL A` | ✅ |
+
+## Jami
+| | Soni |
+|---|---|
+| Umumiy shablonlar | 66 |
+| Rasmlardagi chizmalar (IMG_0311 – IMG_0466) | 273 |
+| **Plaginda jami** | **339** |
+
+Bir xil chizma bir necha rasmda uchrasa (masalan 0401 va 0419), har biri o'z raqami bilan alohida qatorda turadi.
