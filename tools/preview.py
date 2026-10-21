@@ -33,12 +33,42 @@ def build(ns, i, overrides=None):
     g = ns["G_modgeom"]
     segs = [("CUT" if g.segkind(j) == 1 else "FOLD", g.segx1(j), g.segy1(j), g.segx2(j), g.segy2(j))
             for j in range(g.segn)]
+    return segs, faces_now(ns)
+
+
+def view_faces(ns, yaw=-35, pitch=25):
+    """VBA ViewProject natijasi: [(ekran nuqtalari, yorug'lik)] chizish tartibida"""
+    m = ns["G_mod3d"]
+    if m.fn == 0:
+        return []
+    ns["mod3d__viewproject"](yaw, pitch)
+    out = []
+    for k in range(m.fn):
+        f = m.ford(k)
+        s, n = m.fstart(f), m.fcnt(f)
+        out.append(([(m.vx(s + j), m.vy(s + j)) for j in range(n)], m.flit(f)))
+    return out
+
+
+def faces_now(ns):
     m = ns["G_mod3d"]
     faces = []
     for f in range(m.fn):
         s, n = m.fstart(f), m.fcnt(f)
         faces.append([(m.px(s + k), m.py(s + k), m.pz(s + k)) for k in range(n)])
-    return segs, faces
+    return faces
+
+
+def fold_states(ns):
+    """Buklanadigan shablon uchun: [(nom, yuzalar)] - 50%, 100%, qopqoq ochiq"""
+    if not ns["G_mod3d"].kinematic:
+        return []
+    out = []
+    for name, t, o in (("50%", 0.5, 0), ("100%", 1, 0), ("ochiq", 1, 1)):
+        ns["mod3d__fold3d"](t, o)
+        out.append((name, view_faces(ns)))
+    ns["mod3d__fold3d"](1, 0)
+    return out
 
 
 def check(segs):
@@ -69,9 +99,49 @@ def svg(segs, path):
         f.write("\n".join(out))
 
 
-def tile(segs, faces, title, size=500):
+def iso(g, faces, ox, oy, size, label=None):
+    """VBA ViewProject bergan yuzalarni (ox, oy) dagi size x size katakka chizish"""
+    if not faces:
+        return
+    xs = [p[0] for f, _ in faces for p in f]
+    ys = [p[1] for f, _ in faces for p in f]
+    kk = (size - 40) / max(max(xs) - min(xs), max(ys) - min(ys), 1)
+    for f, lit in faces:
+        pts = [(ox + 20 + (x - min(xs)) * kk, oy + size - 20 - (y - min(ys)) * kk) for x, y in f]
+        if len(pts) >= 3:
+            g.polygon(pts, fill=(int(207 * lit), int(169 * lit), int(126 * lit)), outline=(90, 64, 38))
+    if label:
+        g.text((ox + 5, oy + 5), label, fill="black")
+
+
+def iso_old(g, faces, ox, oy, size, label=None):
+    if not faces:
+        return
+    cy, sy = math.cos(math.radians(-35)), math.sin(math.radians(-35))
+    cp, sp = math.cos(math.radians(25)), math.sin(math.radians(25))
+
+    def rot(v):
+        x, y, z = v
+        ax, az = x * cy + z * sy, -x * sy + z * cy
+        return ax, y * cp - az * sp, y * sp + az * cp
+    rf = [[rot(v) for v in f] for f in faces]
+    ax = [v[0] for f in rf for v in f]
+    ay = [v[1] for f in rf for v in f]
+    kk = (size - 40) / max(max(ax) - min(ax), max(ay) - min(ay), 1)
+    for f in sorted(rf, key=lambda f: sum(v[2] for v in f) / len(f)):
+        pts = [(ox + 20 + (v[0] - min(ax)) * kk, oy + size - 20 - (v[1] - min(ay)) * kk) for v in f]
+        (a0, b0, c0), (a1, b1, c1), (a2, b2, c2) = f[0], f[1], f[2]
+        nz = (a1 - a0) * (b2 - b0) - (b1 - b0) * (a2 - a0)
+        col = (207, 169, 126) if nz >= 0 else (176, 140, 100)
+        g.polygon(pts, fill=col, outline=(90, 64, 38))
+    if label:
+        g.text((ox + 5, oy + 5), label, fill="black")
+
+
+def tile(segs, faces, title, size=500, states=()):
     from PIL import Image, ImageDraw
-    im = Image.new("RGB", (size * 2, size), "white")
+    cells = 2 + max(0, len(states) - 1)
+    im = Image.new("RGB", (size * cells, size), "white")
     g = ImageDraw.Draw(im)
     xs = [v for s in segs for v in (s[1], s[3])]
     ys = [v for s in segs for v in (s[2], s[4])]
@@ -80,21 +150,11 @@ def tile(segs, faces, title, size=500):
     for kind, a, b, c, e in segs:
         P = lambda x, y: (15 + (x - x0) * k, 25 + (y1 - y) * k)
         g.line([P(a, b), P(c, e)], fill="#005AFF" if kind == "CUT" else "#E60028", width=2 if kind == "CUT" else 1)
-    if faces:
-        cy, sy = math.cos(math.radians(-35)), math.sin(math.radians(-35))
-        cp, sp = math.cos(math.radians(25)), math.sin(math.radians(25))
-
-        def rot(v):
-            x, y, z = v
-            ax, az = x * cy + z * sy, -x * sy + z * cy
-            return ax, y * cp - az * sp, y * sp + az * cp
-        rf = [[rot(v) for v in f] for f in faces]
-        ax = [v[0] for f in rf for v in f]
-        ay = [v[1] for f in rf for v in f]
-        kk = (size - 60) / max(max(ax) - min(ax), max(ay) - min(ay), 1)
-        for f in sorted(rf, key=lambda f: sum(v[2] for v in f) / len(f)):
-            pts = [(size + 30 + (v[0] - min(ax)) * kk, size - 30 - (v[1] - min(ay)) * kk) for v in f]
-            g.polygon(pts, fill=(207, 169, 126), outline=(90, 64, 38))
+    if states:
+        for j, (name, fs) in enumerate(states):
+            iso(g, fs, size * (j + 1) if j < 3 else size, 0, size, name)
+    else:
+        iso(g, faces, size, 0, size, "sodda 3D")  # faces = view_faces(...)
     g.text((5, 5), title, fill="black")
     return im
 
@@ -108,7 +168,8 @@ if __name__ == "__main__":
     for i in range(1, n + 1):
         title = "%d. %s / %s" % (i, ns["modtemplates__tgroup"](i), ns["modtemplates__tname"](i))
         try:
-            segs, faces = build(ns, i)
+            segs, _ = build(ns, i)
+            faces = view_faces(ns)
             probs = check(segs)
         except Exception as ex:  # noqa: BLE001
             print("XATO", title, ex)
@@ -119,17 +180,17 @@ if __name__ == "__main__":
         fname = re.sub(r"[^\w]+", "-", "%02d-%s" % (i, ns["modtemplates__tname"](i))).strip("-")
         svg(segs, os.path.join(out, fname + ".svg"))
         try:
-            tiles.append(tile(segs, faces, title))
+            tiles.append(tile(segs, faces, title, 400, fold_states(ns)))
         except ImportError:
             pass
     if tiles:
         from PIL import Image
-        per = 8
+        per = 5
         for s in range(0, len(tiles), per):
             chunk = tiles[s:s + per]
-            sheet = Image.new("RGB", (2000, 500 * ((len(chunk) + 1) // 2)), "#DDDDDD")
+            sheet = Image.new("RGB", (1600, 400 * len(chunk)), "#DDDDDD")
             for j, t in enumerate(chunk):
-                sheet.paste(t, ((j % 2) * 1000, (j // 2) * 500))
+                sheet.paste(t, (0, j * 400))
             sheet.save(os.path.join(out, "sheet-%02d.png" % (s // per + 1)))
     print("%d shablon, %d xato" % (n, bad))
     sys.exit(1 if bad else 0)

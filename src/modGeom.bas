@@ -2,6 +2,7 @@ Attribute VB_Name = "modGeom"
 ' Razvyortka yadrosi.
 ' Shablon panellarni (ko'pburchak) qo'shadi. Ikki panelga umumiy qirra -> bukish,
 ' bitta panelga tegishli qirra -> kesish. Slit bilan ustma-ust qirra -> kesish.
+' Har bukish ikki panelni bog'laydigan sharnir bo'ladi (3D da buklash uchun, mod3D.Fold3D).
 Option Explicit
 Option Private Module          ' Macros ro'yxatida faqat Karobka ko'rinsin
 
@@ -19,9 +20,28 @@ Private fK() As Integer, fX1() As Double, fY1() As Double, fX2() As Double, fY2(
 Public segKind() As Integer
 Public segX1() As Double, segY1() As Double, segX2() As Double, segY2() As Double
 Public segN As Long
+Private segPA() As Long, segPB() As Long          ' bo'lak qaysi panel(lar)ga tegishli (-1 - yo'q)
+
+' Panellar: uchlari pvX/pvY da, pnStart/pnCnt bo'yicha
+Public pvX() As Double, pvY() As Double, pnStart() As Long, pnCnt() As Long, pnN As Long
+Private pvN As Long, eP() As Long, curPanel As Long
+
+' Sharnirlar: hA <-> hB panellar, o'qi (hX1,hY1)-(hX2,hY2), maqsad burchagi hAng (gradus), hLid - qopqoq
+Public hA() As Long, hB() As Long, hX1() As Double, hY1() As Double, hX2() As Double, hY2() As Double
+Public hAng() As Double, hLid() As Boolean, hBad() As Boolean, hLay() As Long, hN As Long
+
+' Shablon bergan 3D ma'lumotlari
+Private foX1() As Double, foY1() As Double, foX2() As Double, foY2() As Double, foA() As Double, foN As Long
+Private loX1() As Double, loY1() As Double, loX2() As Double, loY2() As Double, loL() As Long, loN As Long
+Public rootSet As Boolean, rootVert As Boolean, rootX As Double, rootY As Double
 
 Public Sub DieReset()
     eN = 0: sN = 0: segN = 0: fN = 0
+    pnN = 0: pvN = 0: hN = 0: foN = 0: loN = 0: rootSet = False: curPanel = -1
+    ReDim pvX(0 To 255): ReDim pvY(0 To 255): ReDim pnStart(0 To 63): ReDim pnCnt(0 To 63)
+    ReDim eP(0 To 255)
+    ReDim foX1(0 To 15): ReDim foY1(0 To 15): ReDim foX2(0 To 15): ReDim foY2(0 To 15): ReDim foA(0 To 15)
+    ReDim loX1(0 To 15): ReDim loY1(0 To 15): ReDim loX2(0 To 15): ReDim loY2(0 To 15): ReDim loL(0 To 15)
     ReDim fK(0 To 63): ReDim fX1(0 To 63): ReDim fY1(0 To 63): ReDim fX2(0 To 63): ReDim fY2(0 To 63)
     ReDim eX1(0 To 255): ReDim eY1(0 To 255): ReDim eX2(0 To 255): ReDim eY2(0 To 255)
     ReDim sX1(0 To 63): ReDim sY1(0 To 63): ReDim sX2(0 To 63): ReDim sY2(0 To 63)
@@ -37,16 +57,39 @@ Private Sub AddEdge(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, 
         ReDim Preserve eX1(0 To m): ReDim Preserve eY1(0 To m)
         ReDim Preserve eX2(0 To m): ReDim Preserve eY2(0 To m)
     End If
+    If eN > UBound(eP) Then ReDim Preserve eP(0 To UBound(eX1))
     eX1(eN) = R3(x1): eY1(eN) = R3(y1): eX2(eN) = R3(x2): eY2(eN) = R3(y2)
+    eP(eN) = curPanel
     eN = eN + 1
+End Sub
+
+' Yangi panel boshlanadi; keyingi AddEdge/AddVertex shu panelga
+Private Sub NewPanel()
+    If pnN > UBound(pnStart) Then
+        ReDim Preserve pnStart(0 To UBound(pnStart) * 2 + 1): ReDim Preserve pnCnt(0 To UBound(pnCnt) * 2 + 1)
+    End If
+    curPanel = pnN
+    pnStart(pnN) = pvN: pnCnt(pnN) = 0
+    pnN = pnN + 1
+End Sub
+
+Private Sub AddVertex(ByVal x As Double, ByVal y As Double)
+    If pvN > UBound(pvX) Then
+        ReDim Preserve pvX(0 To UBound(pvX) * 2 + 1): ReDim Preserve pvY(0 To UBound(pvY) * 2 + 1)
+    End If
+    pvX(pvN) = R3(x): pvY(pvN) = R3(y)
+    pvN = pvN + 1
+    pnCnt(curPanel) = pnCnt(curPanel) + 1
 End Sub
 
 ' Poly x1, y1, x2, y2, x3, y3, ...  (yopiq ko'pburchak)
 Public Sub Poly(ParamArray v() As Variant)
     Dim n As Long, i As Long, j As Long
     n = (UBound(v) + 1) \ 2
+    NewPanel
     For i = 0 To n - 1
         j = (i + 1) Mod n
+        AddVertex v(2 * i), v(2 * i + 1)
         AddEdge v(2 * i), v(2 * i + 1), v(2 * j), v(2 * j + 1)
     Next i
 End Sub
@@ -58,8 +101,10 @@ End Sub
 ' Massivdan ko'pburchak (yoylar uchun)
 Public Sub PolyArr(xs() As Double, ys() As Double, ByVal n As Long)
     Dim i As Long, j As Long
+    NewPanel
     For i = 0 To n - 1
         j = (i + 1) Mod n
+        AddVertex xs(i), ys(i)
         AddEdge xs(i), ys(i), xs(j), ys(j)
     Next i
 End Sub
@@ -103,6 +148,37 @@ Public Sub Crease(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, By
     AddFree KIND_FOLD, x1, y1, x2, y2
 End Sub
 
+' ---- 3D uchun: shablon chaqiradi
+' Shu chiziq ustidagi bukishlar maqsad burchagi (gradus, standart 90)
+Public Sub SetFold(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal ang As Double)
+    If foN > UBound(foX1) Then
+        Dim m As Long: m = UBound(foX1) * 2 + 1
+        ReDim Preserve foX1(0 To m): ReDim Preserve foY1(0 To m): ReDim Preserve foX2(0 To m)
+        ReDim Preserve foY2(0 To m): ReDim Preserve foA(0 To m)
+    End If
+    foX1(foN) = R3(x1): foY1(foN) = R3(y1): foX2(foN) = R3(x2): foY2(foN) = R3(y2): foA(foN) = ang
+    foN = foN + 1
+End Sub
+
+' Shu chiziq ustidagi bukishlar - qopqoq sharniri (ochilib-yopiladi). layer - yopiqdagi qavati:
+' 1 - eng tashqi, 2 - uning ostida (masalan gofra qutining ichki qanotlari)
+Public Sub SetLid(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, _
+                  Optional ByVal layer As Long = 1)
+    If loN > UBound(loX1) Then
+        Dim m As Long: m = UBound(loX1) * 2 + 1
+        ReDim Preserve loX1(0 To m): ReDim Preserve loY1(0 To m): ReDim Preserve loX2(0 To m): ReDim Preserve loY2(0 To m)
+        ReDim Preserve loL(0 To m)
+    End If
+    loX1(loN) = R3(x1): loY1(loN) = R3(y1): loX2(loN) = R3(x2): loY2(loN) = R3(y2): loL(loN) = layer
+    loN = loN + 1
+End Sub
+
+' Asosiy panel (x, y nuqtasi ichida). vert = True - tik turadi (old devor), False - yotadi (taglik).
+' Chaqirilmasa 3D buklanmaydi, shablonning sodda 3D modeli ishlatiladi
+Public Sub SetRoot(ByVal x As Double, ByVal y As Double, ByVal vert As Boolean)
+    rootSet = True: rootVert = vert: rootX = x: rootY = y
+End Sub
+
 ' Majburiy kesish (masalan qopqoqlar orasidagi tirqish)
 Public Sub Slit(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double)
     If sN > UBound(sX1) Then
@@ -124,7 +200,8 @@ Private Function OnSeg(ByVal px As Double, ByVal py As Double, _
     OnSeg = Abs(x1 + t * dx - px) < TOL And Abs(y1 + t * dy - py) < TOL
 End Function
 
-Private Sub AddPiece(dict As Object, cnt() As Long, ByVal ax As Double, ByVal ay As Double, ByVal bx As Double, ByVal by As Double)
+Private Sub AddPiece(dict As Object, cnt() As Long, ByVal pid As Long, _
+                     ByVal ax As Double, ByVal ay As Double, ByVal bx As Double, ByVal by As Double)
     Dim k As String, idx As Long, tx As Double, ty As Double
     ax = R3(ax): ay = R3(ay): bx = R3(bx): by = R3(by)
     If bx < ax Or (bx = ax And by < ay) Then
@@ -134,6 +211,7 @@ Private Sub AddPiece(dict As Object, cnt() As Long, ByVal ax As Double, ByVal ay
     If dict.Exists(k) Then
         idx = dict(k)
         cnt(idx) = cnt(idx) + 1
+        If segPB(idx) < 0 And segPA(idx) <> pid Then segPB(idx) = pid
     Else
         idx = segN
         If idx > UBound(segX1) Then
@@ -141,9 +219,11 @@ Private Sub AddPiece(dict As Object, cnt() As Long, ByVal ax As Double, ByVal ay
             ReDim Preserve segX1(0 To m): ReDim Preserve segY1(0 To m)
             ReDim Preserve segX2(0 To m): ReDim Preserve segY2(0 To m)
             ReDim Preserve segKind(0 To m): ReDim Preserve cnt(0 To m)
+            ReDim Preserve segPA(0 To m): ReDim Preserve segPB(0 To m)
         End If
         segX1(idx) = ax: segY1(idx) = ay: segX2(idx) = bx: segY2(idx) = by
         cnt(idx) = 1
+        segPA(idx) = pid: segPB(idx) = -1
         dict.Add k, idx
         segN = segN + 1
     End If
@@ -160,7 +240,7 @@ Public Sub Solve()
 
     segN = 0
     ReDim segX1(0 To 255): ReDim segY1(0 To 255): ReDim segX2(0 To 255): ReDim segY2(0 To 255)
-    ReDim segKind(0 To 255): ReDim cnt(0 To 255)
+    ReDim segKind(0 To 255): ReDim cnt(0 To 255): ReDim segPA(0 To 255): ReDim segPB(0 To 255)
     ReDim ts(0 To 2 * eN + 2 * sN + 2)
 
     For i = 0 To eN - 1
@@ -191,7 +271,7 @@ Public Sub Solve()
             Next j
             For j = 0 To nt - 2
                 If ts(j + 1) - ts(j) > EPS Then
-                    AddPiece dict, cnt, eX1(i) + ts(j) * dx, eY1(i) + ts(j) * dy, _
+                    AddPiece dict, cnt, eP(i), eX1(i) + ts(j) * dx, eY1(i) + ts(j) * dy, _
                                         eX1(i) + ts(j + 1) * dx, eY1(i) + ts(j + 1) * dy
                 End If
             Next j
@@ -208,14 +288,57 @@ Public Sub Solve()
         End If
     Next i
 
+    BuildHinges
+
     For i = 0 To fN - 1
         If segN > UBound(segX1) Then
             k = UBound(segX1) * 2 + 1
             ReDim Preserve segX1(0 To k): ReDim Preserve segY1(0 To k)
             ReDim Preserve segX2(0 To k): ReDim Preserve segY2(0 To k): ReDim Preserve segKind(0 To k)
+            ReDim Preserve segPA(0 To k): ReDim Preserve segPB(0 To k)
         End If
         segKind(segN) = fK(i)
         segX1(segN) = fX1(i): segY1(segN) = fY1(i): segX2(segN) = fX2(i): segY2(segN) = fY2(i)
+        segPA(segN) = -1: segPB(segN) = -1
         segN = segN + 1
+    Next i
+End Sub
+
+' Bukish bo'laklaridan sharnirlar: har panel jufti uchun bitta. Bo'laklar bir to'g'ri chiziqda
+' bo'lmasa (yoy bo'ylab bukish) sharnir yaroqsiz (hBad)
+Private Sub BuildHinges()
+    Dim dict As Object, i As Long, j As Long, h As Long, a As Long, b As Long, k As String
+    Dim mx As Double, my As Double, dx As Double, dy As Double, ln As Double, d1 As Double, d2 As Double
+    Set dict = CreateObject("Scripting.Dictionary")
+    hN = 0
+    ReDim hA(0 To segN): ReDim hB(0 To segN): ReDim hX1(0 To segN): ReDim hY1(0 To segN)
+    ReDim hX2(0 To segN): ReDim hY2(0 To segN): ReDim hAng(0 To segN): ReDim hLid(0 To segN): ReDim hBad(0 To segN)
+    ReDim hLay(0 To segN)
+    For i = 0 To segN - 1
+        If segKind(i) = KIND_FOLD And segPB(i) >= 0 Then
+            a = segPA(i): b = segPB(i)
+            If a > b Then j = a: a = b: b = j
+            k = a & "-" & b
+            mx = (segX1(i) + segX2(i)) / 2: my = (segY1(i) + segY2(i)) / 2
+            If dict.Exists(k) Then
+                h = dict(k)
+                dx = hX2(h) - hX1(h): dy = hY2(h) - hY1(h): ln = Sqr(dx * dx + dy * dy)
+                d1 = Abs((segX1(i) - hX1(h)) * dy - (segY1(i) - hY1(h)) * dx) / ln
+                d2 = Abs((segX2(i) - hX1(h)) * dy - (segY2(i) - hY1(h)) * dx) / ln
+                If d1 > 0.05 Or d2 > 0.05 Then hBad(h) = True
+            Else
+                h = hN: hN = hN + 1
+                dict.Add k, h
+                hA(h) = a: hB(h) = b
+                hX1(h) = segX1(i): hY1(h) = segY1(i): hX2(h) = segX2(i): hY2(h) = segY2(i)
+                hAng(h) = 90: hLid(h) = False: hBad(h) = False
+                For j = 0 To foN - 1
+                    If OnSeg(mx, my, foX1(j), foY1(j), foX2(j), foY2(j)) Then hAng(h) = foA(j)
+                Next j
+                For j = 0 To loN - 1
+                    If OnSeg(mx, my, loX1(j), loY1(j), loX2(j), loY2(j)) Then hLid(h) = True: hLay(h) = loL(j)
+                Next j
+            End If
+        End If
     Next i
 End Sub

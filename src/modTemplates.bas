@@ -195,6 +195,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
         Case "TELESCOPE"
             Tray 0, L, W, H, 0
             Tray L + 2 * H + 20 + p("HL"), L + 2 * p("K"), W + 2 * p("K"), p("HL"), 0
+            SetRoot L / 2, W / 2, False
             Box3 0, 0, 0, L, H, W, False
             Box3 0 - p("K"), H * 1.6, 0 - p("K"), L + 2 * p("K"), p("HL"), W + 2 * p("K"), True, False
         Case "MAILER"
@@ -209,14 +210,17 @@ Public Sub TBuild(ByVal i As Long, p As Object)
             Gable L, W, H, p("G"), p("HH"), p("HW"), Flag(i, "N"), Flag(i, "R")
         Case "TRAY"
             Tray 0, L, W, H, Pv(p, "RT")
+            SetRoot L / 2, W / 2, False
             Box3 0, 0, 0, L, H, W, False
         Case "TRAYD"
             TrayDouble L, W, H, p("T"), Pv(p, "RT")
+            SetRoot L / 2, W / 2, False
             Box3 0, 0, 0, L, H, W, False
         Case "PTRAY": PolyTray Int(p("N")), p("A"), H, p("G"), 0
         Case "FLOWER": PolyTray Int(p("N")), p("A"), H, 0, p("P")
         Case "SLEEVE"
             Body xs, L, p("G"), W, H, W, H
+            SetRoot W / 2, L / 2, False
             Box3 0, 0, 0, L, H, W, True, True, False
         Case "DRAWER": Drawer L, W, H, p("G"), p("K")
         Case "PRISM": Prism Int(p("N")), p("A"), H, p("G"), p("TK")
@@ -235,6 +239,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
         Case "PLUNCH": PolyLunch Int(p("N")), p("A"), H, p("G")
         Case "TRAYW"
             TrayWeb 0, L, W, H
+            SetRoot L / 2, W / 2, False
             Box3 0, 0, 0, L, H, W, False
         Case "INSERT": Insert L, W, H, Int(p("NX")), Int(p("NY")), p("T")
         Case "HOUSE": House p("A"), H, p("R"), p("G"), Pv(p, "OY")
@@ -242,6 +247,7 @@ Public Sub TBuild(ByVal i As Long, p As Object)
         Case "CYL": Cylinder p("DI"), H, p("G")
     End Select
     Solve
+    Fold3D 1, 0                                  ' yig'ilgan, qopqoq yopiq
 End Sub
 
 ' ================================================================ yordamchilar
@@ -385,6 +391,15 @@ Private Sub SlotFlaps(xs() As Double, ByVal baseY As Double, ByVal s As Double, 
     For i = 1 To UBound(xs) - 1: Slit xs(i), baseY, xs(i), baseY + s * f: Next i
 End Sub
 
+' Piramida yoki tomning qo'shni yuzalari orasidagi burilish burchagi (gradus): yelim qanoti shuncha buklanadi.
+' n - tomonlar soni, rin - taglik ichki radiusi, h - balandlik
+Private Function FlapAng(ByVal n As Long, ByVal rin As Double, ByVal h As Double) As Double
+    Dim c As Double
+    c = (h * h * Cos(2 * PI / n) + rin * rin) / (h * h + rin * rin)
+    If c >= 1 Then FlapAng = 0: Exit Function
+    FlapAng = (Atn(-c / Sqr(1 - c * c)) + PI / 2) * 180 / PI      ' Acos
+End Function
+
 ' Muntazam ko'pburchak: birinchi qirrasi (x1,y1)-(x2,y2), soat strelkasiga teskari. Nuqtalar ptX/ptY da
 Private Sub RegPoly(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal n As Long)
     Dim k As Long, ex As Double, ey As Double, a As Double, c As Double, s As Double, x As Double, y As Double
@@ -415,6 +430,11 @@ Private Sub Rsc(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal g
             CutStadium (xs(k) + xs(k + 1)) / 2, H - Max2(25, hh * 1.5), Min2(rt, W - 20), hh
         Next k
     End If
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True       ' 3D: orqa panel tik turadi, ustki qanotlar - qopqoq
+    If st <> 0 Then                              ' ichki (W) qanotlar ostida, tashqi (L) qanotlar ustida
+        SetLid xs(0), H, xs(1), H, 1: SetLid xs(2), H, xs(3), H, 1
+        SetLid xs(1), H, xs(2), H, 2: SetLid xs(3), H, xs(4), H, 2
+    End If
     Box3 0, 0, 0, L, H, W, st <> 0
 End Sub
 
@@ -438,6 +458,7 @@ Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVa
         If dbl Then
             LockWall x0, sx, W, H, t, False      ' ichki yon devor
             BaseSlots x0, W, False
+            SetFold x0 + sx * H, 0, x0 + sx * H, W, 180
         End If
         For b = 0 To 1                           ' quloqlar old/orqa devorga ulangan
             If b = 0 Then yy = 0: sy = -1 Else yy = W: sy = 1
@@ -479,6 +500,8 @@ Private Sub Mailer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVa
     End If
     If il Then CutEuroSlot L / 2, y0 + ht / 2, Min2(L * 0.3, 40)
     If rt > 0 And H >= 30 Then CutStadium L / 2, 0 - H / 2, Min2(rt, L - 30), Min2(25, H * 0.4)
+    SetRoot L / 2, W / 2, False                  ' 3D: taglik yotadi, qopqoq orqa devorda
+    SetLid 0, W + H, L, W + H
     Box3 0, 0, 0, L, H, W, False
     Lid3 L, H, W, 70, H - t
 End Sub
@@ -507,6 +530,8 @@ Private Sub TuckEnd(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByV
         Poly xs(2), H, xs(3), H, xs(3), H + il - c, xs(3) - c, H + il, xs(2) + c, H + il, xs(2), H + il - c
         CutEuroSlot (xs(2) + xs(3)) / 2, H + il * 0.55, Min2(L * 0.4, 30)
     End If
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True       ' 3D: old panel tik, qopqoq orqa panelda
+    SetLid xs(0), H, xs(1), H
     Box3 0, 0, 0, L, H, W, False
     Lid3 L, H, W, 35, tuck
 End Sub
@@ -598,6 +623,7 @@ Private Sub Gable(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal
         xa = xs(i): xb = xs(i + 1)
         Rect xa, H, xb, y1
         If i Mod 2 = 0 Then
+            SetFold xa, y1, xb, y1, -90                  ' ruchka qismi tik ko'tariladi
             cx = (xa + xb) / 2: cy = y1 + hh * 0.55: th = Min2(22, hh * 0.35)
             If rnd Then
                 Dim ry As Double
@@ -617,6 +643,7 @@ Private Sub Gable(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVal
             Crease xb, H, xm, y1
         End If
     Next i
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True
     Box3 0, 0, 0, L, H, W, False
     Face 0, H, 0, 0, H + W / 2, W / 2, L, H + W / 2, W / 2, L, H, 0
     Face 0, H, W, L, H, W, L, H + W / 2, W / 2, 0, H + W / 2, W / 2
@@ -678,6 +705,7 @@ Private Sub TrayDouble(ByVal L As Double, ByVal W As Double, ByVal H As Double, 
         Rect 0, y0, L, y0 + sy * H
         LockWall y0, sy, L, H, t, True
         BaseSlots y0, L, True
+        SetFold 0, y0 + sy * H, L, y0 + sy * H, 180
     Next b
 End Sub
 
@@ -689,6 +717,7 @@ Private Sub PolyTray(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByV
     ReDim vx(0 To n - 1): ReDim vy(0 To n - 1)
     For k = 0 To n - 1: vx(k) = ptX(k): vy(k) = ptY(k): Next k
     PolyWalls vx, vy, n, H, g, pet
+    SetRoot sd / 2, sd / 2 * Tan(PI * (n - 2) / (2 * n)), False   ' taglik markazi
     PolyTray3D vx, vy, n, 0, H, True
 End Sub
 
@@ -701,6 +730,7 @@ Private Sub Drawer(ByVal L As Double, ByVal W As Double, ByVal H As Double, ByVa
     xs(1) = ww: xs(2) = ww + hh: xs(3) = 2 * ww + hh: xs(4) = 2 * ww + 2 * hh
     Glue ox, L + k, g
     For i = 0 To 3: Rect ox + xs(i), 0, ox + xs(i + 1), L + k: Next i
+    SetRoot L / 2, W / 2, False
     Box3 0, 0, 0, L, H, W, False
     Box3 L * 0.4, 0 - k, 0 - k, L + k, H + 2 * k, W + 2 * k, True, True, False
 End Sub
@@ -717,6 +747,9 @@ Private Sub Prism(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVal 
         If k = 0 Then s = 1 Else s = -1
         PrismEnd n, sd, H, tk, s
     Next k
+    SetRoot sd / 2, H / 2, True                  ' 3D: panellar orasida tashqi burchak 360/n
+    For k = 0 To n - 1: SetFold k * sd, 0, k * sd, H, 360 / n: Next k
+    SetLid 0, H, sd, H, 0                        ' qopqoq quloqlar ustida
     ' 3D
     Dim vx() As Double, vz() As Double, j As Long
     RegPoly 0, 0, sd, 0, n
@@ -772,6 +805,8 @@ Private Sub Pyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVa
         ex = (vx(j) - vx(k)) / sd: ey = (vy(j) - vy(k)) / sd
         nx = ey: ny = -ex
         axp = (vx(k) + vx(j)) / 2 + nx * sl: ayp = (vy(k) + vy(j)) / 2 + ny * sl
+        SetFold vx(k), vy(k), vx(j), vy(j), 180 - Atn(H / rin) * 180 / PI
+        If Not crv Then SetFold vx(j), vy(j), axp, ayp, FlapAng(n, rin, H)
         If crv Then
             CurvedTri vx(k), vy(k), vx(j), vy(j), axp, ayp, sl * 0.12
             CutCircle axp + (((vx(k) + vx(j)) / 2) - axp) * 0.12, ayp + (((vy(k) + vy(j)) / 2) - ayp) * 0.12, 2.5
@@ -789,6 +824,7 @@ Private Sub Pyramid(ByVal n As Long, ByVal sd As Double, ByVal H As Double, ByVa
     ' 3D
     Dim cx As Double, cz As Double
     For k = 0 To n - 1: cx = cx + vx(k) / n: cz = cz + vy(k) / n: Next k
+    SetRoot cx, cz, False
     For k = 0 To n - 1
         j = (k + 1) Mod n
         Face vx(k), 0, vy(k), vx(j), 0, vy(j), cx, H, cz
@@ -827,6 +863,8 @@ Private Sub Petal(ByVal sty As String, ByVal sd As Double, ByVal H As Double, By
         PtPoly
     Next k
     ' 3D: kub va ichkariga egilgan gulbarglar
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True       ' 3D: gulbarglar - qopqoq
+    SetLid 0, H, xs(4), H
     Box3 0, 0, 0, sd, H, sd, False
     Dim a As Double, cs As Double, sn As Double
     a = 65 * PI / 180: cs = Cos(a): sn = Sin(a)
@@ -965,6 +1003,7 @@ Private Sub PolyWalls(vx() As Double, vy() As Double, ByVal n As Long, ByVal H A
             If n = 4 Then c = Min2(g * 0.3, H / 4) Else c = Min2(g / Tan(2 * PI / n) * 1.1 + 1, H / 2)
             Poly x2, y2, x2 + ex * g + nx * c, y2 + ey * g + ny * c, _
                  x2 + ex * g + nx * (H - c), y2 + ey * g + ny * (H - c), x2 + nx * H, y2 + ny * H
+            SetFold x2, y2, x2 + nx * H, y2 + ny * H, 360 / n      ' qo'shni devor ichiga
         End If
         If pet > 0 Then
             PtBegin
@@ -1110,6 +1149,7 @@ Private Sub TrayWebAt(ByVal ox As Double, ByVal oy As Double, ByVal L As Double,
             If b = 0 Then y0 = oy: sy = -1 Else y0 = oy + W: sy = 1
             Poly x0, y0, x0 + sx * H, y0, x0 + sx * H, y0 + sy * H
             Poly x0, y0, x0 + sx * H, y0 + sy * H, x0, y0 + sy * H
+            SetFold x0, y0, x0 + sx * H, y0 + sy * H, 180      ' burchak diagonal bo'ylab ikki buklanadi
         Next b
     Next a
 End Sub
@@ -1133,6 +1173,9 @@ Private Sub Lunch(ByVal L As Double, ByVal W As Double, ByVal H As Double)
     Pt cx + tw / 2, yt
     PtPoly
     CutPoly cx - tw / 2 - 1, 0 - H + 4, cx + tw / 2 + 1, 0 - H + 4
+    SetRoot L / 2, W / 2, False                  ' 3D: qopqoq orqa devor ustida, yopiqda tik davom etadi
+    SetFold 0, W + H, L, W + H, 0
+    SetLid 0, W + H, L, W + H
     Box3 0, 0, 0, L, H, W, False
     Box3 0, H * 1.4, 0, L, H, W, True, False
 End Sub
@@ -1149,6 +1192,9 @@ Private Sub PolyLunch(ByVal n As Long, ByVal sd As Double, ByVal H As Double, By
     Next k
     PolyWalls bx, by, n, H, g, 0
     PolyWalls lx, ly, n, H, g, 0
+    SetRoot sd / 2, sd / 2 * Tan(PI * (n - 2) / (2 * n)), False
+    SetFold 0, 0 - H, sd, 0 - H, 0                ' qopqoq taglik devori ustida davom etadi
+    SetLid 0, 0 - H, sd, 0 - H
     PolyTray3D bx, by, n, 0, H, True
     For k = 0 To n - 1: ly(k) = by(k): Next k
     PolyTray3D bx, ly, n, H * 1.5, H, False
@@ -1199,6 +1245,8 @@ Private Sub House(ByVal sd As Double, ByVal H As Double, ByVal R As Double, ByVa
     For k = 0 To 3
         xa = xs(k): xb = xs(k + 1): xm = (xa + xb) / 2
         Poly xa, H, xb, H, xm, H + sl
+        SetFold xa, H, xb, H, Atn(sd / (2 * R)) * 180 / PI       ' tom ichkariga egiladi
+        SetFold xb, H, xm, H + sl, FlapAng(4, sd / 2, R)
         fx = xm - xb: fy = sl: fl = Sqr(fx * fx + fy * fy)
         fx = fx / fl: fy = fy / fl
         ox = fy: oyy = 0 - fx                     ' o'ng qirradan tashqariga
@@ -1218,6 +1266,7 @@ Private Sub House(ByVal sd As Double, ByVal H As Double, ByVal R As Double, ByVa
             End If
         End If
     Next k
+    SetRoot (xs(2) + xs(3)) / 2, H / 2, True
     Box3 0, 0, 0, sd, H, sd, False
     Face 0, H, sd, sd, H, sd, sd / 2, H + R, sd / 2
     Face sd, H, sd, sd, H, 0, sd / 2, H + R, sd / 2
