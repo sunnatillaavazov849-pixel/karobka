@@ -8,6 +8,7 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya.
 1. **Code → Download ZIP** orqali yuklab oling va arxivni oching.
 2. CorelDRAW'da **Alt+F11** ni bosing. Chapdagi **GlobalMacros** ustida o'ng tugmani bosib, **Import File** ni tanlang va `src` papkadagi 7 ta faylni import qiling:
    `modGeom.bas`, `modTemplates.bas`, `mod3D.bas`, `modDraw.bas`, `modMain.bas`, `clsField.cls`, `frmKarobka.frm`.
+   `frmKarobka.frx` ham shu papkada turishi kerak: `frmKarobka.frm` import qilinganda u o'zi o'qiladi va forma **Forms** ichida oyna bo'lib paydo bo'ladi.
    Eski versiya o'rnatilgan bo'lsa, avval eski modullarni o'chiring (o'ng tugma → **Remove**).
 3. **Debug → Compile** ni bosing, so'ng **Ctrl+S** bilan saqlang.
 4. Ishga tushirish: **Tools → Macros → Karobka**.
@@ -55,4 +56,5 @@ Panellar `Rect` / `Poly` bilan chiziladi: ikki panelga umumiy qirra bukish, qolg
 Koddagi o'zgarishdan keyin:
 - `python3 tools/preview.py` — hamma modullarni tekshiradi (lint: e'lon qilinmagan nom, takroriy e'lon, label xatosi) va shablonlarni Corelsiz chizadi: yoyilma, 50% / 100% yig'ilgan va qopqoq ochiq holatlar. VBA kodi `tools/vba2py.py` bilan Python'ga o'giriladi, natija `preview/` papkasida;
 - `python3 tools/compare.py RASMLAR CHIQISH 0311 0340` — asl rasmdagi chizma, plagin yoyilmasi va 3D yonma-yon turgan taqqoslash varaqlari;
+- `python3 tools/make_frx.py` — `frmKarobka.frx` ni yaratadi, `.frm` sarlavhasini unga moslaydi va olefile/oletools bilan tekshiradi;
 - `python3 tools/make_paste.py` — `src/joylash` dagi nusxalarni yangilaydi.

@@ -1,10 +1,11 @@
 VERSION 5.00
-Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmKarobka 
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frmKarobka
    Caption         =   "Karobka"
    ClientHeight    =   5400
-   ClientLeft      =   45
-   ClientTop       =   390
+   ClientLeft      =   120
+   ClientTop       =   465
    ClientWidth     =   7050
+   OleObjectBlob   =   "frmKarobka.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
 Attribute VB_Name = "frmKarobka"
