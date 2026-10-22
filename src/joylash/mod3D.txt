@@ -121,12 +121,28 @@ Public Sub Fold3D(ByVal tf As Double, ByVal topen As Double)
 End Sub
 
 Private Function PanelArea(ByVal k As Long) As Double
+    PanelArea = Abs(PanelSigned(k))
+End Function
+
+' Yoyilmadagi panel maydoni ishorasi bilan (soat strelkasiga teskari - musbat)
+Private Function PanelSigned(ByVal k As Long) As Double
     Dim i As Long, j As Long, a As Double
     For i = 0 To pnCnt(k) - 1
         j = (i + 1) Mod pnCnt(k)
         a = a + pvX(pnStart(k) + i) * pvY(pnStart(k) + j) - pvX(pnStart(k) + j) * pvY(pnStart(k) + i)
     Next i
-    PanelArea = Abs(a) / 2
+    PanelSigned = a / 2
+End Function
+
+' Ekrandagi (ViewProject) yuza maydoni ishorasi bilan
+Private Function ScreenArea(ByVal f As Long) As Double
+    Dim j As Long, k As Long, n As Long, a As Double
+    n = fStart(f)
+    For j = 0 To fCnt(f) - 1
+        k = n + (j + 1) Mod fCnt(f)
+        a = a + vX(n + j) * vY(k) - vX(k) * vY(n + j)
+    Next j
+    ScreenArea = a / 2
 End Function
 
 ' (x, y) nuqtasi ichidagi panel; topilmasa eng katta panel
@@ -268,6 +284,7 @@ Public Sub ViewProject(ByVal yaw As Double, ByVal pitch As Double)
     For i = 0 To pN - 1
         ax = px(i) * cy + pz(i) * sy: az = -px(i) * sy + pz(i) * cy   ' Y o'qi atrofida
         ay = py(i) * cp - az * sp: az = py(i) * sp + az * cp            ' X o'qi atrofida
+        ax = 0 - ax          ' ko'zgu: chizma bosma tomondan ko'rinadi, quti undan uzoqqa buklanadi
         vX(i) = ax: vY(i) = ay: vZ(i) = az
         If ax < vMinX Then vMinX = ax
         If ax > vMaxX Then vMaxX = ax
@@ -298,7 +315,11 @@ Public Sub ViewProject(ByVal yaw As Double, ByVal pitch As Double)
             fNx(i) = fNx(i) / ln: fNy(i) = fNy(i) / ln: fNz(i) = fNz(i) / ln
         End If
         fD(i) = fNx(i) * vX(n) + fNy(i) * vY(n) + fNz(i) * vZ(n)
-        fBack(i) = fNz(i) < 0
+        If fPan(i) >= 0 Then                     ' buklangan panel: bosma (tashqi) tomoni ko'rinmasa - ichki tomon
+            fBack(i) = ScreenArea(i) * PanelSigned(fPan(i)) < 0
+        Else                                     ' sodda model (ko'zgu tufayli ishora teskari)
+            fBack(i) = fNz(i) > 0
+        End If
         fLit(i) = 0.55 + 0.45 * Abs(fNx(i) * -0.3 + fNy(i) * 0.8 + fNz(i) * 0.5)
         If fBack(i) Then fLit(i) = fLit(i) * 0.82                     ' ichki tomoni to'qroq
     Next i

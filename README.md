@@ -30,6 +30,8 @@ Talab: CorelDRAW 2020 yoki undan yangi versiya.
 2. Dizaynni yoyilma ustiga **"Dizayn"** nomli qatlamga joylang. Qatlam yo'q bo'lsa, **Mockup** tugmasini birinchi bosganda o'zi yaratiladi.
 3. **Mockup** ni bosing: dizayn har bir yuzaga to'g'ri joylanadi. Slayderlarni qimirlatsangiz, oddiy 3D ko'rinishga qaytadi.
 
+Dizayn bosma (tashqi) tomonga tushadi, quti ichi karton rangida qoladi. Qopqoq va old devor buklanganda ag'dariladi, shuning uchun ulardagi yozuvni yoyilmada 180° burib qo'ying.
+
 Egri shakllar (yostiqcha, silindr, doira quti, sumka-quti, yulduz, tort qutilari, konfet, vstavka, olmos) buklanmaydi, ularda sodda 3D model ko'rsatiladi.
 
 ## Shablonlar (339 ta)
